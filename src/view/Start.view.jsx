@@ -1,8 +1,9 @@
 import React from "react";
 import globantImage from "../assets/Globant-Original1.png";
+import globantBackground from "../assets/Globant-start-view.png";
 
 import RegisterButton from "../commons/ButtonRegister";
-import { Box, Grid, Stack } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { setLoginModalOpen } from "../state/features/loginModalSlice";
 import { useDispatch } from "react-redux";
 import LoginModal from "./LoginModal.view";
@@ -19,8 +20,11 @@ const Start = () => {
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
-          minHeight: "100vh",
-          padding: "16px",
+          minHeight: "98vh",
+          padding: "5px",
+          backgroundImage: `url(${globantBackground})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <Grid
@@ -35,11 +39,13 @@ const Start = () => {
               src={globantImage}
               alt="Globant Logo"
               style={{
-                width: "100%",
+                position: "absolute",
+                bottom: "76%",
+                width: "80%",
                 height: "auto",
                 maxWidth: "400px",
                 marginTop: "70px",
-                marginLeft: "10px",
+                marginLeft: "35px",
               }}
             />
           </Grid>

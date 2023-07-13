@@ -13,6 +13,11 @@
   }
 }
 
+@media (min-width: 601px) and (min-height: 701px) {
+  .start-container {
+    background-image: none;
+  }
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
