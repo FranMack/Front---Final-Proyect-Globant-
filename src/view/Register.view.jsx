@@ -17,6 +17,16 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
+  const [image, setImage] = useState("");
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +43,7 @@ const Register = () => {
           username: username,
           is_admin: false,
           password: password,
+          url_img: image,
         }
       );
       alert(`User created ${user.data.user.username}`);
@@ -87,7 +98,21 @@ const Register = () => {
           }}
         >
           <Grid>
-            <Avatar style={{ width: "90px", height: "90px" }}>H</Avatar>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: "none" }}
+              id="avatar-upload"
+            />
+
+            <label htmlFor="avatar-upload">
+              <Avatar
+                component="span"
+                sx={{ width: 90, height: 90, cursor: "pointer" }}
+                src={image}
+              ></Avatar>
+            </label>
           </Grid>
           <Grid item style={{ marginBottom: "20px" }}>
             <Grid container direction="column">
