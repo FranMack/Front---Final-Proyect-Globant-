@@ -3,10 +3,18 @@ import Avatar from "@mui/material/Avatar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link, useParams } from "react-router-dom";
 import Select from "@mui/material/Select";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 import MenuItem from "@mui/material/MenuItem";
 
-import { Box, FormControl, FormHelperText, Input, Stack } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  Input,
+  Stack,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { fakeData } from "../utils/fakeData";
@@ -90,25 +98,22 @@ const Profile = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          borderBottom: "2px solid #808080",
-
-          boxShadow: "0px 2px 0px rgba(0, 0, 0, 0.2)",
+          borderBottom: "1px solid grey",
         }}
       >
         <div
           style={{ display: "flex", alignItems: "center", marginLeft: "15px" }}
         >
-          <Link to="/">
-            <ArrowBackIcon />
-          </Link>
-          <h3 style={{ marginLeft: "16px" }}>Profile</h3>
+          <IconButton component={Link} to="/home">
+            <KeyboardBackspaceIcon />
+          </IconButton>
+          <h3 style={{ marginLeft: "16px", color: "grey" }}>Profile</h3>
         </div>
       </Box>
       <Box
         sx={{
-          borderBottom: "2px solid #808080",
+          borderBottom: "1px solid grey",
           padding: "16px",
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
         }}
       >
         <Box
@@ -292,7 +297,7 @@ const Profile = () => {
             borderRadius: "20px",
           }}
         >
-          Salir
+          Log Out
         </Button>
         {editing ? (
           <Button
@@ -301,7 +306,7 @@ const Profile = () => {
             color="success"
             style={{ width: "130px", borderRadius: "20px" }}
           >
-            Guardar
+            Save
           </Button>
         ) : (
           <Button
@@ -310,7 +315,7 @@ const Profile = () => {
             onClick={handleEditClick}
             style={{ width: "130px", borderRadius: "20px" }}
           >
-            Editar
+            Edit
           </Button>
         )}
       </Box>

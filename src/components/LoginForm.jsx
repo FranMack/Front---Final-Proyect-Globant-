@@ -96,6 +96,8 @@ const LoginForm = () => {
       >
         <LoadingButton
           type="submit"
+          component={Link}
+          to="/home"
           variant="contained"
           color="success"
           size="large"
