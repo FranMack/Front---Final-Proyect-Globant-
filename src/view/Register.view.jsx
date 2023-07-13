@@ -6,8 +6,10 @@ import globantImage from "../assets/Globant-Original1.png";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setLoginModalOpen } from "../state/features/loginModalSlice";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -17,6 +19,9 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +41,8 @@ const Register = () => {
         }
       );
       alert(`User created ${user.data.user.username}`);
+      navigate("/");
+      dispatch(setLoginModalOpen(true));
     } catch (error) {
       alert("User can not be created");
     }
