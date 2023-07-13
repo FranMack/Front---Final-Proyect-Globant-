@@ -1,5 +1,6 @@
 import React from "react";
 import globantImage from "../assets/Globant-Original1.png";
+
 import RegisterButton from "../commons/ButtonRegister";
 import { Box, Grid, Stack } from "@mui/material";
 import { setLoginModalOpen } from "../state/features/loginModalSlice";
@@ -43,6 +44,7 @@ const Start = () => {
             />
           </Grid>
         </Grid>
+<<<<<<< HEAD
         <Grid
           container
           justifyContent="center"
@@ -71,11 +73,20 @@ const Start = () => {
                 </Link>
               </>
             </Grid>
+=======
+        <Grid item xs={12}>
+          <Grid container justifyContent="center">
+            <p>
+              Do you have an account?
+              <Link style={{ color: "#3AB54A" }}>Log in</Link>
+            </p>
+>>>>>>> ff1cebf5e027573dc6d8ccbf2bfcb8a106bb7c6d
           </Grid>
         </Grid>
       </Box>
     </>
   );
+
 };
 
 export default Start;
