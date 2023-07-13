@@ -13,7 +13,6 @@ const Register = () => {
 
     const [name,setName] = useState("");
     const [lastname, setLastname] = useState("");
-    const [genre, setGenre] = useState("");
     const [location, setLocation] = useState("");
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -32,7 +31,7 @@ const Register = () => {
                 last_name: lastname,
                 phone_number: Number(number),
                 ubication: location,
-                genre: genre,
+                genre: "no binario",
                 email: email,
                 username: username,
                 is_admin: false,
@@ -42,20 +41,20 @@ const Register = () => {
             );
             alert(`User created ${user.data.user.username}`);
           } catch (error) {
-            alert("User already exist");
+            alert("User can not be created");
           }
 
     }
       
     const buttonStyles = {
         borderRadius: "50px",
-        textTransform: "none",
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
         color: "#000000",
         border: "2px solid #808080",
-        padding: "5px 50px",
-    };    
+        padding: "8px 50px",
+        marginTop: "20px",
 
+    };    
   return (
     <>
       <Box
@@ -67,18 +66,19 @@ const Register = () => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "16px",
+          marginLeft: "2px",
         }}
       >
         <Grid
           container
           spacing={2}
-          style={{  marginLeft: "4px", borderBottom: "1px solid grey", width: "100%" }}
+          style={{borderBottom: "1px solid grey",  width: "100%" }}
         >
           <Grid style={{ display: "flex", alignItems: "center" }}>
             <IconButton component={Link} to="/">
               <KeyboardBackspaceIcon />
             </IconButton>
-            <h5 style={{ marginLeft: "8px", color:"grey" }}>New Register</h5>
+            <h5 style={{ marginLeft: "8px", color:"grey" }}>NEW REGISTER</h5>
           </Grid>
         </Grid> 
 
@@ -87,40 +87,111 @@ const Register = () => {
           spacing={2}
           justifyContent="center"
           alignItems="center"
-          style={{ marginTop: "2px", marginBottom: "16px" }}
+          style={{ marginTop: "1px", marginBottom: "16px", /* marginLeft: "50px" */ }}
         >
+         <Grid >
+            <Avatar style={{ width: "90px", height: "90px" }}>H</Avatar>
+          </Grid>
+          <Grid item style={{marginBottom: "20px"}} >
+            <Grid container direction="column">
+              <Grid item>
+                <TextField
+                color="success"
+                  required
+                   sx={{ width: "180px",}}
+                  id="standard-basic"
+                  label="Name"
+                  variant="standard"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                color="success"
+                required
+                 sx={{ width: "180px"}}
+                  id="standard-basic"
+                  label="Last name"
+                  variant="standard"
+                  value={lastname}
+                  onChange={(e) => setLastname(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid style={{borderBottom: "1px solid grey",  width: "100%", marginTop: "20px", marginLeft: "5px"}}></Grid>
+
           <Grid item>
-            <Avatar>H</Avatar>
+            <TextField
+            color="success"
+            required
+            sx={{ width: "300px"}}
+              id="standard-basic"
+              label="Email"
+              variant="standard"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </Grid>
           <Grid item>
-            <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={(e)=> setName(e.target.value)} />
+            <TextField
+            color="success"
+            required
+            sx={{ width: "300px"}}
+              id="standard-basic"
+              label="Username"
+              variant="standard"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </Grid>
           <Grid item>
-            <TextField id="standard-basic" label="Last name" variant="standard" value={lastname} onChange={(e)=> setLastname(e.target.value)}/>
+            <TextField
+            color="success"
+            required
+              sx={{ width: "300px"}}
+              id="standard-basic"
+              label="Password"
+              variant="standard"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Grid>
+          <Grid item >
+          <Grid container spacing={2}>
+          <Grid item>
+            <TextField
+            color="success"
+            required
+            sx={{ width: "140px"}}
+              id="standard-basic"
+              label="Location"
+              variant="standard"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
           </Grid>
           <Grid item>
-            <TextField id="standard-basic" label="Genre" variant="standard" value={genre} onChange={(e)=> setGenre(e.target.value)} />
+            <TextField
+            color="success"
+            sx={{ width: "140px"}}
+              id="standard-basic"
+              label="Phone number"
+              variant="standard"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+            />
+          </Grid> 
           </Grid>
-          <Grid item>
-            <TextField id="standard-basic" label="Email" variant="standard" value={email} onChange={(e)=> setEmail(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <TextField id="standard-basic" label="Username" variant="standard" value={username} onChange={(e)=> setUsername(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <TextField id="standard-basic" label="Password" variant="standard" type="password" value={password} onChange={(e)=> setPassword(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <TextField id="standard-basic" label="Location" variant="standard" value={location} onChange={(e)=> setLocation(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <TextField id="standard-basic" label="Phone number" variant="standard" value={number} onChange={(e)=> setNumber(e.target.value)} />
           </Grid>
         </Grid>
+         
+          <Button type="submit" variant="outlined" style={buttonStyles} >NEW ACCOUNT</Button>
 
-        <Button type="submit" variant="outlined" style={buttonStyles}>New account</Button>
-
-        <Grid item xs={12} sm={6} md={4} lg={3}  style={{ marginTop: "40px"}} >
+        <Grid item xs={12} sm={6} md={4} lg={3}  style={{ marginTop: "40px"}}  >
           <img
             src={globantImage}
             alt="Globant Logo"
@@ -128,10 +199,11 @@ const Register = () => {
               width: "60%",
               height: "auto",
               maxWidth: "400px",
-              marginLeft: "60px"
+              marginLeft: "69px"
             }}
           />
         </Grid>
+        
       </Box>
     </>
   );
