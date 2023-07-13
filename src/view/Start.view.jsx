@@ -39,11 +39,13 @@ const Start = () => {
               src={globantImage}
               alt="Globant Logo"
               style={{
-                width: "95%",
+                position: "absolute",
+                bottom: "76%",
+                width: "80%",
                 height: "auto",
                 maxWidth: "400px",
                 marginTop: "70px",
-                marginLeft: "10px",
+                marginLeft: "35px",
               }}
             />
           </Grid>
