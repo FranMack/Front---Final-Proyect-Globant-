@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setLoginModalOpen } from "../state/features/loginModalSlice";
+import { setUser } from "../state/features/userSlice";
 import userApi from "../api/modules/user.api";
 
 import { useState } from "react";
@@ -23,17 +24,20 @@ const LoginForm = () => {
     validationSchema: Yup.object({
       email: Yup.string().email("invalid email").required("email is required"),
       password: Yup.string()
-        .min(8, "password minimum 8 characters")
+        .min(6, "password minimum 8 characters")
         .required("password is required"),
     }),
     onSubmit: async (values) => {
       setErrorMessage(undefined);
       setIsLoginRequest(true);
       const { response, err } = await userApi.login(values);
+      console.log(response);
       setIsLoginRequest(false);
       if (response) {
         signinForm.resetForm();
         dispatch(setLoginModalOpen(false));
+        dispatch(setUser(response));
+
         console.log("Sign in success", "New report");
       }
 
