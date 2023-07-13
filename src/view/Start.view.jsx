@@ -1,5 +1,6 @@
 import React from "react";
 import globantImage from "../assets/Globant-Original1.png";
+
 import RegisterButton from "../commons/ButtonRegister";
 import { Box, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -60,6 +61,7 @@ const Start = () => {
       </Grid>
     </Box>
   );
+
 };
 
 export default Start;
