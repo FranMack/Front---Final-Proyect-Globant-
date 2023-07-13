@@ -52,7 +52,7 @@ const Start = () => {
         <Grid item xs={12}>
           <Grid container justifyContent="center">
             <p>
-              Do you have an account?{" "}
+              Do you have an account?
               <Link style={{ color: "#3AB54A" }}>Log in</Link>
             </p>
           </Grid>
