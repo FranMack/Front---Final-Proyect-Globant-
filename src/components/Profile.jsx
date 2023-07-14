@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "@mui/material/Select";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 import MenuItem from "@mui/material/MenuItem";
+import { setUser } from "../state/features/userSlice";
 
 import {
   Box,
@@ -18,6 +19,7 @@ import {
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { fakeData } from "../utils/fakeData";
+import { useDispatch } from "react-redux";
 
 const Profile = () => {
   const { username } = useParams();
@@ -31,6 +33,8 @@ const Profile = () => {
   const [ubication, setUbication] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUsers = async () => {
@@ -92,6 +96,12 @@ const Profile = () => {
     };
     reader.readAsDataURL(file);
   };
+
+  const handleLogout = () => {
+    dispatch(setUser(null));
+    navigate("/");
+  };
+
   return (
     <Box>
       <Box
@@ -296,6 +306,7 @@ const Profile = () => {
             width: "130px",
             borderRadius: "20px",
           }}
+          onClick={handleLogout}
         >
           Log Out
         </Button>
