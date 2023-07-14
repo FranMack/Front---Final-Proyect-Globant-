@@ -3,7 +3,7 @@ import { Alert, Box, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setLoginModalOpen } from "../state/features/loginModalSlice";
 import { setUser } from "../state/features/userSlice";
 import userApi from "../api/modules/user.api";
@@ -15,6 +15,7 @@ const LoginForm = () => {
 
   const [isLoginRequest, setIsLoginRequest] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
+  const navigate = useNavigate();
 
   const signinForm = useFormik({
     initialValues: {
@@ -38,7 +39,7 @@ const LoginForm = () => {
         dispatch(setLoginModalOpen(false));
         dispatch(setUser(response));
 
-        console.log("Sign in success", "New report");
+        navigate("/home");
       }
 
       if (err) setErrorMessage(err.message);
@@ -96,8 +97,6 @@ const LoginForm = () => {
       >
         <LoadingButton
           type="submit"
-          component={Link}
-          to="/home"
           variant="contained"
           color="success"
           size="large"
