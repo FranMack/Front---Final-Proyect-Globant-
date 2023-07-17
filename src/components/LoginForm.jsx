@@ -32,12 +32,11 @@ const LoginForm = () => {
       setErrorMessage(undefined);
       setIsLoginRequest(true);
       const { response, err } = await userApi.login(values);
-      console.log(response);
       setIsLoginRequest(false);
       if (response) {
         signinForm.resetForm();
-        dispatch(setLoginModalOpen(false));
         dispatch(setUser(response));
+        dispatch(setLoginModalOpen(false));
 
         navigate("/home");
       }

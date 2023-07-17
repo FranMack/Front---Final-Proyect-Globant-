@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import globantImage from "../assets/Globant-Original1.png";
 import globantBackground from "../assets/Globant-start-view.png";
-
 import RegisterButton from "../commons/ButtonRegister";
 import { Box, Grid } from "@mui/material";
 import { setLoginModalOpen } from "../state/features/loginModalSlice";
-import { useDispatch } from "react-redux";
 import LoginModal from "./LoginModal.view";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const Start = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    } else {
+      navigate("/home");
+    }
+  }, [user]);
   return (
     <>
       <LoginModal />
