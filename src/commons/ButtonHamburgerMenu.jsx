@@ -53,7 +53,12 @@ export default function SwipeableTemporaryDrawer() {
           src={user.user.url_img}
           component="span"
           sx={{ width: 50, height: 50 }}
-        />
+        >
+          {!user.user.url_img
+            ? user.user.first_name.charAt(0).toUpperCase() +
+              user.user.last_name.charAt(0).toUpperCase()
+            : null}
+        </Avatar>
         <Box sx={{ ml: 2 }}>
           <Typography>
             {user.user.first_name} {user.user.last_name}
