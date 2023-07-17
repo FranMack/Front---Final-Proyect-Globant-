@@ -5,8 +5,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import SwipeableTemporaryDrawer from "../commons/ButtonHamburgerMenu";
-
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 function ResponsiveAppBar() {
+    const user = useSelector((state)=>state.user)
   return (
     <AppBar position="static" sx={{ background: "white" }}>
       <Container maxWidth="xl">
@@ -22,7 +24,9 @@ function ResponsiveAppBar() {
             Reports
           </Button>
           <Button
-            color="inherit"
+          component={Link}
+          to={`/profile/${user.user.username}`  }          
+          color="inherit"
             sx={{
               color: "#3AB54A",
               display: { xs: "none", md: "flex" },
