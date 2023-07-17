@@ -42,6 +42,7 @@ const Register = () => {
           first_name: name,
           last_name: lastname,
           phone_number: Number(number),
+
           ubication: location,
           genre: "no binario",
           email: email,
@@ -107,18 +108,22 @@ const Register = () => {
           <Grid>
             <input
               type="file"
-              accept="image/*"
+              accept="image/jpeg, image/png"
               onChange={handleImageUpload}
               style={{ display: "none" }}
               id="avatar-upload"
             />
-
             <label htmlFor="avatar-upload">
               <Avatar
                 component="span"
                 sx={{ width: 90, height: 90, cursor: "pointer" }}
                 src={image}
-              ></Avatar>
+              >
+                {!image && name && lastname
+                  ? name.charAt(0).toUpperCase() +
+                    lastname.charAt(0).toUpperCase()
+                  : null}
+              </Avatar>
             </label>
           </Grid>
           <Grid item style={{ marginBottom: "20px" }}>

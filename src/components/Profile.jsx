@@ -147,7 +147,7 @@ const Profile = ({ username }) => {
           </label>
 
           <div style={{ marginLeft: "70px" }}>
-            <Stack spacing={2}>
+            <Stack spac ing={2}>
               <FormControl sx={{ width: "140px", marginTop: "10px" }}>
                 <Input
                   value={firstName}
