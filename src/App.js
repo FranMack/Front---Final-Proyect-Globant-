@@ -9,7 +9,6 @@ import Home from "./components/Home";
 import { useDispatch, useSelector } from "react-redux";
 import userApi from "./api/modules/user.api";
 import { setUser } from "./state/features/userSlice";
-import NotFound from "./components/NotFound";
 
 function App() {
   const { user } = useSelector((state) => state.user);
