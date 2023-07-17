@@ -7,7 +7,7 @@ function Loading() {
   return (
     <Box sx={{height:"100vh", display: 'flex',flexDirection:"column",justifyContent:"center", alignItems:"center" }}>
 
-        <Box sx={{height:"18%",marginBottom:"20%"}}><Logo/></Box>
+        <Box sx={{height:"18%",marginBottom:"21%"}}><Logo/></Box>
         
       <CircularProgress thickness={5} size={50} sx={{color:"#bed733"}}>
 
