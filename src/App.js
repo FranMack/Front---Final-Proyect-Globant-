@@ -34,7 +34,7 @@ function App() {
 
   useEffect(() => {
     if (!loading) {
-      if (!user) {
+      if (!user && window.location.pathname !== "/register") {
         navigate("/");
       }
     }
