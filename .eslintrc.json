@@ -1,0 +1,30 @@
+//correr lint > npm run lint
+{
+	"env": {
+		"browser": true, // Especifica el entorno del navegador
+		"es2021": true // Habilita las características de ES2021 (ES12)
+	},
+	"settings": {
+		"react": {
+			"version": "detect" // Detecta automáticamente la versión instalada de React
+		}
+	},
+	"extends": [
+		"eslint:recommended", // Extiende las reglas recomendadas de ESLint
+		"plugin:react/recommended", // Extiende las reglas específicas de React para ESLint
+		"prettier"
+	],
+	"overrides": [],
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true // Habilita el análisis de JSX
+		},
+		"plugins": ["react"],
+		"rules": {
+			"react/prop-types": "off", // Desactiva el requerimiento de definir los tipos de propiedades en los componentes de React
+			"react/react-in-jsx-scope": "off" // Desactiva el requerimiento de importar React explícitamente en JSX
+		}
+	}
+}
