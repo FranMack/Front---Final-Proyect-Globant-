@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "@mui/material/Select";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -21,8 +20,7 @@ import axios from "axios";
 import { fakeData } from "../utils/fakeData";
 import { useDispatch } from "react-redux";
 
-const Profile = () => {
-  const { username } = useParams();
+const Profile = ({ username }) => {
   const [userData, setUserData] = useState({});
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = useState(false);
@@ -137,7 +135,7 @@ const Profile = () => {
         >
           <input
             type="file"
-            accept="image/*"
+            accept="image/jpeg, image/png"
             onChange={handleImageUpload}
             style={{ display: "none" }}
             id="avatar-upload"

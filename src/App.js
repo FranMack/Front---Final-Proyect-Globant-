@@ -14,10 +14,13 @@ import { setUser } from "./state/features/userSlice";
 
 function App() {
   const { user } = useSelector((state) => state.user);
+
   const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const authUser = async () => {
@@ -25,6 +28,7 @@ function App() {
 
       if (response) {
         dispatch(setUser(response));
+        setUsername(response.username);
       }
       if (err) dispatch(setUser(null));
 
@@ -51,7 +55,7 @@ function App() {
       <Route path="/" element={<Start />}></Route>
       <Route path="/register" element={<Register />}></Route>
       <Route path="/home" element={<Home />} />
-      <Route path="/profile/:username" element={<Profile />} />
+      <Route path="profile" element={<Profile username={username} />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>
