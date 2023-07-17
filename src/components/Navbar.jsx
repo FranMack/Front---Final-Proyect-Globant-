@@ -5,9 +5,21 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import SwipeableTemporaryDrawer from "../commons/ButtonHamburgerMenu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../state/features/userSlice";
+
 
 function ResponsiveAppBar() {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(setUser(null));
+    navigate("/");
+  };
+
   return (
     <AppBar position="static" sx={{ background: "white" }}>
       <Container maxWidth="xl">
@@ -23,6 +35,8 @@ function ResponsiveAppBar() {
             Reports
           </Button>
           <Button
+            component={Link}
+            to={`/profile/${user.user.username}`}
             color="inherit"
             component={Link}
             to="/profile"
@@ -39,8 +53,14 @@ function ResponsiveAppBar() {
             <SwipeableTemporaryDrawer />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
-          <Button color="inherit" sx={{ color: "#3AB54A" }}>
-            Logout
+          <Button
+            color="inherit"
+            style={{
+              color: "#3AB54A",
+            }}
+            onClick={handleLogout}
+          >
+            Log Out
           </Button>
           <Box sx={{ flexGrow: 0 }}></Box>
         </Toolbar>

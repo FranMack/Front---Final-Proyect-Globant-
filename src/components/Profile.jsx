@@ -5,7 +5,6 @@ import Select from "@mui/material/Select";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 import MenuItem from "@mui/material/MenuItem";
-import { setUser } from "../state/features/userSlice";
 
 import {
   Box,
@@ -31,8 +30,6 @@ const Profile = ({ username }) => {
   const [ubication, setUbication] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState("");
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getUsers = async () => {
@@ -53,7 +50,6 @@ const Profile = ({ username }) => {
     };
     getUsers();
   }, []);
-  console.log(userData);
   const handleClose = () => {
     setOpen(false);
   };
@@ -93,11 +89,6 @@ const Profile = ({ username }) => {
       setImage(reader.result);
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleLogout = () => {
-    dispatch(setUser(null));
-    navigate("/");
   };
 
   return (
@@ -296,18 +287,6 @@ const Profile = ({ username }) => {
           justifyContent: "space-between",
         }}
       >
-        <Button
-          variant="cotained"
-          style={{
-            background: "rgba(255,0,0,0.8)",
-            color: "white",
-            width: "130px",
-            borderRadius: "20px",
-          }}
-          onClick={handleLogout}
-        >
-          Log Out
-        </Button>
         {editing ? (
           <Button
             variant="contained"
