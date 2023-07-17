@@ -17,10 +17,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function SwipeableTemporaryDrawer() {
-
-  const user = useSelector((state)=>state.user)
+  const user = useSelector((state) => state.user);
   const [state, setState] = React.useState({
-    left: false
+    left: false,
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -46,7 +45,7 @@ export default function SwipeableTemporaryDrawer() {
         sx={{
           display: "flex",
           alignItems: "center",
-          p: 3
+          p: 3,
         }}
       >
         <Avatar
@@ -56,7 +55,9 @@ export default function SwipeableTemporaryDrawer() {
           sx={{ width: 50, height: 50 }}
         />
         <Box sx={{ ml: 2 }}>
-          <Typography>{user.user.first_name} {user.user.last_name}</Typography>
+          <Typography>
+            {user.user.first_name} {user.user.last_name}
+          </Typography>
         </Box>
       </Box>
       <Divider />
@@ -65,13 +66,13 @@ export default function SwipeableTemporaryDrawer() {
           {
             text: "Reports",
             icon: <SignalCellularAltOutlinedIcon sx={{ color: "#3AB54A" }} />,
-            path: "/reports"
+            path: "/reports",
           },
           {
             text: "Profile",
             icon: <AccountCircleOutlinedIcon sx={{ color: "#3AB54A" }} />,
-            path: `/profile/${user.user.username}`
-          }
+            path: "/profile",
+          },
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton component={Link} to={item.path}>

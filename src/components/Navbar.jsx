@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import SwipeableTemporaryDrawer from "../commons/ButtonHamburgerMenu";
+import { Link } from "react-router-dom";
 
 function ResponsiveAppBar() {
   return (
@@ -16,17 +17,19 @@ function ResponsiveAppBar() {
             sx={{
               color: "#3AB54A",
               display: { xs: "none", md: "flex" },
-              mr: 1
+              mr: 1,
             }}
           >
             Reports
           </Button>
           <Button
             color="inherit"
+            component={Link}
+            to="/profile"
             sx={{
               color: "#3AB54A",
               display: { xs: "none", md: "flex" },
-              mr: 1
+              mr: 1,
             }}
           >
             Profile
