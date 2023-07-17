@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../state/features/userSlice";
 
+
 function ResponsiveAppBar() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -37,6 +38,8 @@ function ResponsiveAppBar() {
             component={Link}
             to={`/profile/${user.user.username}`}
             color="inherit"
+            component={Link}
+            to="/profile"
             sx={{
               color: "#3AB54A",
               display: { xs: "none", md: "flex" },
