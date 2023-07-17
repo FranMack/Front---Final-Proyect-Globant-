@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Start from "./view/Start.view";
 import Profile from "./components/Profile.jsx";
 import Register from "./view/Register.view";
+import Loading from "./view/Loading";
+import NotFound from "./view/NotFound.view";
 
 import { Route, Routes, useNavigate } from "react-router";
 import Home from "./components/Home";
@@ -41,7 +43,7 @@ function App() {
   }, [loading, navigate, user]);
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return <Loading />;
   }
 
   return (
@@ -51,7 +53,7 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/profile/:username" element={<Profile />} />
 
-      <Route path="*" element={<p>Not Found</p>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
