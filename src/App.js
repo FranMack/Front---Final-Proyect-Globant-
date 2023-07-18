@@ -5,7 +5,8 @@ import Profile from './components/Profile.jsx';
 import Register from './view/Register.view';
 import Loading from './view/Loading';
 import NotFound from './view/NotFound.view';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes, useNavigate } from 'react-router';
 import Home from './view/Home';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,14 +49,17 @@ function App() {
 	}
 
 	return (
-		<Routes>
-			<Route path='/' element={<Start />}></Route>
-			<Route path='/register' element={<Register />}></Route>
-			<Route path='/home' element={<Home />} />
-			<Route path='profile' element={<Profile />} />
+		<>
+			<ToastContainer />
+			<Routes>
+				<Route path='/' element={<Start />}></Route>
+				<Route path='/register' element={<Register />}></Route>
+				<Route path='/home' element={<Home />} />
+				<Route path='profile' element={<Profile />} />
 
-			<Route path='*' element={<NotFound />} />
-		</Routes>
+				<Route path='*' element={<NotFound />} />
+			</Routes>
+		</>
 	);
 }
 
