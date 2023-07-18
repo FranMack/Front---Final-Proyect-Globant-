@@ -13,23 +13,21 @@ import userApi from './api/modules/user.api';
 import { setUser } from './state/features/userSlice';
 
 function App() {
-	const { user } = useSelector(state => state.user);
+	const user = useSelector(state => state.user);
 
 	const [loading, setLoading] = useState(true);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		const authUser = async () => {
+			const { response, err } = await userApi.getInfo();
 
-  useEffect(() => {
-    const authUser = async () => {
-      const { response, err } = await userApi.getInfo();
-
-      if (response) {
-        dispatch(setUser(response));
-      }
-      if (err) dispatch(setUser(null));
-
+			if (response) {
+				dispatch(setUser(response));
+			}
+			if (err) dispatch(setUser(null));
 
 			setLoading(false);
 		};
@@ -49,14 +47,12 @@ function App() {
 		return <Loading />;
 	}
 
-
-  return (
-    <Routes>
-      <Route path="/" element={<Start />}></Route>
-      <Route path="/register" element={<Register />}></Route>
-      <Route path="/home" element={<Home />} />
-      <Route path="profile" element={<Profile />} />
-
+	return (
+		<Routes>
+			<Route path='/' element={<Start />}></Route>
+			<Route path='/register' element={<Register />}></Route>
+			<Route path='/home' element={<Home />} />
+			<Route path='profile' element={<Profile />} />
 
 			<Route path='*' element={<NotFound />} />
 		</Routes>
