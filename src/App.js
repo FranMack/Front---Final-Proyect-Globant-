@@ -20,17 +20,16 @@ function App() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [username, setUsername] = useState('');
 
-	useEffect(() => {
-		const authUser = async () => {
-			const { response, err } = await userApi.getInfo();
+  useEffect(() => {
+    const authUser = async () => {
+      const { response, err } = await userApi.getInfo();
 
-			if (response) {
-				dispatch(setUser(response));
-				setUsername(response.username);
-			}
-			if (err) dispatch(setUser(null));
+      if (response) {
+        dispatch(setUser(response));
+      }
+      if (err) dispatch(setUser(null));
+
 
 			setLoading(false);
 		};
@@ -50,12 +49,14 @@ function App() {
 		return <Loading />;
 	}
 
-	return (
-		<Routes>
-			<Route path='/' element={<Start />}></Route>
-			<Route path='/register' element={<Register />}></Route>
-			<Route path='/home' element={<Home />} />
-			<Route path='profile' element={<Profile username={username} />} />
+
+  return (
+    <Routes>
+      <Route path="/" element={<Start />}></Route>
+      <Route path="/register" element={<Register />}></Route>
+      <Route path="/home" element={<Home />} />
+      <Route path="profile" element={<Profile />} />
+
 
 			<Route path='*' element={<NotFound />} />
 		</Routes>

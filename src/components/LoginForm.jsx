@@ -39,6 +39,9 @@ const LoginForm = () => {
         dispatch(setLoginModalOpen(false));
 
         navigate("/home");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
 
       if (err) setErrorMessage(err.message);

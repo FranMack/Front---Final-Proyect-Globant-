@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Select from "@mui/material/Select";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
@@ -17,9 +17,11 @@ import {
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { fakeData } from "../utils/fakeData";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-const Profile = ({ username }) => {
+const Profile = () => {
+  const { user } = useSelector((state) => state.user);
+  console.log(user);
   const [userData, setUserData] = useState({});
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = useState(false);
@@ -35,7 +37,7 @@ const Profile = ({ username }) => {
     const getUsers = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/user/profile/${username}`
+          `http://localhost:5000/api/v1/user/profile/${user.username}`
         );
         setUserData(response.data[0]);
         setFirstName(response.data[0].first_name);
@@ -69,7 +71,7 @@ const Profile = ({ username }) => {
         url_img: image,
       };
       const response = await axios.put(
-        `http://localhost:5000/api/v1/user/profile/${username}`,
+        `http://localhost:5000/api/v1/user/profile/${user.username}`,
         updatedData
       );
       setUserData(response.data);
@@ -126,17 +128,18 @@ const Profile = ({ username }) => {
         >
           <input
             type="file"
+            disabled={!editing}
             accept="image/jpeg, image/png"
             onChange={handleImageUpload}
             style={{ display: "none" }}
             id="avatar-upload"
           />
+          {/* agregar toasty advertencia por si la imagen es muy pesada */}
 
           <label htmlFor="avatar-upload">
             <Avatar
               component="span"
               sx={{ width: 90, height: 90, cursor: "pointer" }}
-              disabled={!editing}
               src={image || userData.url_img}
             >
               {!image && userData.first_name && userData.last_name
