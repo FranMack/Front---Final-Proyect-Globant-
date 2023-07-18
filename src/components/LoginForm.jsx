@@ -16,7 +16,7 @@ const LoginForm = () => {
 	const [errorMessage, setErrorMessage] = useState();
 	const navigate = useNavigate();
 
-  const signinForm = useFormik({
+	const signinForm = useFormik({
 		initialValues: {
 			email: '',
 			password: '',
@@ -38,13 +38,15 @@ const LoginForm = () => {
 				dispatch(setLoginModalOpen(false));
 				navigate('/home');
 				toast.success('Login successful');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+				setTimeout(() => {
+					window.location.reload();
+				}, 1000);
 			} else {
 				setErrorMessage(err.message);
 				toast.error(err.message);
 			}
+		},
+	});
 
 	const handleUpdatePassword = () => {
 		console.log('Updated password!!!');
