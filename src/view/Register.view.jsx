@@ -9,24 +9,24 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import { LoadingButton } from '@mui/lab';
+
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 
 import globantImage from '../assets/Globant-Original1.png';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Register = () => {
-	const [name, setName] = useState('');
-	const [lastname, setLastname] = useState('');
 	const [location, setLocation] = useState('');
-	const [email, setEmail] = useState('');
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
 	const [number, setNumber] = useState('');
 	const [image, setImage] = useState('');
 	const [errorMessage, setErrorMessage] = useState();
+	const [isLoginRequest, setIsLoginRequest] = useState(false);
+
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
 		const reader = new FileReader();
@@ -39,40 +39,74 @@ const Register = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const handleSubmit = async e => {
-		e.preventDefault();
-		setErrorMessage('');
+	const signupForm = useFormik({
+		initialValues: {
+			first_name: '',
+			last_name: '',
+			location: '',
+			email: '',
+			username: '',
+			password: '',
+		},
+		validationSchema: Yup.object({
+			first_name: Yup.string()
+				.min(1, 'firstname minimum 1 character')
+				.required('firstname is required'),
+			last_name: Yup.string()
+				.min(1, 'lastname minimum 1 character')
+				.required('lastname is required'),
+			location: Yup.string()
+				.min(1, 'location minimum 1 character')
+				.required('location is required'),
+			email: Yup.string().email('invalid email').required('email is required'),
+			username: Yup.string()
+				.min(4, 'username minimum 8 characters')
+				.required('username is required'),
+			password: Yup.string()
+				.min(8, 'password minimum 8 characters')
+				.matches(
+					/^(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+					'password must contain at least one special character',
+				)
+				.matches(/\d/, 'password must contain at least one number')
+				.matches(/[a-z]/, 'password must contain at least one lowercase letter')
+				.matches(/[A-Z]/, 'password must contain at least one capital letter')
+				.required('password is required'),
+		}),
+		onSubmit: async values => {
+			setErrorMessage(undefined);
+			setIsLoginRequest(true);
+			try {
+				const response = await axios.post(
+					'http://localhost:5000/api/v1/user/register',
+					{
+						first_name: values.first_name,
+						last_name: values.last_name,
+						phone_number: Number(number),
+						ubication: values.location,
+						genre: 'no binario',
+						email: values.email,
+						username: values.username,
+						is_admin: false,
+						password: values.password,
+						url_img: image,
+					},
+				);
 
-		try {
-			const response = await axios.post(
-				'http://localhost:5000/api/v1/user/register',
-				{
-					first_name: name,
-					last_name: lastname,
-					phone_number: Number(number),
-					ubication: location,
-					genre: 'no binario',
-					email: email,
-					username: username,
-					is_admin: false,
-					password: password,
-					url_img: image,
-				},
-			);
-
-			const user = response.data.user;
-			toast.success(`User created ${user.username}`);
-			navigate('/');
-			dispatch(setLoginModalOpen(true));
-		} catch (error) {
-			console.log(error);
-			const errorMessage =
-				error.response?.data?.message ||
-				'An error occurred during registration';
-			setErrorMessage(errorMessage);
-			toast.error(errorMessage);
-		}
-	};
+				const user = response.data.user;
+				toast.success(`User created ${user.username}`);
+				navigate('/');
+				dispatch(setLoginModalOpen(true));
+			} catch (error) {
+				const errorMessage =
+					error.response?.data?.message ||
+					'An error occurred during registration';
+				setErrorMessage(errorMessage);
+				toast.error(errorMessage);
+			}
+			setIsLoginRequest(false);
+		},
+	});
 
 	const buttonStyles = {
 		borderRadius: '50px',
@@ -87,7 +121,7 @@ const Register = () => {
 			<ToastContainer />
 			<Box
 				component='form'
-				onSubmit={handleSubmit}
+				onSubmit={signupForm.handleSubmit}
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
@@ -134,9 +168,11 @@ const Register = () => {
 								sx={{ width: 90, height: 90, cursor: 'pointer' }}
 								src={image}
 							>
-								{!image && name && lastname
-									? name.charAt(0).toUpperCase() +
-									  lastname.charAt(0).toUpperCase()
+								{!image &&
+								signupForm.values.first_name &&
+								signupForm.values.last_name
+									? signupForm.values.first_name.charAt(0).toUpperCase() +
+									  signupForm.values.last_name.charAt(0).toUpperCase()
 									: null}
 							</Avatar>
 						</label>
@@ -146,25 +182,38 @@ const Register = () => {
 							<Grid item>
 								<TextField
 									color='success'
-									required
 									sx={{ width: '180px' }}
-									id='standard-basic'
+									name='first_name'
 									label='Name'
 									variant='standard'
-									value={name}
-									onChange={e => setName(e.target.value)}
+									value={signupForm.values.first_name}
+									onChange={signupForm.handleChange}
+									error={
+										signupForm.touched.first_name &&
+										signupForm.errors.first_name !== undefined
+									}
+									helperText={
+										signupForm.touched.first_name &&
+										signupForm.errors.first_name
+									}
 								/>
 							</Grid>
 							<Grid item>
 								<TextField
 									color='success'
-									required
 									sx={{ width: '180px' }}
-									id='standard-basic'
+									name='last_name'
 									label='Last name'
 									variant='standard'
-									value={lastname}
-									onChange={e => setLastname(e.target.value)}
+									value={signupForm.values.last_name}
+									onChange={signupForm.handleChange}
+									error={
+										signupForm.touched.last_name &&
+										signupForm.errors.last_name !== undefined
+									}
+									helperText={
+										signupForm.touched.last_name && signupForm.errors.last_name
+									}
 								/>
 							</Grid>
 						</Grid>
@@ -182,38 +231,54 @@ const Register = () => {
 					<Grid item>
 						<TextField
 							color='success'
-							required
 							sx={{ width: '300px' }}
-							id='standard-basic'
+							name='email'
 							label='Email'
 							variant='standard'
-							value={email}
-							onChange={e => setEmail(e.target.value)}
+							value={signupForm.values.email}
+							onChange={signupForm.handleChange}
+							error={
+								signupForm.touched.email &&
+								signupForm.errors.email !== undefined
+							}
+							helperText={signupForm.touched.email && signupForm.errors.email}
 						/>
 					</Grid>
 					<Grid item>
 						<TextField
 							color='success'
-							required
 							sx={{ width: '300px' }}
-							id='standard-basic'
+							name='username'
 							label='Username'
 							variant='standard'
-							value={username}
-							onChange={e => setUsername(e.target.value)}
+							value={signupForm.values.username}
+							onChange={signupForm.handleChange}
+							error={
+								signupForm.touched.username &&
+								signupForm.errors.username !== undefined
+							}
+							helperText={
+								signupForm.touched.username && signupForm.errors.username
+							}
 						/>
 					</Grid>
 					<Grid item>
 						<TextField
 							color='success'
-							required
 							sx={{ width: '300px' }}
-							id='standard-basic'
+							name='password'
 							label='Password'
 							variant='standard'
 							type='password'
-							value={password}
-							onChange={e => setPassword(e.target.value)}
+							value={signupForm.values.password}
+							onChange={signupForm.handleChange}
+							error={
+								signupForm.touched.password &&
+								signupForm.errors.password !== undefined
+							}
+							helperText={
+								signupForm.touched.password && signupForm.errors.password
+							}
 						/>
 					</Grid>
 					<Grid item>
@@ -221,20 +286,26 @@ const Register = () => {
 							<Grid item>
 								<TextField
 									color='success'
-									required
 									sx={{ width: '140px' }}
-									id='standard-basic'
+									name='location'
 									label='Location'
 									variant='standard'
-									value={location}
-									onChange={e => setLocation(e.target.value)}
+									value={signupForm.values.location}
+									onChange={signupForm.handleChange}
+									error={
+										signupForm.touched.location &&
+										signupForm.errors.location !== undefined
+									}
+									helperText={
+										signupForm.touched.location && signupForm.errors.location
+									}
 								/>
 							</Grid>
 							<Grid item>
 								<TextField
 									color='success'
 									sx={{ width: '140px' }}
-									id='standard-basic'
+									name='phone_number'
 									label='Phone number'
 									variant='standard'
 									value={number}
@@ -252,9 +323,14 @@ const Register = () => {
 					</Box>
 				)}
 
-				<Button type='submit' variant='outlined' style={buttonStyles}>
+				<LoadingButton
+					type='submit'
+					variant='outlined'
+					style={buttonStyles}
+					loading={isLoginRequest}
+				>
 					NEW ACCOUNT
-				</Button>
+				</LoadingButton>
 
 				<Grid item xs={12} sm={6} md={4} lg={3} style={{ marginTop: '40px' }}>
 					<img
