@@ -1,24 +1,25 @@
-import "./App.css";
-import React, { useEffect, useState } from "react";
-import Start from "./view/Start.view";
-import Profile from "./components/Profile.jsx";
-import Register from "./view/Register.view";
-import Loading from "./view/Loading";
-import NotFound from "./view/NotFound.view";
+import './App.css';
+import React, { useEffect, useState } from 'react';
+import Start from './view/Start.view';
+import Profile from './components/Profile.jsx';
+import Register from './view/Register.view';
+import Loading from './view/Loading';
+import NotFound from './view/NotFound.view';
 
-import { Route, Routes, useNavigate } from "react-router";
-import Home from "./view/Home";
-import { useDispatch, useSelector } from "react-redux";
-import userApi from "./api/modules/user.api";
-import { setUser } from "./state/features/userSlice";
+import { Route, Routes, useNavigate } from 'react-router';
+import Home from './view/Home';
+import { useDispatch, useSelector } from 'react-redux';
+import userApi from './api/modules/user.api';
+import { setUser } from './state/features/userSlice';
 
 function App() {
-  const { user } = useSelector((state) => state.user);
+	const { user } = useSelector(state => state.user);
 
-  const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(true);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 
   useEffect(() => {
     const authUser = async () => {
@@ -29,23 +30,25 @@ function App() {
       }
       if (err) dispatch(setUser(null));
 
-      setLoading(false);
-    };
 
-    authUser();
-  }, [dispatch]);
+			setLoading(false);
+		};
 
-  useEffect(() => {
-    if (!loading) {
-      if (!user && window.location.pathname !== "/register") {
-        navigate("/");
-      }
-    }
-  }, [loading, navigate, user]);
+		authUser();
+	}, [dispatch]);
 
-  if (loading) {
-    return <Loading />;
-  }
+	useEffect(() => {
+		if (!loading) {
+			if (!user && window.location.pathname !== '/register') {
+				navigate('/');
+			}
+		}
+	}, [loading, navigate, user]);
+
+	if (loading) {
+		return <Loading />;
+	}
+
 
   return (
     <Routes>
@@ -54,9 +57,10 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="profile" element={<Profile />} />
 
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
+
+			<Route path='*' element={<NotFound />} />
+		</Routes>
+	);
 }
 
 export default App;

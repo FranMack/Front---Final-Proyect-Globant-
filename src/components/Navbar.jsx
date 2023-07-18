@@ -8,6 +8,7 @@ import SwipeableTemporaryDrawer from "../commons/ButtonHamburgerMenu";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../state/features/userSlice";
+import { setLoginModalOpen } from "../state/features/loginModalSlice";
 
 function ResponsiveAppBar() {
   const user = useSelector((state) => state.user);
@@ -17,6 +18,7 @@ function ResponsiveAppBar() {
   const handleLogout = () => {
     dispatch(setUser(null));
     navigate("/");
+   dispatch(setLoginModalOpen(true))
   };
 
   return (
