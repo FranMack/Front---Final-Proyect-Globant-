@@ -60,7 +60,7 @@ const Register = () => {
 				.required('location is required'),
 			email: Yup.string().email('invalid email').required('email is required'),
 			username: Yup.string()
-				.min(4, 'username minimum 8 characters')
+				.min(4, 'username minimum 4 characters')
 				.required('username is required'),
 			password: Yup.string()
 				.min(8, 'password minimum 8 characters')
