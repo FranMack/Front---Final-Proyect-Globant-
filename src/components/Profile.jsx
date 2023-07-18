@@ -67,6 +67,7 @@ const Profile = () => {
 			const updatedData = {
 				first_name: firstName,
 				last_name: lastName,
+				username: user.username,
 				email,
 				ubication: ubication,
 				phone_number: phoneNumber,
