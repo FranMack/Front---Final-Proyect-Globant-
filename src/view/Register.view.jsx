@@ -21,7 +21,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const Register = () => {
-	const [location, setLocation] = useState('');
 	const [number, setNumber] = useState('');
 	const [image, setImage] = useState('');
 	const [errorMessage, setErrorMessage] = useState();
