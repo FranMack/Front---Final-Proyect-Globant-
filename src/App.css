@@ -44,6 +44,11 @@
 
 /* maps */
 
+.selected {
+	background-color: #3ab54a !important;
+	color: #ffffff;
+}
+
 .top-container {
 	width: 100px;
 	background-color: #cac4c4;
