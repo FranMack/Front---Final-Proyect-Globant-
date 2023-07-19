@@ -12,6 +12,7 @@ import Home from './view/Home';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from './api/modules/user.api';
 import { setUser } from './state/features/userSlice';
+import OfficeMap from './components/OfficeMap';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -56,7 +57,7 @@ function App() {
 				<Route path='/register' element={<Register />}></Route>
 				<Route path='/home' element={<Home />} />
 				<Route path='profile' element={<Profile />} />
-
+				<Route path='/map' element={<OfficeMap />} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</>
