@@ -12,8 +12,12 @@ import Home from './view/Home';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from './api/modules/user.api';
 import { setUser } from './state/features/userSlice';
+
+import OfficeMap from './components/OfficeMap';
+
 import LoginModal from './view/LoginModal.view';
 import ReportModal from './view/ReportModal.view';
+
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -61,8 +65,12 @@ function App() {
 				<Route path='/home' element={<Home />} />
 				<Route path='profile' element={<Profile />} />
 
+				<Route path='/map' element={<OfficeMap />} />
+
+
 				<Route path='/report-cam-on' element={<p>Repor camera on</p>} />
 				<Route path='/report-cam-off' element={<p>Report camera off</p>} />
+
 
 				<Route path='*' element={<NotFound />} />
 			</Routes>
