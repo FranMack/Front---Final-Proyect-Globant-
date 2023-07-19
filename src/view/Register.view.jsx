@@ -121,19 +121,27 @@ const Register = () => {
 			<Box
 				component='form'
 				onSubmit={signupForm.handleSubmit}
-				style={{
+				sx={{
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					padding: '16px',
-					marginLeft: '2px',
+					margin: { xs: 'inherit', md: '30px auto' },
+					padding: '0 0 20px 0',
+					width: { xs: 'inherit', md: '400px' },
+					boxSizing: 'border-box',
+					boxShadow: { xs: 'inherit', md: '0 6px 10px rgba(0, 0, 0, 0.15)' },
 				}}
 			>
 				<Grid
 					container
 					spacing={2}
-					style={{ borderBottom: '1px solid grey', width: '100%' }}
+					style={{
+						borderBottom: '1px solid grey',
+						width: '100%',
+						marginTop: 0,
+						marginLeft: 0,
+					}}
 				>
 					<Grid style={{ display: 'flex', alignItems: 'center' }}>
 						<IconButton component={Link} to='/'>
@@ -151,6 +159,8 @@ const Register = () => {
 					style={{
 						marginTop: '1px',
 						marginBottom: '16px',
+						marginLeft: 0,
+						width: '100%',
 					}}
 				>
 					<Grid>
@@ -223,96 +233,104 @@ const Register = () => {
 							borderBottom: '1px solid grey',
 							width: '100%',
 							marginTop: '20px',
-							marginLeft: '5px',
 						}}
 					></Grid>
-
-					<Grid item>
-						<TextField
-							color='success'
-							sx={{ width: '300px' }}
-							name='email'
-							label='Email'
-							variant='standard'
-							value={signupForm.values.email}
-							onChange={signupForm.handleChange}
-							error={
-								signupForm.touched.email &&
-								signupForm.errors.email !== undefined
-							}
-							helperText={signupForm.touched.email && signupForm.errors.email}
-						/>
-					</Grid>
-					<Grid item>
-						<TextField
-							color='success'
-							sx={{ width: '300px' }}
-							name='username'
-							label='Username'
-							variant='standard'
-							value={signupForm.values.username}
-							onChange={signupForm.handleChange}
-							error={
-								signupForm.touched.username &&
-								signupForm.errors.username !== undefined
-							}
-							helperText={
-								signupForm.touched.username && signupForm.errors.username
-							}
-						/>
-					</Grid>
-					<Grid item>
-						<TextField
-							color='success'
-							sx={{ width: '300px' }}
-							name='password'
-							label='Password'
-							variant='standard'
-							type='password'
-							value={signupForm.values.password}
-							onChange={signupForm.handleChange}
-							error={
-								signupForm.touched.password &&
-								signupForm.errors.password !== undefined
-							}
-							helperText={
-								signupForm.touched.password && signupForm.errors.password
-							}
-						/>
-					</Grid>
-					<Grid item>
-						<Grid container spacing={2}>
-							<Grid item>
-								<TextField
-									color='success'
-									sx={{ width: '140px' }}
-									name='location'
-									label='Location'
-									variant='standard'
-									value={signupForm.values.location}
-									onChange={signupForm.handleChange}
-									error={
-										signupForm.touched.location &&
-										signupForm.errors.location !== undefined
-									}
-									helperText={
-										signupForm.touched.location && signupForm.errors.location
-									}
-								/>
-							</Grid>
-							<Grid item>
-								<TextField
-									color='success'
-									sx={{ width: '140px' }}
-									name='phone_number'
-									label='Phone number'
-									variant='standard'
-									value={number}
-									onChange={e => setNumber(e.target.value)}
-								/>
+					<Box
+						sx={{
+							padding: '16px',
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							rowGap: '10px',
+						}}
+					>
+						<Grid item>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='email'
+								label='Email'
+								variant='standard'
+								value={signupForm.values.email}
+								onChange={signupForm.handleChange}
+								error={
+									signupForm.touched.email &&
+									signupForm.errors.email !== undefined
+								}
+								helperText={signupForm.touched.email && signupForm.errors.email}
+							/>
+						</Grid>
+						<Grid item>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='username'
+								label='Username'
+								variant='standard'
+								value={signupForm.values.username}
+								onChange={signupForm.handleChange}
+								error={
+									signupForm.touched.username &&
+									signupForm.errors.username !== undefined
+								}
+								helperText={
+									signupForm.touched.username && signupForm.errors.username
+								}
+							/>
+						</Grid>
+						<Grid item>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='password'
+								label='Password'
+								variant='standard'
+								type='password'
+								value={signupForm.values.password}
+								onChange={signupForm.handleChange}
+								error={
+									signupForm.touched.password &&
+									signupForm.errors.password !== undefined
+								}
+								helperText={
+									signupForm.touched.password && signupForm.errors.password
+								}
+							/>
+						</Grid>
+						<Grid item>
+							<Grid container spacing={2}>
+								<Grid item>
+									<TextField
+										color='success'
+										sx={{ width: '140px' }}
+										name='location'
+										label='Location'
+										variant='standard'
+										value={signupForm.values.location}
+										onChange={signupForm.handleChange}
+										error={
+											signupForm.touched.location &&
+											signupForm.errors.location !== undefined
+										}
+										helperText={
+											signupForm.touched.location && signupForm.errors.location
+										}
+									/>
+								</Grid>
+								<Grid item>
+									<TextField
+										color='success'
+										sx={{ width: '140px' }}
+										name='phone_number'
+										label='Phone number'
+										variant='standard'
+										value={number}
+										onChange={e => setNumber(e.target.value)}
+									/>
+								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
+					</Box>
 				</Grid>
 				{errorMessage && (
 					<Box sx={{ marginTop: 2 }}>
