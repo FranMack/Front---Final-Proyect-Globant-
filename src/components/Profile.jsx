@@ -98,7 +98,15 @@ const Profile = () => {
 	};
 
 	return (
-		<Box>
+		<Box
+			sx={{
+				margin: { xs: 'inherit', md: '30px auto' },
+				padding: '0 0 20px 0',
+				width: { xs: 'inherit', md: '400px' },
+				boxSizing: 'border-box',
+				boxShadow: { xs: 'inherit', md: '0 6px 10px rgba(0, 0, 0, 0.15)' },
+			}}
+		>
 			<Box
 				sx={{
 					display: 'flex',
@@ -118,7 +126,7 @@ const Profile = () => {
 			<Box
 				sx={{
 					borderBottom: '1px solid grey',
-					padding: '16px',
+					padding: '10px 16px',
 				}}
 			>
 				<Box
@@ -153,7 +161,7 @@ const Profile = () => {
 						</Avatar>
 					</label>
 
-					<div style={{ marginLeft: '70px' }}>
+					<div style={{ padding: '16px' }}>
 						<Stack spac ing={2}>
 							<FormControl sx={{ width: '140px', marginTop: '10px' }}>
 								<Input
@@ -194,10 +202,15 @@ const Profile = () => {
 					</div>
 				</Box>
 			</Box>
-			<Box>
-				<FormControl
-					sx={{ width: '300px', marginLeft: '30px', marginTop: '40px' }}
-				>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					padding: '16px',
+				}}
+			>
+				<FormControl sx={{ width: '300px', marginTop: '10px' }}>
 					<Input
 						value={email}
 						onChange={e => setEmail(e.target.value)}
@@ -215,9 +228,7 @@ const Profile = () => {
 						Email
 					</FormHelperText>
 				</FormControl>
-				<FormControl
-					sx={{ width: '300px', marginLeft: '30px', marginTop: '10px' }}
-				>
+				<FormControl sx={{ width: '300px', marginTop: '10px' }}>
 					<Input
 						value={ubication}
 						id='name'
@@ -235,10 +246,7 @@ const Profile = () => {
 						Ubication
 					</FormHelperText>
 				</FormControl>
-
-				<FormControl
-					sx={{ width: '300px', marginLeft: '30px', marginTop: '10px' }}
-				>
+				<FormControl sx={{ width: '300px', marginTop: '10px' }}>
 					<Input
 						value={phoneNumber}
 						id='name'
@@ -256,42 +264,39 @@ const Profile = () => {
 						Phone Number
 					</FormHelperText>
 				</FormControl>
-				<div>
-					<FormControl sx={{ m: 1, width: '325px', marginTop: '30px' }}>
-						<Select
-							labelId='demo-controlled-open-select-label'
-							id='demo-controlled-open-select'
-							open={open}
-							onClose={handleClose}
-							onOpen={handleOpen}
-							sx={{ height: '40px', marginLeft: '24px' }}
-						>
-							<MenuItem value=''>
-								<em>None</em>
+
+				<FormControl sx={{ m: 1, width: '300px', marginTop: '30px' }}>
+					<Select
+						labelId='demo-controlled-open-select-label'
+						id='demo-controlled-open-select'
+						open={open}
+						onClose={handleClose}
+						onOpen={handleOpen}
+						sx={{ height: '40px' }}
+					>
+						<MenuItem value=''>
+							<em>None</em>
+						</MenuItem>
+						{fakeData.map((item, index) => (
+							<MenuItem key={index} value={item.localidad}>
+								{item.localidad},{item.direccion}
 							</MenuItem>
-							{fakeData.map((item, index) => (
-								<MenuItem key={index} value={item.localidad}>
-									{item.localidad},{item.direccion}
-								</MenuItem>
-							))}
-						</Select>
-						<FormHelperText
-							sx={{
-								fontSize: '11px',
-								textAlign: 'center',
-							}}
-							id='name-helper'
-						>
-							Office
-						</FormHelperText>
-					</FormControl>
-				</div>
+						))}
+					</Select>
+					<FormHelperText
+						sx={{
+							fontSize: '11px',
+							textAlign: 'center',
+						}}
+						id='name-helper'
+					>
+						Office
+					</FormHelperText>
+				</FormControl>
 			</Box>
 			<Box
 				sx={{
-					margin: '40px',
-					display: 'flex',
-					justifyContent: 'space-between',
+					textAlign: 'center',
 				}}
 			>
 				{editing ? (
