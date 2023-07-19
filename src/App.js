@@ -5,6 +5,7 @@ import Profile from './components/Profile.jsx';
 import Register from './view/Register.view';
 import Loading from './view/Loading';
 import NotFound from './view/NotFound.view';
+import ReportHistory from './view/ReportHistory';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes, useNavigate } from 'react-router';
@@ -56,6 +57,7 @@ function App() {
 				<Route path='/register' element={<Register />}></Route>
 				<Route path='/home' element={<Home />} />
 				<Route path='profile' element={<Profile />} />
+				<Route path='reports' element={<ReportHistory />} />
 
 				<Route path='*' element={<NotFound />} />
 			</Routes>
