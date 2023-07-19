@@ -4,7 +4,6 @@ import globantBackground from '../assets/Globant-start-view.png';
 import RegisterButton from '../commons/ButtonRegister';
 import { Box, Grid } from '@mui/material';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
-import LoginModal from './LoginModal.view';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -22,7 +21,6 @@ const Start = () => {
 	}, [user]);
 	return (
 		<>
-			<LoginModal />
 			<Box
 				style={{
 					display: 'flex',

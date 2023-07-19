@@ -9,6 +9,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import { setReportModalOpen } from '../state/features/reportModalSlice';
 
 function ResponsiveAppBar() {
 	const user = useSelector(state => state.user);
@@ -51,6 +53,20 @@ function ResponsiveAppBar() {
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						{user && <SwipeableTemporaryDrawer />}
 					</Box>
+
+					<Button
+						variant='contained'
+						style={{
+							backgroundColor: '#3AB54A',
+							color: '#FFFFFF',
+							borderRadius: '20px',
+							marginRight: '1px',
+						}}
+						onClick={() => dispatch(setReportModalOpen(true))}
+					>
+						New Report <PostAddIcon />
+					</Button>
+
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
 					<Button
 						color='inherit'
