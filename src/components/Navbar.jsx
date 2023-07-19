@@ -28,6 +28,8 @@ function ResponsiveAppBar() {
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<Button
+					component={Link}
+					to="/reports"
 						color='inherit'
 						sx={{
 							color: '#3AB54A',
