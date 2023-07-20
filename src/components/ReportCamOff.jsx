@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import technicalServiceImage from '../assets/technical-service-image.png';
 import {
 	Box,
 	TextField,
 	FormControl,
 	InputLabel,
-	IconButton,
 	Select,
 	MenuItem,
 	Button,
 } from '@mui/material';
 
 import OfficeMap from './OfficeMap';
+import ResponsiveAppBar from './Navbar';
 
 const ReportCamOff = () => {
 	const [item, setItem] = useState('');
@@ -37,6 +35,7 @@ const ReportCamOff = () => {
 
 	return (
 		<>
+			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',
@@ -47,9 +46,6 @@ const ReportCamOff = () => {
 				<div
 					style={{ display: 'flex', alignItems: 'center', marginLeft: '15px' }}
 				>
-					<IconButton component={Link} to='/home'>
-						<KeyboardBackspaceIcon />
-					</IconButton>
 					<h3 style={{ marginLeft: '16px', color: 'grey' }}>New Report</h3>
 				</div>
 			</Box>
