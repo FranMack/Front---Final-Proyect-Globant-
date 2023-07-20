@@ -34,7 +34,6 @@ const GoogleMaps = () => {
         keyword: "Globant",
       };
 
-     
 
       service.nearbySearch(request, (results, status) => {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
@@ -50,6 +49,7 @@ const GoogleMaps = () => {
   if (loadError) {
     return <div>Error loading Google Maps</div>;
   }
+
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -73,7 +73,11 @@ const GoogleMaps = () => {
               position={{ lat: selectedMarker.geometry.location.lat(), lng: selectedMarker.geometry.location.lng() }}
               onCloseClick={() => setSelectedMarker(null)}
             >
-              <div>{selectedMarker.name}</div>
+              <div>
+              <div>{selectedMarker.name}
+              </div> 
+              <div>{selectedMarker.vicinity} </div>
+              </div>
             </InfoWindow>
           )}
         </GoogleMap>
