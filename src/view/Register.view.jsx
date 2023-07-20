@@ -19,15 +19,30 @@ import globantImage from '../assets/Globant-Original1.png';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+} from '@mui/material';
 
 const Register = () => {
 	const [number, setNumber] = useState('');
 	const [image, setImage] = useState('');
 	const [errorMessage, setErrorMessage] = useState();
 	const [isLoginRequest, setIsLoginRequest] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
+		const maxSizeInBytes = 1024 * 60;
+
+		if (file && file.size > maxSizeInBytes) {
+			setShowModal(true);
+			return;
+		}
+
 		const reader = new FileReader();
 		reader.onload = () => {
 			setImage(reader.result);
@@ -107,6 +122,10 @@ const Register = () => {
 		},
 	});
 
+	const handleCloseModal = () => {
+		setShowModal(false);
+	};
+
 	const buttonStyles = {
 		borderRadius: '50px',
 		boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
@@ -185,6 +204,20 @@ const Register = () => {
 									: null}
 							</Avatar>
 						</label>
+						<Dialog open={showModal} onClose={handleCloseModal}>
+							<DialogTitle>Imagen demasiado grande</DialogTitle>
+							<DialogContent>
+								<p>
+									El tamaño de la imagen excede el límite permitido de 60KB. Por
+									favor, selecciona una imagen más pequeña.
+								</p>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={handleCloseModal} color='primary' autoFocus>
+									Cerrar
+								</Button>
+							</DialogActions>
+						</Dialog>
 					</Grid>
 					<Grid item style={{ marginBottom: '20px' }}>
 						<Grid container direction='column'>

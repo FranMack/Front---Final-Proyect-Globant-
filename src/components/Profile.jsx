@@ -8,12 +8,17 @@ import MenuItem from '@mui/material/MenuItem';
 
 import {
 	Box,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
 	FormControl,
 	FormHelperText,
 	IconButton,
 	Input,
 	Stack,
 } from '@mui/material';
+
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { fakeData } from '../utils/fakeData';
@@ -33,6 +38,7 @@ const Profile = () => {
 	const [ubication, setUbication] = useState(user.ubication);
 	const [phoneNumber, setPhoneNumber] = useState(user.phone_number);
 	const [image, setImage] = useState(user.url_img);
+	const [showModal, setShowModal] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -91,11 +97,22 @@ const Profile = () => {
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
+		const maxSizeInBytes = 1024 * 60;
+
+		if (file && file.size > maxSizeInBytes) {
+			setShowModal(true);
+			return;
+		}
+
 		const reader = new FileReader();
 		reader.onload = () => {
 			setImage(reader.result);
 		};
 		reader.readAsDataURL(file);
+	};
+
+	const handleCloseModal = () => {
+		setShowModal(false);
 	};
 
 	return (
@@ -174,7 +191,20 @@ const Profile = () => {
 										: null}
 								</Avatar>
 							</label>
-
+							<Dialog open={showModal} onClose={handleCloseModal}>
+								<DialogTitle>Imagen demasiado grande</DialogTitle>
+								<DialogContent>
+									<p>
+										El tamaño de la imagen excede el límite permitido de 60KB.
+										Por favor, selecciona una imagen más pequeña.
+									</p>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={handleCloseModal} color='primary' autoFocus>
+										Cerrar
+									</Button>
+								</DialogActions>
+							</Dialog>
 							<div style={{ padding: '16px' }}>
 								<Stack spac ing={2}>
 									<FormControl sx={{ width: '140px', marginTop: '10px' }}>
