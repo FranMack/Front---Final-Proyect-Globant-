@@ -19,6 +19,7 @@ import OfficeMap from './components/OfficeMap';
 
 import LoginModal from './view/LoginModal.view';
 import ReportModal from './view/ReportModal.view';
+import Footer from './components/Footer';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -74,6 +75,7 @@ function App() {
 
 				<Route path='*' element={<NotFound />} />
 			</Routes>
+			<Footer />
 		</>
 	);
 }
