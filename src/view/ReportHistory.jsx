@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 
-import React, { useState } from 'react';
-import { reportFakeData } from '../utils/reportFakeData';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import { Box, Button, Stack, IconButton } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -9,9 +10,36 @@ import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { Link } from 'react-router-dom';
 const ReportHistory = () => {
-	const [reports, setReports] = useState(reportFakeData);
+	const [reports, setReports] = useState([]);
+    const [search, setSearch] = useState("");
+	const [date, setDate] = useState();
+	
 
-	console.log(reports, setReports);
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+      };
+
+
+	
+
+    useEffect(()=>{
+
+        axios.get("http://localhost:5000/api/v1/user/all")
+        .then((res)=>setReports(res.data))
+        .catch((error)=>{console.log(error)})
+
+
+    },[])
+
+    useEffect(() => {
+        axios
+          .get(`http://localhost:5000/api/v1//search?device=${search}`)
+		  .then((res)=>setReports(res.data))
+          .catch((err) => console.log(err));
+      }, [search]);
+
+
+
 
 	return (
 		<Box
@@ -62,7 +90,7 @@ const ReportHistory = () => {
 					marginTop: '5%',
 				}}
 			>
-				<SearchInput />
+				<SearchInput  search={search} handleSearch={handleSearch}/>
 			</Box>
 
 			<Stack sx={{ marginTop: '10%' }}>

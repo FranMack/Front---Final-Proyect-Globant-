@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Box } from '@mui/material';
+import { Link } from "react-router-dom";
 
 
 
@@ -38,6 +39,7 @@ const ReportItem=({report})=>{
   
   
         <Box
+        component={Link} to={`${report._id}`}
           sx={{
             height: '60%', // Cambiamos la altura a 100%
             width: '60%',
@@ -49,12 +51,14 @@ const ReportItem=({report})=>{
             borderLeft:"0px",
             backgroundColor:"lightgrey",
             fontSize:"1.1rem",
-            fontWeight:"bolder"
+            fontWeight:"bolder",
+            textDecoration:"none",
+            color: "black"
        
           }}
         >
          <p>{report.device}</p>
-         <p>{report.date}</p>
+         <p>{report.date_report}</p>
         </Box>
   
   
