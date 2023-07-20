@@ -37,7 +37,7 @@ const GoogleMaps = () => {
      
 
       service.nearbySearch(request, (results, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {s
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           const globantPlaces = results.filter(place => includesGlobant(place.name.toLowerCase()));
           setMcdonaldsNearby(globantPlaces);
         }
