@@ -44,7 +44,7 @@ const Start = () => {
 						marginTop: 'auto',
 					  }}
 				>
-				
+
 						<img
 							src={globantImage}
 							alt='Globant Logo'
