@@ -52,7 +52,6 @@ const ReportCamOff = () => {
 	const handleSubmit = event => {
 		event.preventDefault();
 		if (selectedFile) {
-			console.log('selected File:', selectedFile);
 		}
 
 		toast.success('Report create successful');

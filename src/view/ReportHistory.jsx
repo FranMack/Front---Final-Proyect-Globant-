@@ -9,8 +9,6 @@ import ResponsiveAppBar from '../components/Navbar';
 const ReportHistory = () => {
 	const [reports, setReports] = useState(reportFakeData);
 
-	console.log(reports, setReports);
-
 	return (
 		<>
 			<ResponsiveAppBar />
