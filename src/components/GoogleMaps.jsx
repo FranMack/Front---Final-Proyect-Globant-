@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, useLoadScript } from '@react-google-maps/api';
 import { Box } from '@mui/material';
+
+const libraries = ['places'];
+
+const includesGlobant = (name) => {
+  return name.toLowerCase().includes('globant');
+};
 
 const GoogleMaps = () => {
   const [userLocation, setUserLocation] = useState(null);
+  const [mcdonaldsNearby, setMcdonaldsNearby] = useState([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyAKmP_5wDtUG3gM479BwLoqp9URpz4Wktw',
-    libraries: ['places']
+    libraries
   });
 
   useEffect(() => {
@@ -16,6 +23,29 @@ const GoogleMaps = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (isLoaded && userLocation) {
+      const service = new window.google.maps.places.PlacesService(document.createElement('div'));
+
+   
+      const request = {
+        location: new window.google.maps.LatLng(userLocation.lat, userLocation.lng),
+        radius: 100000, 
+        keyword: "Globant",
+      };
+
+     
+
+      service.nearbySearch(request, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {s
+          const globantPlaces = results.filter(place => includesGlobant(place.name.toLowerCase()));
+          setMcdonaldsNearby(globantPlaces);
+        }
+      });
+    }
+  }, [isLoaded, userLocation]);
+
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   if (loadError) {
     return <div>Error loading Google Maps</div>;
@@ -27,10 +57,25 @@ const GoogleMaps = () => {
       {isLoaded && userLocation && (
         <GoogleMap
           mapContainerClassName='map-container'
-          center={ userLocation }
-          zoom={15}
+          center={userLocation}
+          zoom={14}
         >
           <Marker position={userLocation} />
+          {mcdonaldsNearby.map((place) => (
+            <Marker
+              key={place.place_id}
+              position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }}
+              onClick={() => setSelectedMarker(place)}
+            />
+          ))}
+          {selectedMarker && (
+            <InfoWindow
+              position={{ lat: selectedMarker.geometry.location.lat(), lng: selectedMarker.geometry.location.lng() }}
+              onCloseClick={() => setSelectedMarker(null)}
+            >
+              <div>{selectedMarker.name}</div>
+            </InfoWindow>
+          )}
         </GoogleMap>
       )}
     </Box>
@@ -38,4 +83,3 @@ const GoogleMaps = () => {
 };
 
 export default GoogleMaps;
-
