@@ -35,13 +35,16 @@ const Start = () => {
 				}}
 			>
 				<Grid
-					container
-					justifyContent='center'
-					alignItems='center'
-					spacing={2}
-					style={{ marginBottom: 'auto' }}
+				item 
+				xs ={12}
+					  style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'flex-end',
+						marginTop: 'auto',
+					  }}
 				>
-					<Grid item xs={12} sm={6} md={4} lg={3}>
+				
 						<img
 							src={globantImage}
 							alt='Globant Logo'
@@ -51,11 +54,9 @@ const Start = () => {
 								width: '80%',
 								height: 'auto',
 								maxWidth: '400px',
-								marginTop: '70px',
-								marginLeft: '35px',
 							}}
 						/>
-					</Grid>
+					
 				</Grid>
 				<Grid
 					container
