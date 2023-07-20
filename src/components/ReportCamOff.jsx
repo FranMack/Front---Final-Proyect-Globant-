@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
 import { fakeData } from '../utils/fakeData';
-
-
-
 import technicalServiceImage from '../assets/technical-service-image.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,15 +12,32 @@ import {
 	Select,
 	MenuItem,
 	Button,
+	IconButton,
+	Typography,
 } from '@mui/material';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 import OfficeMap from './OfficeMap';
 import ResponsiveAppBar from './Navbar';
+import { useNavigate } from 'react-router';
 
 const ReportCamOff = () => {
+	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
 	const [office, setOffice] = useState('');
+	const [selectedFile, setselectedFile] = useState(null);
+
+	const handleFileChange = e => {
+		const file = e.target.files[0];
+		setselectedFile(file);
+
+		const reader = new FileReader();
+
+		if (file) {
+			reader.readAsDataURL(file);
+		}
+	};
 
 	const handleItemChange = event => {
 		setItem(event.target.value);
@@ -38,10 +51,17 @@ const ReportCamOff = () => {
 
 	const handleSubmit = event => {
 		event.preventDefault();
+		if (selectedFile) {
+			console.log('selected File:', selectedFile);
+		}
+
 		toast.success('Report create successful');
 
 		setItem('');
 		setDescripcion('');
+		setTimeout(() => {
+			navigate('/home');
+		}, 1000);
 	};
 	const isOfficeSelected = !!office;
 
@@ -79,12 +99,50 @@ const ReportCamOff = () => {
 				>
 					Enter the Damaged item manually
 				</h3>
-
 				<img
 					src={technicalServiceImage}
 					alt='Technical Service'
 					style={{ width: '200px', margin: '20px' }}
 				/>
+				<Box
+					sx={{
+						margin: 0,
+						display: 'flex',
+						alignItems: 'center',
+						width: '90%',
+						paddingBottom: '20px',
+					}}
+				>
+					{selectedFile ? (
+						<img
+							src={URL.createObjectURL(selectedFile)}
+							alt='Uploaded File'
+							style={{ width: '150px', marginRight: '10px' }}
+						/>
+					) : null}
+					<Typography
+						variant='body1'
+						style={{ flexGrow: 1, marginRight: '10px' }}
+					>
+						{selectedFile ? selectedFile.name : 'no files selected'}
+					</Typography>
+					<label htmlFor='fileInput'>
+						<input
+							type='file'
+							accept='image/jpeg, image/png'
+							onChange={handleFileChange}
+							style={{ display: 'none' }}
+							id='fileInput'
+						/>
+						<IconButton
+							color='primary'
+							aria-label='upload picture'
+							component='span'
+						>
+							<PhotoCameraIcon />
+						</IconButton>
+					</label>
+				</Box>
 
 				<FormControl style={{ width: '90%' }}>
 					<InputLabel id='demo-simple-select-label'>Item</InputLabel>
@@ -108,7 +166,6 @@ const ReportCamOff = () => {
 						<MenuItem value='mouse'>Mouse</MenuItem>
 					</Select>
 				</FormControl>
-
 				<TextField
 					label='Description'
 					multiline
@@ -136,11 +193,8 @@ const ReportCamOff = () => {
 					</Select>
 				</FormControl>
 				{isOfficeSelected && <OfficeMap />}
-
 				<Button
 					type='submit'
-					component={Link}
-					to='/home'
 					variant='contained'
 					style={{
 						backgroundColor: '#3AB54A',
