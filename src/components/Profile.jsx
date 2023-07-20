@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { Link } from 'react-router-dom';
 import Select from '@mui/material/Select';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-
 import MenuItem from '@mui/material/MenuItem';
 
 import {
 	Box,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
 	FormControl,
 	FormHelperText,
-	IconButton,
 	Input,
 	Stack,
 } from '@mui/material';
+
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { fakeData } from '../utils/fakeData';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
+import Navbar from '../components/Navbar';
 
 const Profile = () => {
 	const user = useSelector(state => state.user);
@@ -32,6 +34,7 @@ const Profile = () => {
 	const [ubication, setUbication] = useState(user.ubication);
 	const [phoneNumber, setPhoneNumber] = useState(user.phone_number);
 	const [image, setImage] = useState(user.url_img);
+	const [showModal, setShowModal] = useState(false);
 
 	const dispatch = useDispatch();
 
@@ -90,6 +93,13 @@ const Profile = () => {
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
+		const maxSizeInBytes = 1024 * 60;
+
+		if (file && file.size > maxSizeInBytes) {
+			setShowModal(true);
+			return;
+		}
+
 		const reader = new FileReader();
 		reader.onload = () => {
 			setImage(reader.result);
@@ -97,229 +107,259 @@ const Profile = () => {
 		reader.readAsDataURL(file);
 	};
 
+	const handleCloseModal = () => {
+		setShowModal(false);
+	};
+
 	return (
-		<Box
-			sx={{
-				margin: { xs: 'inherit', md: '30px auto' },
-				padding: '0 0 20px 0',
-				width: { xs: 'inherit', md: '400px' },
-				boxSizing: 'border-box',
-				boxShadow: { xs: 'inherit', md: '0 6px 10px rgba(0, 0, 0, 0.15)' },
-			}}
-		>
+		<>
+			<Navbar />
 			<Box
 				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					borderBottom: '1px solid grey',
-				}}
-			>
-				<div
-					style={{ display: 'flex', alignItems: 'center', marginLeft: '15px' }}
-				>
-					<IconButton component={Link} to='/home'>
-						<KeyboardBackspaceIcon />
-					</IconButton>
-					<h3 style={{ marginLeft: '16px', color: 'grey' }}>Profile</h3>
-				</div>
-			</Box>
-			<Box
-				sx={{
-					borderBottom: '1px solid grey',
-					padding: '10px 16px',
+					margin: { xs: 'inherit', md: '0px auto' },
+					padding: '0 0 20px 0',
+					boxSizing: 'border-box',
 				}}
 			>
 				<Box
 					sx={{
 						display: 'flex',
 						alignItems: 'center',
-
-						marginLeft: '10px',
-						marginBottom: '20px',
+						borderBottom: '1px solid grey',
 					}}
 				>
-					<input
-						type='file'
-						disabled={!editing}
-						accept='image/jpeg, image/png'
-						onChange={handleImageUpload}
-						style={{ display: 'none' }}
-						id='avatar-upload'
-					/>
-					{/* agregar toasty advertencia por si la imagen es muy pesada */}
-
-					<label htmlFor='avatar-upload'>
-						<Avatar
-							component='span'
-							sx={{ width: 90, height: 90, cursor: 'pointer' }}
-							src={image || userData.url_img}
-						>
-							{!image && userData.first_name && userData.last_name
-								? userData.first_name.charAt(0).toUpperCase() +
-								  userData.last_name.charAt(0).toUpperCase()
-								: null}
-						</Avatar>
-					</label>
-
-					<div style={{ padding: '16px' }}>
-						<Stack spac ing={2}>
-							<FormControl sx={{ width: '140px', marginTop: '10px' }}>
-								<Input
-									value={firstName}
-									onChange={e => setFirstName(e.target.value)}
-									disabled={!editing}
-									id='name'
-									type='text'
-									aria-describedby='name-helper'
-									sx={{ borderBottom: '1.5px solid #808080' }}
-								/>
-								<FormHelperText
-									id='name-helper'
-									sx={{ fontSize: '11px', textAlign: 'center' }}
-								>
-									Name
-								</FormHelperText>
-							</FormControl>
-							<FormControl sx={{ width: '140px' }}>
-								<Input
-									value={lastName}
-									onChange={e => setLastName(e.target.value)}
-									disabled={!editing}
-									id='name'
-									type='text'
-									aria-describedby='name-helper'
-									sx={{ borderBottom: '1.5px solid #808080' }}
-								/>
-
-								<FormHelperText
-									sx={{ fontSize: '11px', textAlign: 'center' }}
-									id='name-helper'
-								>
-									Last Name
-								</FormHelperText>
-							</FormControl>
-						</Stack>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							marginLeft: '15px',
+						}}
+					>
+						
+						<h3 style={{ marginLeft: '16px', color: 'grey' }}>Profile</h3>
 					</div>
 				</Box>
-			</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					padding: '16px',
-				}}
-			>
-				<FormControl sx={{ width: '300px', marginTop: '10px' }}>
-					<Input
-						value={email}
-						onChange={e => setEmail(e.target.value)}
-						disabled={!editing}
-						id='name'
-						type='text'
-						aria-describedby='name-helper'
-						sx={{ borderBottom: '1.5px solid #808080' }}
-					/>
-
-					<FormHelperText
-						sx={{ fontSize: '11px', textAlign: 'center' }}
-						id='name-helper'
-					>
-						Email
-					</FormHelperText>
-				</FormControl>
-				<FormControl sx={{ width: '300px', marginTop: '10px' }}>
-					<Input
-						value={ubication}
-						id='name'
-						type='text'
-						onChange={e => setUbication(e.target.value)}
-						disabled={!editing}
-						aria-describedby='name-helper'
-						sx={{ borderBottom: '1.5px solid #808080' }}
-					/>
-
-					<FormHelperText
-						sx={{ fontSize: '11px', textAlign: 'center' }}
-						id='name-helper'
-					>
-						Ubication
-					</FormHelperText>
-				</FormControl>
-				<FormControl sx={{ width: '300px', marginTop: '10px' }}>
-					<Input
-						value={phoneNumber}
-						id='name'
-						type='text'
-						onChange={e => setPhoneNumber(e.target.value)}
-						disabled={!editing}
-						aria-describedby='name-helper'
-						sx={{ borderBottom: '1.5px solid #808080' }}
-					/>
-
-					<FormHelperText
-						sx={{ fontSize: '11px', textAlign: 'center' }}
-						id='name-helper'
-					>
-						Phone Number
-					</FormHelperText>
-				</FormControl>
-
-				<FormControl sx={{ m: 1, width: '300px', marginTop: '30px' }}>
-					<Select
-						labelId='demo-controlled-open-select-label'
-						id='demo-controlled-open-select'
-						open={open}
-						onClose={handleClose}
-						onOpen={handleOpen}
-						sx={{ height: '40px' }}
-					>
-						<MenuItem value=''>
-							<em>None</em>
-						</MenuItem>
-						{fakeData.map((item, index) => (
-							<MenuItem key={index} value={item.localidad}>
-								{item.localidad},{item.direccion}
-							</MenuItem>
-						))}
-					</Select>
-					<FormHelperText
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						margin: '0 auto',
+						width: '400px',
+					}}
+				>
+					<Box
 						sx={{
-							fontSize: '11px',
+							borderBottom: '1px solid grey',
+							padding: '10px 16px',
+						}}
+					>
+						<Box
+							sx={{
+								display: 'flex',
+								alignItems: 'center',
+
+								marginLeft: '10px',
+								marginBottom: '20px',
+							}}
+						>
+							<input
+								type='file'
+								disabled={!editing}
+								accept='image/jpeg, image/png'
+								onChange={handleImageUpload}
+								style={{ display: 'none' }}
+								id='avatar-upload'
+							/>
+							{/* agregar toasty advertencia por si la imagen es muy pesada */}
+
+							<label htmlFor='avatar-upload'>
+								<Avatar
+									component='span'
+									sx={{ width: 90, height: 90, cursor: 'pointer' }}
+									src={image || userData.url_img}
+								>
+									{!image && userData.first_name && userData.last_name
+										? userData.first_name.charAt(0).toUpperCase() +
+										  userData.last_name.charAt(0).toUpperCase()
+										: null}
+								</Avatar>
+							</label>
+							<Dialog open={showModal} onClose={handleCloseModal}>
+								<DialogTitle>Imagen demasiado grande</DialogTitle>
+								<DialogContent>
+									<p>
+										El tamaño de la imagen excede el límite permitido de 60KB.
+										Por favor, selecciona una imagen más pequeña.
+									</p>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={handleCloseModal} color='primary' autoFocus>
+										Cerrar
+									</Button>
+								</DialogActions>
+							</Dialog>
+							<div style={{ padding: '16px' }}>
+								<Stack spac ing={2}>
+									<FormControl sx={{ width: '140px', marginTop: '10px' }}>
+										<Input
+											value={firstName}
+											onChange={e => setFirstName(e.target.value)}
+											disabled={!editing}
+											id='name'
+											type='text'
+											aria-describedby='name-helper'
+											sx={{ borderBottom: '1.5px solid #808080' }}
+										/>
+										<FormHelperText
+											id='name-helper'
+											sx={{ fontSize: '11px', textAlign: 'center' }}
+										>
+											Name
+										</FormHelperText>
+									</FormControl>
+									<FormControl sx={{ width: '140px' }}>
+										<Input
+											value={lastName}
+											onChange={e => setLastName(e.target.value)}
+											disabled={!editing}
+											id='name'
+											type='text'
+											aria-describedby='name-helper'
+											sx={{ borderBottom: '1.5px solid #808080' }}
+										/>
+
+										<FormHelperText
+											sx={{ fontSize: '11px', textAlign: 'center' }}
+											id='name-helper'
+										>
+											Last Name
+										</FormHelperText>
+									</FormControl>
+								</Stack>
+							</div>
+						</Box>
+					</Box>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							padding: '16px',
+						}}
+					>
+						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
+							<Input
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+								disabled={!editing}
+								id='name'
+								type='text'
+								aria-describedby='name-helper'
+								sx={{ borderBottom: '1.5px solid #808080' }}
+							/>
+
+							<FormHelperText
+								sx={{ fontSize: '11px', textAlign: 'center' }}
+								id='name-helper'
+							>
+								Email
+							</FormHelperText>
+						</FormControl>
+						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
+							<Input
+								value={ubication}
+								id='name'
+								type='text'
+								onChange={e => setUbication(e.target.value)}
+								disabled={!editing}
+								aria-describedby='name-helper'
+								sx={{ borderBottom: '1.5px solid #808080' }}
+							/>
+
+							<FormHelperText
+								sx={{ fontSize: '11px', textAlign: 'center' }}
+								id='name-helper'
+							>
+								Ubication
+							</FormHelperText>
+						</FormControl>
+						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
+							<Input
+								value={phoneNumber}
+								id='name'
+								type='text'
+								onChange={e => setPhoneNumber(e.target.value)}
+								disabled={!editing}
+								aria-describedby='name-helper'
+								sx={{ borderBottom: '1.5px solid #808080' }}
+							/>
+
+							<FormHelperText
+								sx={{ fontSize: '11px', textAlign: 'center' }}
+								id='name-helper'
+							>
+								Phone Number
+							</FormHelperText>
+						</FormControl>
+
+						<FormControl sx={{ m: 1, width: '300px', marginTop: '30px' }}>
+							<Select
+								labelId='demo-controlled-open-select-label'
+								id='demo-controlled-open-select'
+								open={open}
+								onClose={handleClose}
+								onOpen={handleOpen}
+								sx={{ height: '40px' }}
+							>
+								<MenuItem value=''>
+									<em>None</em>
+								</MenuItem>
+								{fakeData.map((item, index) => (
+									<MenuItem key={index} value={item.localidad}>
+										{item.localidad},{item.direccion}
+									</MenuItem>
+								))}
+							</Select>
+							<FormHelperText
+								sx={{
+									fontSize: '11px',
+									textAlign: 'center',
+								}}
+								id='name-helper'
+							>
+								Office
+							</FormHelperText>
+						</FormControl>
+					</Box>
+					<Box
+						sx={{
 							textAlign: 'center',
 						}}
-						id='name-helper'
 					>
-						Office
-					</FormHelperText>
-				</FormControl>
+						{editing ? (
+							<Button
+								variant='contained'
+								onClick={handleSaveClick}
+								color='success'
+								style={{ width: '130px', borderRadius: '20px' }}
+							>
+								Save
+							</Button>
+						) : (
+							<Button
+								variant='contained'
+								color='success'
+								onClick={handleEditClick}
+								style={{ width: '130px', borderRadius: '20px' }}
+							>
+								Edit
+							</Button>
+						)}
+					</Box>
+				</Box>
 			</Box>
-			<Box
-				sx={{
-					textAlign: 'center',
-				}}
-			>
-				{editing ? (
-					<Button
-						variant='contained'
-						onClick={handleSaveClick}
-						color='success'
-						style={{ width: '130px', borderRadius: '20px' }}
-					>
-						Save
-					</Button>
-				) : (
-					<Button
-						variant='contained'
-						color='success'
-						onClick={handleEditClick}
-						style={{ width: '130px', borderRadius: '20px' }}
-					>
-						Edit
-					</Button>
-				)}
-			</Box>
-		</Box>
+		</>
 	);
 };
 

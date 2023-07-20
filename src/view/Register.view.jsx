@@ -19,16 +19,30 @@ import globantImage from '../assets/Globant-Original1.png';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+} from '@mui/material';
 
 const Register = () => {
-	//const [location, setLocation] = useState('');
 	const [number, setNumber] = useState('');
 	const [image, setImage] = useState('');
 	const [errorMessage, setErrorMessage] = useState();
 	const [isLoginRequest, setIsLoginRequest] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
+		const maxSizeInBytes = 1024 * 60;
+
+		if (file && file.size > maxSizeInBytes) {
+			setShowModal(true);
+			return;
+		}
+
 		const reader = new FileReader();
 		reader.onload = () => {
 			setImage(reader.result);
@@ -108,6 +122,10 @@ const Register = () => {
 		},
 	});
 
+	const handleCloseModal = () => {
+		setShowModal(false);
+	};
+
 	const buttonStyles = {
 		borderRadius: '50px',
 		boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
@@ -122,19 +140,27 @@ const Register = () => {
 			<Box
 				component='form'
 				onSubmit={signupForm.handleSubmit}
-				style={{
+				sx={{
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					padding: '16px',
-					marginLeft: '2px',
+					margin: { xs: 'inherit', md: '30px auto' },
+					padding: '0 0 20px 0',
+					width: { xs: 'inherit', md: '400px' },
+					boxSizing: 'border-box',
+					boxShadow: { xs: 'inherit', md: '0 6px 10px rgba(0, 0, 0, 0.15)' },
 				}}
 			>
 				<Grid
 					container
 					spacing={2}
-					style={{ borderBottom: '1px solid grey', width: '100%' }}
+					style={{
+						borderBottom: '1px solid grey',
+						width: '100%',
+						marginTop: 0,
+						marginLeft: 0,
+					}}
 				>
 					<Grid style={{ display: 'flex', alignItems: 'center' }}>
 						<IconButton component={Link} to='/'>
@@ -152,6 +178,8 @@ const Register = () => {
 					style={{
 						marginTop: '1px',
 						marginBottom: '16px',
+						marginLeft: 0,
+						width: '100%',
 					}}
 				>
 					<Grid>
@@ -176,6 +204,20 @@ const Register = () => {
 									: null}
 							</Avatar>
 						</label>
+						<Dialog open={showModal} onClose={handleCloseModal}>
+							<DialogTitle>Imagen demasiado grande</DialogTitle>
+							<DialogContent>
+								<p>
+									El tamaño de la imagen excede el límite permitido de 60KB. Por
+									favor, selecciona una imagen más pequeña.
+								</p>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={handleCloseModal} color='primary' autoFocus>
+									Cerrar
+								</Button>
+							</DialogActions>
+						</Dialog>
 					</Grid>
 					<Grid item style={{ marginBottom: '20px' }}>
 						<Grid container direction='column'>
@@ -224,96 +266,104 @@ const Register = () => {
 							borderBottom: '1px solid grey',
 							width: '100%',
 							marginTop: '20px',
-							marginLeft: '5px',
 						}}
 					></Grid>
-
-					<Grid item>
-						<TextField
-							color='success'
-							sx={{ width: '300px' }}
-							name='email'
-							label='Email'
-							variant='standard'
-							value={signupForm.values.email}
-							onChange={signupForm.handleChange}
-							error={
-								signupForm.touched.email &&
-								signupForm.errors.email !== undefined
-							}
-							helperText={signupForm.touched.email && signupForm.errors.email}
-						/>
-					</Grid>
-					<Grid item>
-						<TextField
-							color='success'
-							sx={{ width: '300px' }}
-							name='username'
-							label='Username'
-							variant='standard'
-							value={signupForm.values.username}
-							onChange={signupForm.handleChange}
-							error={
-								signupForm.touched.username &&
-								signupForm.errors.username !== undefined
-							}
-							helperText={
-								signupForm.touched.username && signupForm.errors.username
-							}
-						/>
-					</Grid>
-					<Grid item>
-						<TextField
-							color='success'
-							sx={{ width: '300px' }}
-							name='password'
-							label='Password'
-							variant='standard'
-							type='password'
-							value={signupForm.values.password}
-							onChange={signupForm.handleChange}
-							error={
-								signupForm.touched.password &&
-								signupForm.errors.password !== undefined
-							}
-							helperText={
-								signupForm.touched.password && signupForm.errors.password
-							}
-						/>
-					</Grid>
-					<Grid item>
-						<Grid container spacing={2}>
-							<Grid item>
-								<TextField
-									color='success'
-									sx={{ width: '140px' }}
-									name='location'
-									label='Location'
-									variant='standard'
-									value={signupForm.values.location}
-									onChange={signupForm.handleChange}
-									error={
-										signupForm.touched.location &&
-										signupForm.errors.location !== undefined
-									}
-									helperText={
-										signupForm.touched.location && signupForm.errors.location
-									}
-								/>
-							</Grid>
-							<Grid item>
-								<TextField
-									color='success'
-									sx={{ width: '140px' }}
-									name='phone_number'
-									label='Phone number'
-									variant='standard'
-									value={number}
-									onChange={e => setNumber(e.target.value)}
-								/>
+					<Box
+						sx={{
+							padding: '16px',
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							rowGap: '10px',
+						}}
+					>
+						<Grid item>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='email'
+								label='Email'
+								variant='standard'
+								value={signupForm.values.email}
+								onChange={signupForm.handleChange}
+								error={
+									signupForm.touched.email &&
+									signupForm.errors.email !== undefined
+								}
+								helperText={signupForm.touched.email && signupForm.errors.email}
+							/>
+						</Grid>
+						<Grid item>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='username'
+								label='Username'
+								variant='standard'
+								value={signupForm.values.username}
+								onChange={signupForm.handleChange}
+								error={
+									signupForm.touched.username &&
+									signupForm.errors.username !== undefined
+								}
+								helperText={
+									signupForm.touched.username && signupForm.errors.username
+								}
+							/>
+						</Grid>
+						<Grid item>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='password'
+								label='Password'
+								variant='standard'
+								type='password'
+								value={signupForm.values.password}
+								onChange={signupForm.handleChange}
+								error={
+									signupForm.touched.password &&
+									signupForm.errors.password !== undefined
+								}
+								helperText={
+									signupForm.touched.password && signupForm.errors.password
+								}
+							/>
+						</Grid>
+						<Grid item>
+							<Grid container spacing={2}>
+								<Grid item>
+									<TextField
+										color='success'
+										sx={{ width: '140px' }}
+										name='location'
+										label='Location'
+										variant='standard'
+										value={signupForm.values.location}
+										onChange={signupForm.handleChange}
+										error={
+											signupForm.touched.location &&
+											signupForm.errors.location !== undefined
+										}
+										helperText={
+											signupForm.touched.location && signupForm.errors.location
+										}
+									/>
+								</Grid>
+								<Grid item>
+									<TextField
+										color='success'
+										sx={{ width: '140px' }}
+										name='phone_number'
+										label='Phone number'
+										variant='standard'
+										value={number}
+										onChange={e => setNumber(e.target.value)}
+									/>
+								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
+					</Box>
 				</Grid>
 				{errorMessage && (
 					<Box sx={{ marginTop: 2 }}>

@@ -119,4 +119,3 @@ const ReportHistory = () => {
 };
 
 export default ReportHistory;
-
