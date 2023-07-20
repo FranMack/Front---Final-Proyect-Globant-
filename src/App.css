@@ -43,7 +43,9 @@
 }
 
 /* maps */
-
+.map {
+	background-color: #f0ebeb;
+}
 .selected {
 	background-color: #3ab54a !important;
 	color: #ffffff;
@@ -85,10 +87,10 @@
 }
 
 .grid-container {
-	margin-top: 20px;
 	display: flex;
 	justify-content: space-around;
 	width: 100%;
+	padding-top: 20px;
 }
 /* circulos */
 
