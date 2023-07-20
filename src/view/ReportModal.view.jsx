@@ -49,6 +49,7 @@ const ReportModal = () => {
 							borderRadius: '20px',
 							width: '90%',
 						}}
+						onClick={() => dispatch(setReportModalOpen(false))}
 					>
 						I HAVE CAMERA
 						<VideocamIcon />
@@ -64,6 +65,7 @@ const ReportModal = () => {
 							width: '90%',
 							border: '1px solid #3AB54A',
 						}}
+						onClick={() => dispatch(setReportModalOpen(false))}
 					>
 						I DON&apos;T HAVE A CAMERA
 						<VideocamOffIcon />

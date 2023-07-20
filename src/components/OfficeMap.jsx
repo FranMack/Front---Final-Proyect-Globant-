@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ResponsiveAppBar from './Navbar';
+// import ResponsiveAppBar from './Navbar';
 import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ function OfficeMap() {
 
 	return (
 		<>
-			<ResponsiveAppBar />
+			{/* <ResponsiveAppBar /> */}
 
 			{!selectedDesk ? (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>

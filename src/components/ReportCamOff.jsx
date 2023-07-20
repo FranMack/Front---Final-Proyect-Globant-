@@ -13,6 +13,8 @@ import {
 	Button,
 } from '@mui/material';
 
+import OfficeMap from './OfficeMap';
+
 const ReportCamOff = () => {
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
@@ -75,6 +77,7 @@ const ReportCamOff = () => {
 					alt='Technical Service'
 					style={{ width: '200px' }}
 				/>
+				<OfficeMap />
 				<FormControl style={{ width: '90%' }}>
 					<Select
 						labelId='item-label'
