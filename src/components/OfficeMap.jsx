@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-// import ResponsiveAppBar from './Navbar';
-import { Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 function OfficeMap() {
 	const [selectedDesk, setSelectedDesk] = useState(null);
@@ -27,8 +26,16 @@ function OfficeMap() {
 	};
 
 	return (
-		<>
-			{/* <ResponsiveAppBar /> */}
+		<div>
+			<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
+				Select your floor
+			</Typography>
+			<FormControl style={{ width: '90%' }}>
+				<InputLabel id='item-label'>floor</InputLabel>
+				<Select label='floor' id='office-select'>
+					<MenuItem value=''>Selecciona una oficina</MenuItem>
+				</Select>
+			</FormControl>
 
 			{!selectedDesk ? (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
@@ -36,7 +43,7 @@ function OfficeMap() {
 				</Typography>
 			) : (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
-					Your desk is :{selectedDesk}
+					Your desk is: {selectedDesk}
 				</Typography>
 			)}
 
@@ -161,18 +168,7 @@ function OfficeMap() {
 					</div>
 				</div>
 			</div>
-			<Button
-				component={Link}
-				to='/home'
-				sx={{
-					backgroundColor: '#3AB54A',
-					color: '#FFFFFF',
-					borderRadius: '20px',
-				}}
-			>
-				Accept
-			</Button>
-		</>
+		</div>
 	);
 }
 

@@ -11,6 +11,7 @@ import { setUser } from '../state/features/userSlice';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { setReportModalOpen } from '../state/features/reportModalSlice';
+import ButtonHome from '../commons/ButtonHome';
 
 function ResponsiveAppBar() {
 	const user = useSelector(state => state.user);
@@ -56,24 +57,29 @@ function ResponsiveAppBar() {
 						{user && <SwipeableTemporaryDrawer />}
 					</Box>
 
+					
+
 					<Button
 						variant='contained'
 						style={{
+							marginRight: '16px',
 							backgroundColor: '#3AB54A',
 							color: '#FFFFFF',
 							borderRadius: '20px',
-							marginRight: '1px',
 						}}
 						onClick={() => dispatch(setReportModalOpen(true))}
 					>
-						New Report <PostAddIcon />
+						 <PostAddIcon />
 					</Button>
+					
+					<ButtonHome />
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
 					<Button
 						color='inherit'
 						style={{
 							color: '#3AB54A',
+							marginLeft: '30px'
 						}}
 						onClick={handleLogout}
 					>

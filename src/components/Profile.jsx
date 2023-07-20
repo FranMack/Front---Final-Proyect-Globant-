@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { Link } from 'react-router-dom';
 import Select from '@mui/material/Select';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-
 import MenuItem from '@mui/material/MenuItem';
 
 import {
@@ -14,7 +11,6 @@ import {
 	DialogTitle,
 	FormControl,
 	FormHelperText,
-	IconButton,
 	Input,
 	Stack,
 } from '@mui/material';
@@ -139,9 +135,7 @@ const Profile = () => {
 							marginLeft: '15px',
 						}}
 					>
-						<IconButton component={Link} to='/home'>
-							<KeyboardBackspaceIcon />
-						</IconButton>
+						
 						<h3 style={{ marginLeft: '16px', color: 'grey' }}>Profile</h3>
 					</div>
 				</Box>
