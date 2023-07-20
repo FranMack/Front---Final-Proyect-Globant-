@@ -48,9 +48,7 @@ const LoginForm = () => {
 		},
 	});
 
-	const handleUpdatePassword = () => {
-		console.log('Updated password!!!');
-	};
+	const handleUpdatePassword = () => {};
 
 	return (
 		<Box component='form' onSubmit={signinForm.handleSubmit}>
