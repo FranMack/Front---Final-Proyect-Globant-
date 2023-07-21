@@ -3,16 +3,30 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 import { Box, Button, Stack, IconButton } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { Link } from 'react-router-dom';
+import { TransformISOdate } from '../utils/functions';
+
+
 const ReportHistory = () => {
 	const [reports, setReports] = useState([]);
     const [search, setSearch] = useState("");
-	const [date, setDate] = useState();
+	const [date,setDate]=useState(null)
+	const [isoDate,setIsoDate]=useState(null)
+
+	const handleDate=(newDate)=>{
+
+		setDate(newDate)
+		if(date){
+			setIsoDate(TransformISOdate(date.$d))
+		}
+	
+	}
 	
 
     const handleSearch = (e) => {
@@ -20,7 +34,6 @@ const ReportHistory = () => {
       };
 
 
-	
 
     useEffect(()=>{
 
@@ -37,22 +50,23 @@ const ReportHistory = () => {
 		  .then((res)=>setReports(res.data))
           .catch((err) => console.log(err));
       }, [search]);
+	  
+
+	  /*useEffect(() => {
+        axios
+          .get(`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}`)
+		  .then((res)=>setReports(res.data))
+          .catch((err) => console.log(err));
+      }, [isoDate]);
 
 
-
+	  if(isoDate){console.log("date",isoDate)}
+	  console.log("reportes",reports)*/
 
 	return (
+		<>
+		<Navbar/>
 		<Box
-			sx={{
-				height: '100vh',
-				margin: { xs: 'inherit', md: '30px auto' },
-				padding: '0 0 20px 0',
-				width: { xs: 'inherit', md: '400px' },
-				display: 'flex,',
-				boxShadow: { xs: 'inherit', md: '0 6px 10px rgba(0, 0, 0, 0.15)' },
-			}}
-		>
-			<Box
 				sx={{
 					display: 'flex',
 					alignItems: 'center',
@@ -61,24 +75,21 @@ const ReportHistory = () => {
 					borderBottom: '1px solid grey',
 				}}
 			>
-				<IconButton component={Link} to='/home'>
-					<KeyboardBackspaceIcon
-						sx={{ marginLeft: '5%', marginRight: '15px', color: 'grey' }}
-					/>
-				</IconButton>
-				<h3 style={{ color: 'grey' }}>Historial de reportes</h3>
+				<Box sx={{marginLeft:{xs:"10%", md:"3%"}}}>
+
+				<h3 style={{ color: 'grey' }}>Historial de reportes inactivos</h3>
+				</Box>
+				
 			</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					width: '100%',
-					height: '8%',
-					borderBottom: '1px solid grey',
-				}}
-			>
-				<h3 style={{ color: 'grey', marginLeft: '10%' }}>REPORTES INACTIVOS</h3>
-			</Box>
+		<Box
+			sx={{
+				height: '100vh',
+				width: { xs: 'inherit', md: '600px' },
+				display: 'flex,',
+				margin:{xs:"0 auto", md:"3% auto"}
+			}}
+		>
+			
 
 			<Box
 				sx={{
@@ -90,7 +101,7 @@ const ReportHistory = () => {
 					marginTop: '5%',
 				}}
 			>
-				<SearchInput  search={search} handleSearch={handleSearch}/>
+				<SearchInput  search={search} handleSearch={handleSearch} date={date} isoDate={isoDate} handleDate={handleDate}/>
 			</Box>
 
 			<Stack sx={{ marginTop: '10%' }}>
@@ -115,6 +126,7 @@ const ReportHistory = () => {
 				</Button>
 			</Box>
 		</Box>
+		</>
 	);
 };
 

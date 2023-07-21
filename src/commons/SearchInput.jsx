@@ -11,10 +11,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-const SearchInput = ({ search, handleSearch }) => {
 
-	const [open,setOpen]=useState(false)
-const [date,setDate]=useState(null)
+const SearchInput = ({ search, handleSearch,date,isoDate,handleDate }) => {
+
+const [open,setOpen]=useState(false)
+
 
 const handleCalendar=()=>{
     setOpen(!open)
@@ -22,13 +23,8 @@ const handleCalendar=()=>{
 
 }
 
-const handleDate=(newDate)=>{
 
-    setDate(newDate)
 
-}
-
-if(date){console.log("date",date.$d)}
 
 	return (
 		<>
