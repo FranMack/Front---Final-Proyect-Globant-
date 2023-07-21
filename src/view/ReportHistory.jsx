@@ -24,7 +24,7 @@ const ReportHistory = () => {
 
     useEffect(()=>{
 
-        axios.get("http://localhost:5000/api/v1/user/all")
+        axios.get("http://localhost:5000/api/v1/report/all")
         .then((res)=>setReports(res.data))
         .catch((error)=>{console.log(error)})
 
@@ -33,7 +33,7 @@ const ReportHistory = () => {
 
     useEffect(() => {
         axios
-          .get(`http://localhost:5000/api/v1//search?device=${search}`)
+          .get(`http://localhost:5000/api/v1/report/search?device=${search}`)
 		  .then((res)=>setReports(res.data))
           .catch((err) => console.log(err));
       }, [search]);

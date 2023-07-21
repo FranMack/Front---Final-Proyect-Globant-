@@ -1,22 +1,40 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 
-import React from 'react';
-import { Box, Input } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Input,IconButton,Modal,Button } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-const SearchInput = ({search,handleSearch}) => {
+const SearchInput = ({ search, handleSearch }) => {
 
+	const [open,setOpen]=useState(false)
+const [date,setDate]=useState(null)
 
+const handleCalendar=()=>{
+    setOpen(!open)
+    console.log("aaaaaaaaaa",open)
+
+}
+
+const handleDate=(newDate)=>{
+
+    setDate(newDate)
+
+}
+
+if(date){console.log("date",date.$d)}
 
 	return (
 		<>
 			<Box
 				sx={{
-					height: '60%', 
+					height: '60%',
 					width: '10%',
 					border: '1px solid grey',
 					display: 'flex',
@@ -45,8 +63,8 @@ const SearchInput = ({search,handleSearch}) => {
 				}}
 			>
 				<Input
-        value={search}
-        onChange={handleSearch}
+					value={search}
+					onChange={handleSearch}
 					disableUnderline={true}
 					placeholder='Buscar'
 					sx={{
@@ -69,10 +87,28 @@ const SearchInput = ({search,handleSearch}) => {
 					backgroundColor: 'lightgrey',
 				}}
 			>
-  <CalendarMonthIcon sx={{ marginLeft: '5px' }} />
-      </Box>
+        <IconButton onClick={handleCalendar}>
+        <CalendarMonthIcon  sx={{ marginLeft: '5px' }} />
+        </IconButton>
+   
+			</Box>
 
-			
+      {open &&(
+      <Modal open={open} sx={{width: { 
+        s: 'inherit', md: '400px',
+        margin:"0 auto",
+				padding: '0 0 20px 0',
+        },}}>
+
+        <Box sx={{backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"end"}}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DateCalendar value={date} onChange={handleDate} />
+      <Button sx={{marginRight:"15%"}} onClick={handleCalendar}>Close</Button>
+    </LocalizationProvider>
+
+        </Box>
+      
+    </Modal>)}
 		</>
 	);
 };

@@ -20,6 +20,7 @@ import OfficeMap from './components/OfficeMap';
 import LoginModal from './view/LoginModal.view';
 import ReportModal from './view/ReportModal.view';
 import Footer from './components/Footer';
+import BasicDateCalendar from './commons/Calendar';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -74,6 +75,7 @@ function App() {
 				<Route path='/report-cam-off' element={<ReportCamOff />} />
 
 				<Route path='*' element={<NotFound />} />
+				<Route path='/calendar' element={<BasicDateCalendar />} />
 			</Routes>
 			<Footer />
 		</>
