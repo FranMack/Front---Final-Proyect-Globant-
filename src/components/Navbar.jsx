@@ -29,13 +29,24 @@ function ResponsiveAppBar() {
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<Button
-					component={Link}
-					to="/reports"
 						color='inherit'
 						sx={{
 							color: '#3AB54A',
 							display: { xs: 'none', md: 'flex' },
-							mr: 1,
+							mr: 2,
+						}}
+						onClick={handleLogout}
+					>
+						Log Out
+					</Button>
+					<Button
+						component={Link}
+						to='/reports'
+						color='inherit'
+						sx={{
+							color: '#3AB54A',
+							display: { xs: 'none', md: 'flex' },
+							mr: 2,
 						}}
 					>
 						Reports
@@ -57,8 +68,6 @@ function ResponsiveAppBar() {
 						{user && <SwipeableTemporaryDrawer />}
 					</Box>
 
-					
-
 					<Button
 						variant='contained'
 						style={{
@@ -69,22 +78,11 @@ function ResponsiveAppBar() {
 						}}
 						onClick={() => dispatch(setReportModalOpen(true))}
 					>
-						 <PostAddIcon />
+						<PostAddIcon />
 					</Button>
-					
-					<ButtonHome />
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
-					<Button
-						color='inherit'
-						style={{
-							color: '#3AB54A',
-							marginLeft: '30px'
-						}}
-						onClick={handleLogout}
-					>
-						Log Out
-					</Button>
+					<ButtonHome />
 					<Box sx={{ flexGrow: 0 }}></Box>
 				</Toolbar>
 			</Container>
