@@ -3,6 +3,7 @@
 import React from "react"
 import { Box } from '@mui/material';
 import { Link } from "react-router-dom";
+import { ConvertISOdateToRegular } from "../utils/functions";
 
 
 
@@ -58,7 +59,7 @@ const ReportItem=({report})=>{
           }}
         >
          <p>{report.device}</p>
-         <p>{report.date_report}</p>
+         <p>{ConvertISOdateToRegular(report.date_report)}</p>
         </Box>
   
   
