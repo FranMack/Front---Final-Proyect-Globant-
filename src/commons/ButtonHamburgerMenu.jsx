@@ -15,12 +15,26 @@ import Avatar from '@mui/material/Avatar';
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../state/features/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { setLoginModalOpen } from '../state/features/loginModalSlice';
 
 export default function SwipeableTemporaryDrawer() {
 	const user = useSelector(state => state.user);
 	const [state, setState] = React.useState({
 		left: false,
 	});
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		dispatch(setUser(null));
+		navigate('/');
+		dispatch(setLoginModalOpen(true));
+	};
 
 	const toggleDrawer = (anchor, open) => event => {
 		if (
@@ -87,6 +101,16 @@ export default function SwipeableTemporaryDrawer() {
 					</ListItem>
 				))}
 			</List>
+			<Button
+				color='inherit'
+				style={{
+					color: '#3AB54A',
+					marginLeft: '30px',
+				}}
+				onClick={handleLogout}
+			>
+				Log Out
+			</Button>
 		</Box>
 	);
 
