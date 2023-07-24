@@ -28,17 +28,28 @@ function ResponsiveAppBar() {
 		<AppBar position='static' sx={{ background: 'white' }}>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
+					<ButtonHome />
 					<Button
-						color='inherit'
-						sx={{
-							color: '#3AB54A',
-							display: { xs: 'none', md: 'flex' },
-							mr: 2,
+						variant='contained'
+						style={{
+							marginRight: '16px',
+							backgroundColor: '#3AB54A',
+							color: '#FFFFFF',
+							minWidth: '40px',
+							width: '40px',
+							height: '40px',
+							borderRadius: '50%',
+							position: 'fixed',
+							right: 0,
+							bottom: '100px',
+							zIndex: 99,
 						}}
-						onClick={handleLogout}
+						onClick={() => dispatch(setReportModalOpen(true))}
 					>
-						Log Out
+						<PostAddIcon />
 					</Button>
+
+					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
 					<Button
 						component={Link}
 						to='/reports'
@@ -63,27 +74,27 @@ function ResponsiveAppBar() {
 					>
 						Profile
 					</Button>
-
-					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-						{user && <SwipeableTemporaryDrawer />}
-					</Box>
-
 					<Button
-						variant='contained'
-						style={{
-							marginRight: '16px',
-							backgroundColor: '#3AB54A',
-							color: '#FFFFFF',
-							borderRadius: '20px',
+						color='inherit'
+						sx={{
+							color: '#C5DA2D',
+							display: { xs: 'none', md: 'flex' },
+							mr: 2,
 						}}
-						onClick={() => dispatch(setReportModalOpen(true))}
+						onClick={handleLogout}
 					>
-						<PostAddIcon />
+						Log Out
 					</Button>
 
-					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
-					<ButtonHome />
-					<Box sx={{ flexGrow: 0 }}></Box>
+					<Box
+						sx={{
+							flexGrow: 1,
+							display: { xs: 'flex', md: 'none' },
+							justifyContent: 'flex-end',
+						}}
+					>
+						{user && <SwipeableTemporaryDrawer />}
+					</Box>
 				</Toolbar>
 			</Container>
 		</AppBar>

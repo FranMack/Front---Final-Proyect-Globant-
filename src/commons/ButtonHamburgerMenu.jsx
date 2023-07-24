@@ -24,7 +24,7 @@ import { setLoginModalOpen } from '../state/features/loginModalSlice';
 export default function SwipeableTemporaryDrawer() {
 	const user = useSelector(state => state.user);
 	const [state, setState] = React.useState({
-		left: false,
+		right: false,
 	});
 
 	const dispatch = useDispatch();
@@ -116,7 +116,7 @@ export default function SwipeableTemporaryDrawer() {
 
 	return (
 		<div>
-			{['left'].map(anchor => (
+			{['right'].map(anchor => (
 				<React.Fragment key={anchor}>
 					<IconButton
 						onClick={toggleDrawer(anchor, true)}
