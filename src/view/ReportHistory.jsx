@@ -11,6 +11,7 @@ import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { Link } from 'react-router-dom';
 import { TransformISOdate } from '../utils/functions';
+import { orderByDate } from '../utils/functions';
 
 
 const ReportHistory = () => {
@@ -18,13 +19,18 @@ const ReportHistory = () => {
     const [search, setSearch] = useState("");
 	const [date,setDate]=useState(null)
 	const [isoDate,setIsoDate]=useState(null)
+	const[allReports,setAllreports]=useState(false)
+
+	const handleShowMore=()=>{
+		setAllreports(!allReports)
+	}
 
 	const handleDate=(newDate)=>{
 
 		setDate(newDate)
-		if(date){
-			setIsoDate(TransformISOdate(date.$d))
-		}
+
+		setIsoDate(TransformISOdate(newDate.$d))
+	
 	
 	}
 	
@@ -32,6 +38,15 @@ const ReportHistory = () => {
     const handleSearch = (e) => {
         setSearch(e.target.value);
       };
+
+
+	  const showAllTheReports=(event)=>{
+		event.preventDefault()
+		axios.get("http://localhost:5000/api/v1/report/all")
+        .then((res)=>setReports(res.data))
+        .catch((error)=>{console.log(error)})
+
+	  }
 
 
 
@@ -52,16 +67,21 @@ const ReportHistory = () => {
       }, [search]);
 	  
 
-	  /*useEffect(() => {
-        axios
-          .get(`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}`)
-		  .then((res)=>setReports(res.data))
-          .catch((err) => console.log(err));
-      }, [isoDate]);
+	  useEffect(() => {
+		if(date){
+			axios
+			.get(`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}`)
+			.then((res)=>setReports(res.data))
+			.catch((err) => console.log(err));
+		}
+       
+      }, [date]);
 
 
-	  if(isoDate){console.log("date",isoDate)}
-	  console.log("reportes",reports)*/
+	console.log("date",isoDate)
+	console.log("date",date)
+	console.log("reports",reports)
+	
 
 	return (
 		<>
@@ -101,28 +121,37 @@ const ReportHistory = () => {
 					marginTop: '5%',
 				}}
 			>
-				<SearchInput  search={search} handleSearch={handleSearch} date={date} isoDate={isoDate} handleDate={handleDate}/>
+				<SearchInput  search={search} handleSearch={handleSearch} date={date} isoDate={isoDate} handleDate={handleDate} showAllTheReports={showAllTheReports}/>
 			</Box>
 
 			<Stack sx={{ marginTop: '10%' }}>
-				{reports.map((report, i) => {
-					return (
-						<div key={i}>
-							<ReportItem report={report} />
-						</div>
-					);
-				})}
-			</Stack>
+  {allReports
+    ? orderByDate(reports).map((report, i) => {
+        return (
+          <div key={i}>
+            <ReportItem report={report} />
+          </div>
+        );
+      })
+    : orderByDate(reports).slice(0, 4).map((report, i) => {
+        return (
+          <div key={i}>
+            <ReportItem report={report} />
+          </div>
+        );
+      })}
+</Stack>
 
 			<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
 				<Button
+				onClick={handleShowMore}
 					sx={{
 						color: '#3AB54A',
 						marginLeft: '5px',
 						textDecoration: 'none',
 					}}
 				>
-					Mostrar mas...
+					{allReports ? `Mostrar menos`: `Mostrar mas...`}
 				</Button>
 			</Box>
 		</Box>
