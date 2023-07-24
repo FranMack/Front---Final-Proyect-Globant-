@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
 
-const SearchInput = ({ search, handleSearch,date,isoDate,handleDate }) => {
+const SearchInput = ({ search, handleSearch,date,isoDate,handleDate,showAllTheReports }) => {
 
 const [open,setOpen]=useState(false)
 
@@ -96,11 +96,17 @@ const handleCalendar=()=>{
 				padding: '0 0 20px 0',
         },}}>
 
-        <Box sx={{backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"end"}}>
+        <Box sx={{backgroundColor:"white",display:"flex",flexDirection:"column",alignItems:"center",}}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar value={date} onChange={handleDate} />
-      <Button sx={{marginRight:"15%"}} onClick={handleCalendar}>Close</Button>
+	
     </LocalizationProvider>
+	<Box sx={{display:"flex", justifyContent:"space-around",width:"100%"}}>
+	<Button   onClick={showAllTheReports} >Show all</Button>
+	  <Button  onClick={handleCalendar}>Close</Button>
+	  
+	  </Box>
+     
 
         </Box>
       
