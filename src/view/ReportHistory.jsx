@@ -68,10 +68,13 @@ const ReportHistory = () => {
 	  
 
 	  useEffect(() => {
-        axios
-          .get(`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}`)
-		  .then((res)=>setReports(res.data))
-          .catch((err) => console.log(err));
+		if(date){
+			axios
+			.get(`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}`)
+			.then((res)=>setReports(res.data))
+			.catch((err) => console.log(err));
+		}
+       
       }, [date]);
 
 
