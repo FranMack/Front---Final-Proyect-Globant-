@@ -23,10 +23,16 @@ return fechaConvertida;
 
 export function ConvertISOdateToRegular(isodate){
 
-    let arr=isodate.split("T")
-    let arr2=arr[0].split("-")
+    if(isodate){
 
-    return(`${arr2[2]}/${arr2[1]}/${arr2[0]}`)
+        let arr=isodate.split("T")
+        let arr2=arr[0].split("-")
+    
+        return(`${arr2[2]}/${arr2[1]}/${arr2[0]}`)
+
+    }
+
+  
 }
 
 
