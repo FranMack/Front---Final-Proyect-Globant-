@@ -8,6 +8,7 @@ function OfficeMap() {
 	const handleDeskClick = boxNumber => {
 		setSelectedDesk(boxNumber);
 	};
+
 	const renderBoxes = (start, end) => {
 		const boxes = [];
 		for (let i = start; i <= end; i++) {
@@ -24,20 +25,19 @@ function OfficeMap() {
 	};
 
 	return (
-		<div>
+		<>
 			<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
 				Select your floor
 			</Typography>
 			<FormControl
 				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					width: '100%',
+					width: '90%',
 				}}
 			>
-				<InputLabel id='item-label'>Floor</InputLabel>
-				<Select label='floor' id='office-select' sx={{ width: '90%' }}>
+				<InputLabel id='item-label' required>
+					floor
+				</InputLabel>
+				<Select label='floor' id='office-select' required>
 					<MenuItem value='1'>1</MenuItem>
 					<MenuItem value='2'>2</MenuItem>
 				</Select>
@@ -155,7 +155,7 @@ function OfficeMap() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
