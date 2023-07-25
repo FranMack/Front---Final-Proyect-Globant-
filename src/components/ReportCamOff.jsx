@@ -14,6 +14,7 @@ import {
 	Button,
 	IconButton,
 	Typography,
+	InputAdornment,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
@@ -22,11 +23,13 @@ import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
 
 const ReportCamOff = () => {
+	const maxChars = 100;
 	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
 	const [office, setOffice] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
+	const [descripcionError, setDescripcionError] = useState('');
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -46,21 +49,35 @@ const ReportCamOff = () => {
 		setOffice(event.target.value);
 	};
 	const handleDescripcionChange = event => {
-		setDescripcion(event.target.value);
+		const inputValue = event.target.value;
+		const singleSpaceValue = inputValue.replace(/\s+/g, ' '); // Replace multiple spaces with a single space
+
+		setDescripcion(singleSpaceValue);
+
+		if (singleSpaceValue.length < 10 || singleSpaceValue.length > maxChars) {
+			setDescripcionError('Description must be between 10 and 100 characters.');
+		} else {
+			setDescripcionError('');
+		}
 	};
 
 	const handleSubmit = event => {
 		event.preventDefault();
 
-		toast.success('Report create successful');
-
-		setItem('');
-		setDescripcion('');
-		setTimeout(() => {
-			navigate('/home');
-		}, 1000);
+		if (descripcionError) {
+			toast.error(descripcionError);
+		} else {
+			toast.success('Report create successful');
+			setItem('');
+			setDescripcion('');
+			setTimeout(() => {
+				navigate('/home');
+			}, 1000);
+		}
 	};
 	const isOfficeSelected = !!office;
+
+	const remainingChars = maxChars - descripcion.length;
 
 	return (
 		<>
@@ -73,7 +90,11 @@ const ReportCamOff = () => {
 				}}
 			>
 				<div
-					style={{ display: 'flex', alignItems: 'center', marginLeft: '15px' }}
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						marginLeft: '15px',
+					}}
 				>
 					<h3 style={{ marginLeft: '16px', color: 'grey' }}>New Report</h3>
 				</div>
@@ -142,12 +163,15 @@ const ReportCamOff = () => {
 				</Box>
 
 				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='demo-simple-select-label'>Item</InputLabel>
+					<InputLabel id='demo-simple-select-label' required>
+						Item
+					</InputLabel>
 					<Select
 						id='demo-simple-select'
 						value={item}
 						label='item'
 						onChange={handleItemChange}
+						required
 					>
 						<MenuItem value='notebook-charger'>Notebook Charger</MenuItem>
 						<MenuItem value='cell-phone-charger'>Cellphone Charger</MenuItem>
@@ -167,19 +191,33 @@ const ReportCamOff = () => {
 					label='Description'
 					multiline
 					rows={4}
+					required
 					value={descripcion}
 					onChange={handleDescripcionChange}
+					error={!!descripcionError}
+					helperText={descripcionError}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position='end' style={{ alignSelf: 'flex-end' }}>
+								Max chars.: {remainingChars}/{maxChars}
+							</InputAdornment>
+						),
+					}}
 					margin='normal'
 					variant='outlined'
 					style={{ width: '90%' }}
 				/>
+
 				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='item-label'>office</InputLabel>
+					<InputLabel id='item-label' required>
+						office
+					</InputLabel>
 					<Select
 						label='office'
 						id='office-select'
 						value={office}
 						onChange={handleOfficeChange}
+						required
 					>
 						<MenuItem value=''>Selecciona una oficina</MenuItem>
 						{fakeData.map((item, index) => (
