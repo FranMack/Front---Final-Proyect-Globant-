@@ -245,7 +245,7 @@ const ReportDetail = () => {
 					
 						}}
 					>
-						{`Piso: ${report.floor_number}`}
+						{`Piso:`}
 					</Box>
 					<Box
 						sx={{
@@ -255,7 +255,7 @@ const ReportDetail = () => {
 				
 						}}
 					>
-						{`Box: ${report.box_number}`}
+						{`Box:`}
 					</Box>
 				</Box>
 
@@ -283,7 +283,7 @@ const ReportDetail = () => {
                             marginBottom:"1%"
 						}}
 					>
-						{`Piso: ${report.floor_number}`}
+						{`${report.floor_number}`}
 					</Box>
 					<Box
 						sx={{
@@ -297,7 +297,7 @@ const ReportDetail = () => {
 							textAlign: 'center',
 						}}
 					>
-						{`Box: ${report.box_number}`}
+						{` ${report.box_number}`}
 					</Box>
 				</Box>
 			</Box>
