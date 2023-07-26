@@ -17,7 +17,7 @@ import {
 
 import Button from '@mui/material/Button';
 import axios from 'axios';
-import { fakeData } from '../utils/fakeData';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
 import Navbar from '../components/Navbar';
@@ -26,11 +26,13 @@ import { useFormik } from 'formik';
 
 const Profile = () => {
 	const user = useSelector(state => state.user);
-	const [userData, setUserData] = useState({});
 
+	const [userData, setUserData] = useState({});
 	const [editing, setEditing] = useState(false);
 	const [image, setImage] = useState(user.url_img);
 	const [showModal, setShowModal] = useState(false);
+	const [office, setOffice] = useState([]);
+	const [selectedOffice, setSelectedOffice] = useState({});
 
 	const dispatch = useDispatch();
 
@@ -52,6 +54,42 @@ const Profile = () => {
 			.typeError('phone number must be a number')
 			.integer('phone number must be a integer'),
 	});
+
+	const handleEditClick = () => {
+		setEditing(true);
+		setSelectedOffice(userData.office);
+	};
+
+	useEffect(() => {
+		const getUsers = async () => {
+			try {
+				const response = await axios.get(
+					`http://localhost:5000/api/v1/user/profile/${user.username}`,
+				);
+				setUserData(response.data[0]);
+				if (response.data[0].office) {
+					setSelectedOffice(response.data[0].office);
+				}
+
+				setImage(response.data[0].url_img);
+			} catch (error) {
+				return { msg: ' Error retrieving user', error };
+			}
+		};
+		const getOffices = async () => {
+			try {
+				const response = await axios.get(
+					'http://localhost:5000/api/v1/office/allOffices',
+				);
+
+				setOffice(response.data);
+			} catch (error) {
+				console.error('Error:', error);
+			}
+		};
+		getOffices();
+		getUsers();
+	}, [user.username]);
 	const profileForm = useFormik({
 		initialValues: {
 			firstName: user.first_name,
@@ -59,6 +97,7 @@ const Profile = () => {
 			email: user.email,
 			ubication: user.ubication,
 			phoneNumber: user.phone_number,
+			office: user.office ? user.office : null,
 		},
 		validationSchema: validationSchema,
 		onSubmit: async values => {
@@ -71,6 +110,7 @@ const Profile = () => {
 					ubication: values.ubication,
 					phone_number: values.phoneNumber,
 					url_img: image,
+					office: selectedOffice,
 				};
 				const response = await axios.put(
 					`http://localhost:5000/api/v1/user/profile/${user.username}`,
@@ -78,32 +118,13 @@ const Profile = () => {
 				);
 				setUserData(response.data);
 				dispatch(setUser(updatedData));
+
 				setEditing(false);
 			} catch (error) {
 				console.error('Error editing user', error);
 			}
 		},
 	});
-
-	const handleEditClick = () => {
-		setEditing(true);
-	};
-
-	useEffect(() => {
-		const getUsers = async () => {
-			try {
-				const response = await axios.get(
-					`http://localhost:5000/api/v1/user/profile/${user.username}`,
-				);
-				setUserData(response.data[0]);
-
-				setImage(response.data[0].url_img);
-			} catch (error) {
-				return { msg: ' Error retrieving user', error };
-			}
-		};
-		getUsers();
-	}, []);
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
@@ -124,9 +145,10 @@ const Profile = () => {
 	const handleCloseModal = () => {
 		setShowModal(false);
 	};
-	useEffect(() => {
-		console.log('Errors:', profileForm.errors);
-	}, [profileForm.errors]);
+
+	const handleChangeOffice = event => {
+		setSelectedOffice(event.target.value);
+	};
 
 	return (
 		<>
@@ -383,13 +405,14 @@ const Profile = () => {
 								labelId='demo-controlled-open-select-label'
 								id='demo-controlled-open-select'
 								sx={{ height: '40px' }}
+								value={selectedOffice}
+								disabled={editing ? false : true}
+								onChange={handleChangeOffice}
 							>
-								<MenuItem value=''>
-									<em>None</em>
-								</MenuItem>
-								{fakeData.map((item, index) => (
-									<MenuItem key={index} value={item.localidad}>
-										{item.localidad},{item.direccion}
+								<MenuItem value=''>Select an office</MenuItem>
+								{office?.map((item, index) => (
+									<MenuItem key={index} value={`${item.name},${item.location}`}>
+										{item.name},{item.location}
 									</MenuItem>
 								))}
 							</Select>
