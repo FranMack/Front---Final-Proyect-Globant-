@@ -128,3 +128,16 @@
 	display: flex;
 	justify-content: space-around;
 }
+
+@keyframes rotateIcon {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.button-new-report:hover .icon-new-report {
+	animation: rotateIcon 0.5s linear;
+}
