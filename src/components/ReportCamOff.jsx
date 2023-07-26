@@ -28,6 +28,7 @@ const ReportCamOff = () => {
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
 	const [office, setOffice] = useState([]);
+
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
 	const [selectedOffice, setSelectedOffice] = useState(null);
@@ -47,7 +48,11 @@ const ReportCamOff = () => {
 		setItem(event.target.value);
 	};
 	const handleOfficeChange = event => {
-		setSelectedOffice(event.target.value);
+		const selectedLocation = event.target.value;
+		const selectedOfficeData = office.find(
+			item => item.location === selectedLocation,
+		);
+		setSelectedOffice(selectedOfficeData);
 	};
 	const handleDescripcionChange = event => {
 		const inputValue = event.target.value;
@@ -230,7 +235,7 @@ const ReportCamOff = () => {
 					<Select
 						label='office'
 						id='office-select'
-						value={selectedOffice}
+						value={selectedOffice ? selectedOffice.location : ''}
 						onChange={handleOfficeChange}
 						required
 					>
@@ -242,7 +247,7 @@ const ReportCamOff = () => {
 						))}
 					</Select>
 				</FormControl>
-				{selectedOffice && <OfficeMap />}
+				{selectedOffice && <OfficeMap officeId={selectedOffice} />}
 				<Button
 					type='submit'
 					variant='contained'
