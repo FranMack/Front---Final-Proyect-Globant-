@@ -21,22 +21,73 @@ import { fakeData } from '../utils/fakeData';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
 import Navbar from '../components/Navbar';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
 const Profile = () => {
 	const user = useSelector(state => state.user);
 	const [userData, setUserData] = useState({});
-	const [open, setOpen] = React.useState(false);
-	const [editing, setEditing] = useState(false);
 
-	const [firstName, setFirstName] = useState(user.first_name);
-	const [lastName, setLastName] = useState(user.last_name);
-	const [email, setEmail] = useState(user.email);
-	const [ubication, setUbication] = useState(user.ubication);
-	const [phoneNumber, setPhoneNumber] = useState(user.phone_number);
+	const [editing, setEditing] = useState(false);
 	const [image, setImage] = useState(user.url_img);
 	const [showModal, setShowModal] = useState(false);
 
 	const dispatch = useDispatch();
+
+	const validationSchema = Yup.object({
+		firstName: Yup.string()
+			.min(3, 'First name minimum 3 characters')
+			.required('First name is required')
+			.matches(/^[A-Za-z]+$/, 'First name should contain only letters'),
+		lastName: Yup.string()
+			.min(3, 'Last name minimum 3 characters')
+			.matches(/^[A-Za-z]+$/, 'Last name should contain only letters')
+			.required('Last name is required'),
+		email: Yup.string().email('Invalid email').required('Email is required'),
+		ubication: Yup.string()
+			.min(3, 'Ubication minimum 3 characters')
+			.required('Ubication is required'),
+		phoneNumber: Yup.number()
+			.required('Phone number is required')
+			.typeError('phone number must be a number')
+			.integer('phone number must be a integer'),
+	});
+	const profileForm = useFormik({
+		initialValues: {
+			firstName: user.first_name,
+			lastName: user.last_name,
+			email: user.email,
+			ubication: user.ubication,
+			phoneNumber: user.phone_number,
+		},
+		validationSchema: validationSchema,
+		onSubmit: async values => {
+			try {
+				const updatedData = {
+					first_name: values.firstName,
+					last_name: values.lastName,
+					username: user.username,
+					email: values.email,
+					ubication: values.ubication,
+					phone_number: values.phoneNumber,
+					url_img: image,
+				};
+				const response = await axios.put(
+					`http://localhost:5000/api/v1/user/profile/${user.username}`,
+					updatedData,
+				);
+				setUserData(response.data);
+				dispatch(setUser(updatedData));
+				setEditing(false);
+			} catch (error) {
+				console.error('Error editing user', error);
+			}
+		},
+	});
+
+	const handleEditClick = () => {
+		setEditing(true);
+	};
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -45,11 +96,7 @@ const Profile = () => {
 					`http://localhost:5000/api/v1/user/profile/${user.username}`,
 				);
 				setUserData(response.data[0]);
-				setFirstName(response.data[0].first_name);
-				setLastName(response.data[0].last_name);
-				setEmail(response.data[0].email);
-				setUbication(response.data[0].ubication);
-				setPhoneNumber(response.data[0].phone_number);
+
 				setImage(response.data[0].url_img);
 			} catch (error) {
 				return { msg: ' Error retrieving user', error };
@@ -57,39 +104,6 @@ const Profile = () => {
 		};
 		getUsers();
 	}, []);
-	const handleClose = () => {
-		setOpen(false);
-	};
-
-	const handleOpen = () => {
-		setOpen(true);
-	};
-
-	const handleSaveClick = async () => {
-		try {
-			const updatedData = {
-				first_name: firstName,
-				last_name: lastName,
-				username: user.username,
-				email,
-				ubication: ubication,
-				phone_number: phoneNumber,
-				url_img: image,
-			};
-			const response = await axios.put(
-				`http://localhost:5000/api/v1/user/profile/${user.username}`,
-				updatedData,
-			);
-			setUserData(response.data);
-			dispatch(setUser(updatedData));
-			setEditing(false);
-		} catch (error) {
-			return { msg: ' Error editing user', error };
-		}
-	};
-	const handleEditClick = () => {
-		setEditing(true);
-	};
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
@@ -110,6 +124,9 @@ const Profile = () => {
 	const handleCloseModal = () => {
 		setShowModal(false);
 	};
+	useEffect(() => {
+		console.log('Errors:', profileForm.errors);
+	}, [profileForm.errors]);
 
 	return (
 		<>
@@ -120,6 +137,7 @@ const Profile = () => {
 					padding: '0 0 20px 0',
 					boxSizing: 'border-box',
 				}}
+				onSubmit={profileForm.handleSubmit}
 			>
 				<Box
 					sx={{
@@ -135,7 +153,6 @@ const Profile = () => {
 							marginLeft: '15px',
 						}}
 					>
-						
 						<h3 style={{ marginLeft: '16px', color: 'grey' }}>Profile</h3>
 					</div>
 				</Box>
@@ -171,7 +188,6 @@ const Profile = () => {
 								style={{ display: 'none' }}
 								id='avatar-upload'
 							/>
-							{/* agregar toasty advertencia por si la imagen es muy pesada */}
 
 							<label htmlFor='avatar-upload'>
 								<Avatar
@@ -199,42 +215,66 @@ const Profile = () => {
 									</Button>
 								</DialogActions>
 							</Dialog>
+
 							<div style={{ padding: '16px' }}>
 								<Stack spac ing={2}>
 									<FormControl sx={{ width: '140px', marginTop: '10px' }}>
 										<Input
-											value={firstName}
-											onChange={e => setFirstName(e.target.value)}
+											value={profileForm.values.firstName}
+											onChange={profileForm.handleChange}
 											disabled={!editing}
-											id='name'
-											type='text'
+											name='firstName'
+											label='Name'
 											aria-describedby='name-helper'
 											sx={{ borderBottom: '1.5px solid #808080' }}
 										/>
-										<FormHelperText
-											id='name-helper'
-											sx={{ fontSize: '11px', textAlign: 'center' }}
-										>
-											Name
-										</FormHelperText>
+										{!profileForm.errors.firstName ? (
+											<FormHelperText
+												sx={{ fontSize: '11px', textAlign: 'center' }}
+												id='name-helper'
+											>
+												Firts Name
+											</FormHelperText>
+										) : (
+											<FormHelperText
+												sx={{
+													fontSize: '11px',
+													textAlign: 'center',
+													color: 'red',
+												}}
+											>
+												{profileForm.errors.firstName}
+											</FormHelperText>
+										)}
 									</FormControl>
 									<FormControl sx={{ width: '140px' }}>
 										<Input
-											value={lastName}
-											onChange={e => setLastName(e.target.value)}
+											value={profileForm.values.lastName}
+											onChange={profileForm.handleChange}
 											disabled={!editing}
-											id='name'
-											type='text'
+											name='lastName'
+											label='Last name'
 											aria-describedby='name-helper'
 											sx={{ borderBottom: '1.5px solid #808080' }}
 										/>
-
-										<FormHelperText
-											sx={{ fontSize: '11px', textAlign: 'center' }}
-											id='name-helper'
-										>
-											Last Name
-										</FormHelperText>
+										{!profileForm.errors.lastName ? (
+											<FormHelperText
+												sx={{ fontSize: '11px', textAlign: 'center' }}
+												id='lastname-helper'
+											>
+												Last Name
+											</FormHelperText>
+										) : (
+											<FormHelperText
+												sx={{
+													fontSize: '11px',
+													textAlign: 'center',
+													color: 'red',
+												}}
+											>
+												{profileForm.errors.lastName}
+											</FormHelperText>
+										)}
 									</FormControl>
 								</Stack>
 							</div>
@@ -250,66 +290,98 @@ const Profile = () => {
 					>
 						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
 							<Input
-								value={email}
-								onChange={e => setEmail(e.target.value)}
+								onChange={profileForm.handleChange}
+								value={profileForm.values.email}
 								disabled={!editing}
-								id='name'
-								type='text'
-								aria-describedby='name-helper'
+								id='email'
+								type='email'
+								aria-describedby='email-helper'
 								sx={{ borderBottom: '1.5px solid #808080' }}
 							/>
 
-							<FormHelperText
-								sx={{ fontSize: '11px', textAlign: 'center' }}
-								id='name-helper'
-							>
-								Email
-							</FormHelperText>
+							{!profileForm.errors.email ? (
+								<FormHelperText
+									sx={{ fontSize: '11px', textAlign: 'center' }}
+									id='email-helper'
+								>
+									email
+								</FormHelperText>
+							) : (
+								<FormHelperText
+									sx={{
+										fontSize: '11px',
+										textAlign: 'center',
+										color: 'red',
+									}}
+								>
+									{profileForm.errors.email}
+								</FormHelperText>
+							)}
 						</FormControl>
 						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
 							<Input
-								value={ubication}
-								id='name'
+								value={profileForm.values.ubication}
+								id='ubication'
 								type='text'
-								onChange={e => setUbication(e.target.value)}
+								onChange={profileForm.handleChange}
 								disabled={!editing}
-								aria-describedby='name-helper'
+								aria-describedby='ubication-helper'
 								sx={{ borderBottom: '1.5px solid #808080' }}
 							/>
 
-							<FormHelperText
-								sx={{ fontSize: '11px', textAlign: 'center' }}
-								id='name-helper'
-							>
-								Ubication
-							</FormHelperText>
+							{!profileForm.errors.ubication ? (
+								<FormHelperText
+									sx={{ fontSize: '11px', textAlign: 'center' }}
+									id='ubication-helper'
+								>
+									Location
+								</FormHelperText>
+							) : (
+								<FormHelperText
+									sx={{
+										fontSize: '11px',
+										textAlign: 'center',
+										color: 'red',
+									}}
+								>
+									{profileForm.errors.ubication}
+								</FormHelperText>
+							)}
 						</FormControl>
 						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
 							<Input
-								value={phoneNumber}
-								id='name'
+								value={profileForm.values.phoneNumber}
+								onChange={profileForm.handleChange}
+								id='phoneNumber'
 								type='text'
-								onChange={e => setPhoneNumber(e.target.value)}
 								disabled={!editing}
-								aria-describedby='name-helper'
+								aria-describedby='phoneNumber-helper'
 								sx={{ borderBottom: '1.5px solid #808080' }}
 							/>
 
-							<FormHelperText
-								sx={{ fontSize: '11px', textAlign: 'center' }}
-								id='name-helper'
-							>
-								Phone Number
-							</FormHelperText>
+							{!profileForm.errors.phoneNumber ? (
+								<FormHelperText
+									sx={{ fontSize: '11px', textAlign: 'center' }}
+									id='phoneNumber-helper'
+								>
+									Phone Number
+								</FormHelperText>
+							) : (
+								<FormHelperText
+									sx={{
+										fontSize: '11px',
+										textAlign: 'center',
+										color: 'red',
+									}}
+								>
+									{profileForm.errors.phoneNumber}
+								</FormHelperText>
+							)}
 						</FormControl>
-
 						<FormControl sx={{ m: 1, width: '300px', marginTop: '30px' }}>
 							<Select
 								labelId='demo-controlled-open-select-label'
 								id='demo-controlled-open-select'
-								open={open}
-								onClose={handleClose}
-								onOpen={handleOpen}
 								sx={{ height: '40px' }}
 							>
 								<MenuItem value=''>
@@ -340,8 +412,9 @@ const Profile = () => {
 						{editing ? (
 							<Button
 								variant='contained'
-								onClick={handleSaveClick}
+								type='submit'
 								color='success'
+								onClick={profileForm.handleSubmit}
 								style={{ width: '130px', borderRadius: '20px' }}
 							>
 								Save
