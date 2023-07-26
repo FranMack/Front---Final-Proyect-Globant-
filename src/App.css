@@ -43,6 +43,9 @@
 }
 
 /* maps */
+.red-background {
+	background-color: #ff0000 !important;
+}
 .map {
 	background-color: #f0ebeb;
 }
