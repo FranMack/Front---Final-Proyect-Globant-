@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { fakeData } from '../utils/fakeData';
 import technicalServiceImage from '../assets/technical-service-image.png';
 import { toast } from 'react-toastify';
@@ -15,21 +14,48 @@ import {
 	IconButton,
 	Typography,
 	InputAdornment,
+	Checkbox,
+	FormControlLabel,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-
 import OfficeMap from './OfficeMap';
 import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
+import { haversineDistance } from '../utils/calculus';
+import useUserLocation from '../utils/hookUserLocation';
 
 const ReportCamOff = () => {
 	const maxChars = 100;
 	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
-	const [office, setOffice] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
+	const [isHomeOffice, setIsHomeOffice] = useState(false);
+	const [selectedOffice, setSelectedOffice] = useState('');
+
+	const userLocation = useUserLocation();
+
+	const filterNearbyOffices = radius => {
+		if (!userLocation) return []; // Return an empty array if userLocation is not available
+
+		const nearbyOffices = fakeData.filter(office => {
+			const distance = haversineDistance(
+				userLocation.lat,
+				userLocation.lng,
+				office.latitude,
+				office.longitude,
+			);
+
+			return distance <= radius;
+		});
+
+		return nearbyOffices;
+	};
+
+	const handleNearbyOfficeChange = event => {
+		setSelectedOffice(event.target.value);
+	};
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -45,9 +71,10 @@ const ReportCamOff = () => {
 	const handleItemChange = event => {
 		setItem(event.target.value);
 	};
-	const handleOfficeChange = event => {
-		setOffice(event.target.value);
-	};
+	// const handleOfficeChange = event => {
+	// 	setOffice(event.target.value);
+	// };
+
 	const handleDescripcionChange = event => {
 		const inputValue = event.target.value;
 		const singleSpaceValue = inputValue.replace(/\s+/g, ' '); // Replace multiple spaces with a single space
@@ -59,6 +86,11 @@ const ReportCamOff = () => {
 		} else {
 			setDescripcionError('');
 		}
+	};
+
+	const handleHomeOfficeChange = event => {
+		setIsHomeOffice(event.target.checked);
+		setSelectedOffice(''); // Reset the selected office when switching between home office and regular office
 	};
 
 	const handleSubmit = event => {
@@ -75,7 +107,7 @@ const ReportCamOff = () => {
 			}, 1000);
 		}
 	};
-	const isOfficeSelected = !!office;
+	const isOfficeSelected = !!selectedOffice;
 
 	const remainingChars = maxChars - descripcion.length;
 
@@ -208,26 +240,49 @@ const ReportCamOff = () => {
 					style={{ width: '90%' }}
 				/>
 
-				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='item-label' required>
-						office
-					</InputLabel>
-					<Select
-						label='office'
-						id='office-select'
-						value={office}
-						onChange={handleOfficeChange}
-						required
-					>
-						<MenuItem value=''>Selecciona una oficina</MenuItem>
-						{fakeData.map((item, index) => (
-							<MenuItem key={index} value={item.localidad}>
-								{item.localidad},{item.direccion}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-				{isOfficeSelected && <OfficeMap />}
+				{/* Add the checkbox */}
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={isHomeOffice}
+							onChange={handleHomeOfficeChange}
+							name='homeOffice'
+							color='primary'
+						/>
+					}
+					label='If you are doing home office, check the box.'
+					style={{ alignSelf: 'flex-start', marginLeft: '20px' }}
+				/>
+
+				{isHomeOffice ? (
+					<Typography variant='body1' style={{ margin: '10px' }}>
+						Home office selected. Office options, floor, and office map will be
+						hidden.
+					</Typography>
+				) : (
+					<>
+						<FormControl style={{ width: '90%' }}>
+							<InputLabel id='nearby-office-label'>Nearby Offices</InputLabel>
+							<Select
+								labelId='nearby-office-label'
+								id='nearby-office-select'
+								value={selectedOffice}
+								onChange={handleNearbyOfficeChange}
+								label='Nearby Offices'
+							>
+								<MenuItem value=''>
+									<em>None</em>
+								</MenuItem>
+								{filterNearbyOffices(10).map(office => (
+									<MenuItem key={office.id} value={office.localidad}>
+										{office.localidad},{office.direccion}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+						{isOfficeSelected && <OfficeMap />}
+					</>
+				)}
 				<Button
 					type='submit'
 					variant='contained'
