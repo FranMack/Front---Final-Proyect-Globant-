@@ -28,6 +28,7 @@ const ReportDetail = () => {
 	const[email,setEmail]=useState("")
 	const [contentEmail,setContentEmail]=useState("")
 
+
 	const handleModal = () => {
 		setOpen(!open);
 		setEmail("")
