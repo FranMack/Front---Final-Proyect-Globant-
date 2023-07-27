@@ -84,8 +84,9 @@ const ReportHistory = () => {
 					borderBottom: '1px solid grey',
 				}}
 			>
-				<Box sx={{ marginLeft: { xs: '10%', md: '3%' } }}>
-					<h3 style={{ color: 'grey' }}>Historial de reportes inactivos</h3>
+				<Box sx={{marginLeft:{xs:"10%", md:"3%"}}}>
+
+				<h3 style={{ color: 'grey' }}>Inactive report history</h3>
 				</Box>
 			</Box>
 			<Box
