@@ -4,6 +4,8 @@ import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 
 function OfficeMap(props) {
+	/* eslint-disable no-unused-vars */
+	/* eslint-disable react/prop-types */
 	console.log(props);
 	const [selectedDesk, setSelectedDesk] = useState(null);
 
