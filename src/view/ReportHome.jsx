@@ -47,7 +47,6 @@ const ReportHome = () => {
 
 		setIsoDate(TransformISOdate(newDate.$d));
 	};
-	console.log(stateReport);
 	const handleSearch = e => {
 		setSearch(e.target.value);
 	};
@@ -107,6 +106,19 @@ const ReportHome = () => {
 
 	return (
 		<>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					width: '100%',
+					height: '10%',
+					borderBottom: '1px solid grey',
+				}}
+			>
+				<Box sx={{ marginLeft: { xs: '10%', md: '3%' } }}>
+					<h3 style={{ color: 'grey' }}>Active/In progress reports</h3>
+				</Box>
+			</Box>
 			<Box
 				sx={{
 					height: '100vh',
