@@ -21,8 +21,8 @@ import LoginModal from './view/LoginModal.view';
 import ReportModal from './view/ReportModal.view';
 import Footer from './components/Footer';
 import ReportDetail from './view/ReportDetail';
+import Message from './commons/message';
 
-import emailContent from './components/emailContent';
 
 
 function App() {
@@ -79,9 +79,11 @@ function App() {
 				<Route path='/report-cam-off' element={<ReportCamOff />} />
 
 				<Route path='*' element={<NotFound />} />
-				<Route path="email" element={<emailContent/>}/>
+				<Route path="/message" element={<Message/>}/>
+				
 			
 			</Routes>
+			
 			<Footer />
 		</>
 	);

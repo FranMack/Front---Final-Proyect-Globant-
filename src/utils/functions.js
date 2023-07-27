@@ -1,5 +1,6 @@
 
-
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 export function TransformISOdate(pickedDate){
 
 
@@ -39,123 +40,72 @@ export function ConvertISOdateToRegular(isodate){
 
 export function orderByDate(array) {
     // Utilizamos el método sort para ordenar el array de objetos por la propiedad 'fecha'
-    array.sort((a, b) => new Date(b.date_report) - new Date(a.date_report));
-    return array;
+    let active=array.filter((report)=>{return report.status_report==="Close"})
+    active.sort((a, b) => new Date(b.date_report) - new Date(a.date_report));
+    return active;
   }
 
 
 
-
+  
   export function emailReport(report){
 
-    return(`
-    <html>
-    <head>
-    <title>Welcome to</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Cabin');
-        body { margin: 0; padding: 0; left: 0; top: 0; background-color: white; }
-        h1 { font-family: 'Cabin'; font-weight: 600; color: rgba(5,45,84,1); margin-left: 2px;}
-        p { font-family: 'Cabin'; font-weight: 400; font-size: 11pt; color: rgba(5,45,84,1); margin-left: 2px; }
-        h3 {
-            margin-top: 50px;
-            color: rgba(5,45,84,.25);
-            font-family: 'Cabin'; 
-            font-weight: 400; 
-            font-size: 10pt;
-            width: 80vw;
-        }
-        h2 {
-            text-align: center;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: rgba(5,45,84,1);
-            font-family: 'Cabin'; 
-            font-weight: 400; 
-            font-size: 10pt;
-        }
-        h3 > a { color: rgba(118,146,255,1); }
-        h3 > a:hover { cursor: pointer; }
-        h3 > a:active { opacity: .75; }
-        .page-container { width: 80vw; margin-left: 10vw; }
-        .logo { margin-left: 2px; height: 30px; margin-top: 20px; margin-bottom: 20px; }
-        .divider { height: 1px; width: 100%; background-color: rgba(5,45,84,.1); margin-bottom: 40px; }
-        .button-container {
-            width: 100%;
-            height: 50px;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-        }
-        .cta {
-            transition: all 200ms; 
-            -webkit-transition: all 200ms; 
-            -moz-transition: all 200ms; 
-            -o-transition: all 200ms;
-            -ms-transition: all 200ms;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 46px;
-            color: white;
-            font-size: 11pt;
-            font-family: 'Cabin';
-            font-weight: 500;
-            padding-left: 20px;
-            padding-right: 20px;
-            background-color: #7692FF;
-            border-radius: 5px;
-            margin-top: 0px;
-            margin-bottom: 4px;
-            box-shadow: 0px 4px rgba(118,146,255,.25);
-        }
-        .cta:hover {
-            cursor: pointer;
-        }
-        .cta:active {
-            margin-top: 4px;
-            margin-bottom: 0px;
-            box-shadow: 0px 0px rgba(118,146,255,.25);
-        }
-        .footer-container {
-            width: 100%;
-            margin-top: 50px;
-            padding-bottom: 10px;
-            background-color: rgba(5,45,84,.04);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-    </head>
-    <body>
-        <div class="page-container">
-        <div class="divider"></div>
-        <h1>Welcome to</h1>
-        <p>
-            Hi Matthew, thanks for signing up for. We're so happy to have you! almost ready to join your first group. Click the link below to verify your email.
-        </p>
-        <div class="button-container">
-            <div class="cta">
-            GET STARTED
-            </div>
-        </div>
-        <p>
-            We'll reach out again when we're ready for you to start using. Just reply to this email if you have any questions.
-        </p>
-        <p>
-            ${report.device}
-        </p>
-        </div>
-        <div class="footer-container">
-        <h3 class="footer">
-            If you need help, respond to this message. If this message was sent to you by mistake and you did not sign up for an account with us, we apologize.
-        </h3>
-        <h2>a9 Something 2018</h2>
-        </div>
-    </body>
-</html>`)
-  }
+    return( 
+      
+      
+      `
+      <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Email Globant</title>
+      <style>
+          
+          .contenedor {height:100vh;}
+          .contenedor2 {height:85%;width:30%;background-color:#f1f3f4 ;border:solid 0,0,10px #cac4c4;padding:2%;margin:0 auto }
+          .contenedor3{width: 80%; margin: 0 auto;}
+  
+  
+          
+          img {height:35%; display: block; margin: 0 auto;}
+          ul{ list-style:none;font-size:1.1rem; margin-top: 15%;}
+          li{margin-bottom:2%;}
+          span{font-weight:bolder;}
+          h2{text-align: center;}
+          
+      </style>
+  </head>
+  <body>
+  
+      <div class="contenedor" >
+  
+  
+          <div class="contenedor2">
+          <h2>REPORT DETAIL</h2>
+          <img src=${report.url_img} alt="foto"/>
+         
+          <div class="contenedor3">
+          <ul>
+           <li style=><span> USER:</span> ${report.user}</li>
+          <li style=><span> DATE:</span> ${report.date_report.slice(0,9)}</li>
+          <li style=><span> STATUS:</span> ${report.status_report}</li>
+          <li style=><span> DEVICE:</span> ${report.device}</li>
+          <li style=><span> DESCRIPTION:</span>${report.description}</li>
+          <li style=><span> LOCATION:</span> ${report.location}</li>
+          <li style=><span> FLOOR:</span> ${report.floor_number}</li>
+          <li style=><span> BOX:</span> ${report.box_number}</li>  
+          
+      </ul>
+  </div>
+          </div>
+      
+      
+      
+      
+      
+          
+      </div>
+  
+  
+      
+  </body>
+  </html>` ) }

@@ -7,6 +7,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { emailReport } from '../utils/functions';
 
+
 import {
 	Box,
 	Button,
@@ -25,7 +26,7 @@ import { ConvertISOdateToRegular } from '../utils/functions';
 const ReportDetail = () => {
 	const [open, setOpen] = useState(false);
 	const[email,setEmail]=useState("")
-	const [content,setContent]=useState("")
+	const [contentEmail,setContentEmail]=useState("")
 
 	const handleModal = () => {
 		setOpen(!open);
@@ -41,7 +42,7 @@ const ReportDetail = () => {
 		event.preventDefault();
 		
 	
-		  await axios.post("http://localhost:5000/api/v1/report/send-email", { email, report:content })
+		  await axios.post("http://localhost:5000/api/v1/report/send-email", { email,contentEmail })
 		  .then(()=>{
 		  toast.success('¡Email sent successfully', {
 			position: toast.POSITION.TOP_RIGHT,
@@ -64,14 +65,12 @@ const ReportDetail = () => {
 		axios
 			.get(`http://localhost:5000/api/v1/report/single/${reportId}`)
 			.then((res)=>{ setReport(res.data)
-
-				setContent(emailReport())
-			
+				setContentEmail(emailReport(res.data))
 			});
 	}, []);
 
 
-console.log(content)
+console.log(report)
 	return (
 		<>
 		<ToastContainer/>
