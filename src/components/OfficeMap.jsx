@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 
 function OfficeMap(props) {
-	/* eslint-disable no-unused-vars */
-	/* eslint-disable react/prop-types */
-	console.log(props);
+	console.log('las props', props);
 	const [selectedDesk, setSelectedDesk] = useState(null);
 
 	const handleDeskClick = async boxNumber => {

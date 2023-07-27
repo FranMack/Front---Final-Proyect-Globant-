@@ -8,29 +8,26 @@ import {
 	MenuItem,
 	Box,
 	Button,
+	Typography,
 } from '@mui/material';
 import OfficeMap from '../components/OfficeMap';
 import { haversineDistance } from '../utils/calculus';
 import useUserLocation from '../utils/hookUserLocation';
-import { fakeData } from '../utils/fakeData';
 import { useSelector } from 'react-redux';
 
 const OfficeSelection = () => {
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
-	const user = useSelector((state)=> state.user)
-	const report = useSelector((state)=> state.report)
-	
-
-	const isOfficeSelected = !!selectedOffice;
+	const user = useSelector(state => state.user);
+	const report = useSelector(state => state.report);
 
 	const userLocation = useUserLocation();
 
 	const filterNearbyOffices = radius => {
 		radius = 32;
-		if (!userLocation) return []; 
+		if (!userLocation) return [];
 
-		const nearbyOffices = fakeData.filter(office => {
+		const nearbyOffices = officeList.filter(office => {
 			const distance = haversineDistance(
 				userLocation.lat,
 				userLocation.lng,
@@ -44,45 +41,41 @@ const OfficeSelection = () => {
 		return nearbyOffices;
 	};
 
-	const officeLocation = ()=>{
-        return fakeData.filter(office =>{
-			return office.direccion;
-		}) 
-	}
-
-	const handleNearbyOfficeChange = event => {
-		setSelectedOffice(event.target.value);
+	const handleOfficeChange = event => {
+		const selectedLocation = event.target.value; // Check the selected office ID
+		const selectedOfficeData = officeList.find(
+			office => office._id === selectedLocation, // Check the selected office data
+		);
+		setSelectedOffice(selectedOfficeData);
 	};
 
 	useEffect(() => {
-		axios
-			.get('http://localhost:5000/api/v1/office/allOffices')
-			.then(res => setOfficeList(res.data))
-			.catch(error => {
-				console.log(error);
-			});
-	}, []);
+		axios.get('http://localhost:5000/api/v1/office/allOffices').then(res => {
+			setOfficeList(res.data);
+			console.log('Fetched office data:', res.data);
+		});
+	}, []); /// officeList tiene todas la informacion de oficinas en array
 
-	const handleSubmitNewReport = (e)=>{
+	const handleSubmitNewReport = e => {
 		e.preventDefault();
-		axios.post('http://localhost:5000/api/v1/report/newReport',{
-         user: user.username,
-		 url_img: report.url_img.name,
-		 device: report.device,
-         description: report.description,
-		 location: officeLocation,
-		 latitude: userLocation.lat,
-		 longitude: userLocation.lng,
-		 status_report: "Open",
-		 date_report: Date(),
-		})
-	}
+		axios.post('http://localhost:5000/api/v1/report/newReport', {
+			user: user.username,
+			url_img: report.url_img.name,
+			device: report.device,
+			description: report.description,
+			location: selectedOffice.location, // selectedOffice state holds the currently selected office data
+			latitude: userLocation.lat,
+			longitude: userLocation.lng,
+			status_report: 'Open',
+			date_report: Date(),
+		});
+	};
 
 	return (
 		<>
 			<ResponsiveAppBar />
 			<Box
-			    component='form'
+				component='form'
 				onSubmit={handleSubmitNewReport}
 				style={{
 					display: 'flex',
@@ -115,33 +108,41 @@ const OfficeSelection = () => {
 					<Select
 						labelId='nearby-office-label'
 						id='nearby-office-select'
-						value={selectedOffice}
-						onChange={handleNearbyOfficeChange}
+						value={selectedOffice ? selectedOffice._id : ''}
+						onChange={handleOfficeChange}
 						label='Nearby Offices'
 					>
 						<MenuItem value=''>
 							<em>None</em>
 						</MenuItem>
 						{filterNearbyOffices(10).map(office => (
-							<MenuItem key={office.id} value={office.localidad}>
-								{office.localidad},{office.direccion}
+							<MenuItem key={office._id} value={office._id}>
+								{office.location}, {office.location}
 							</MenuItem>
 						))}
 					</Select>
 				</FormControl>
-				{isOfficeSelected && <OfficeMap />}
-				<Button
-					type='submit'
-					variant='contained'
-					style={{
-						backgroundColor: '#3AB54A',
-						color: '#FFFFFF',
-						borderRadius: '20px',
-						margin: '20px',
-					}}
-				>
-					New Report
-				</Button>
+				{selectedOffice ? (
+					<>
+						<OfficeMap officeId={selectedOffice} />
+						<Button
+							type='submit'
+							variant='contained'
+							style={{
+								backgroundColor: '#3AB54A',
+								color: '#FFFFFF',
+								borderRadius: '20px',
+								margin: '20px',
+							}}
+						>
+							New Report
+						</Button>
+					</>
+				) : (
+					<Typography variant='body1'>
+						Please select your nearby office to see the map.
+					</Typography>
+				)}
 			</Box>
 		</>
 	);
