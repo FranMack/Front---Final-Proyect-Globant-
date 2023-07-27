@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-// Custom hook for getting the user's location
 const useUserLocation = () => {
 	const [userLocation, setUserLocation] = useState(null);
 

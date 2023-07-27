@@ -24,6 +24,7 @@ import OfficeHomeModal from './view/OfficeHomeModal';
 import Footer from './components/Footer';
 import ReportDetail from './view/ReportDetail';
 import OfficeSelection from './view/OfficeSelection';
+import HomeList from './view/HomeList';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -73,15 +74,12 @@ function App() {
 				<Route path='profile' element={<Profile />} />
 				<Route path='reports' element={<ReportHistory />} />
 				<Route path='/reports/:id' element={<ReportDetail />} />
-
 				<Route path='/map' element={<OfficeMap />} />
-
 				<Route path='/report-cam-on' element={<ObjectDetection />} />
 				<Route path='/report-cam-off' element={<ReportCamOff />} />
-
 				<Route path='*' element={<NotFound />} />
-
 				<Route path='/office-list' element={<OfficeSelection />} />
+				<Route path='/home-list' element={<HomeList />} />
 			</Routes>
 			
 			<Footer />
