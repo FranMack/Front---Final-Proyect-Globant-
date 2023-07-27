@@ -15,7 +15,6 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 
-import globantImage from '../assets/Globant-Original1.png';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -482,25 +481,6 @@ const Register = () => {
 				>
 					NEW ACCOUNT
 				</LoadingButton>
-
-				<Grid
-					item
-					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					style={{ marginTop: '40px', textAlign: 'center' }}
-				>
-					<img
-						src={globantImage}
-						alt='Globant Logo'
-						style={{
-							width: '60%',
-							height: 'auto',
-							maxWidth: '400px',
-						}}
-					/>
-				</Grid>
 			</Box>
 		</>
 	);
