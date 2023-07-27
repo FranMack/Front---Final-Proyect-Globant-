@@ -15,7 +15,6 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 
-import globantImage from '../assets/Globant-Original1.png';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -182,13 +181,10 @@ const Register = () => {
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
-					justifyContent: 'space-between',
 					alignItems: 'center',
-					margin: { xs: 'inherit', md: '30px auto' },
+					margin: { xs: 'inherit', md: '0px auto' },
 					padding: '0 0 20px 0',
-					width: { xs: 'inherit', md: '400px' },
 					boxSizing: 'border-box',
-					boxShadow: { xs: 'inherit', md: '0 6px 10px rgba(0, 0, 0, 0.15)' },
 				}}
 			>
 				<Grid
@@ -208,109 +204,126 @@ const Register = () => {
 						<h5 style={{ marginLeft: '8px', color: 'grey' }}>NEW REGISTER</h5>
 					</Grid>
 				</Grid>
-
 				<Grid
 					container
-					spacing={2}
-					justifyContent='center'
-					alignItems='center'
 					style={{
-						marginTop: '1px',
-						marginBottom: '16px',
-						marginLeft: 0,
-						width: '100%',
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						margin: '0 auto',
+						width: '400px',
 					}}
 				>
-					<Grid>
-						<input
-							type='file'
-							accept='image/jpeg, image/png'
-							onChange={handleImageUpload}
-							style={{ display: 'none' }}
-							id='avatar-upload'
-						/>
-						<label htmlFor='avatar-upload'>
-							<Avatar
-								component='span'
-								sx={{ width: 90, height: 90, cursor: 'pointer' }}
-								src={image}
-							>
-								{!image &&
-								signupForm.values.first_name &&
-								signupForm.values.last_name
-									? signupForm.values.first_name.charAt(0).toUpperCase() +
-									  signupForm.values.last_name.charAt(0).toUpperCase()
-									: null}
-							</Avatar>
-						</label>
-						<Dialog open={showModal} onClose={handleCloseModal}>
-							<DialogTitle>Imagen demasiado grande</DialogTitle>
-							<DialogContent>
-								<p>
-									El tamaño de la imagen excede el límite permitido de 60KB. Por
-									favor, selecciona una imagen más pequeña.
-								</p>
-							</DialogContent>
-							<DialogActions>
-								<Button onClick={handleCloseModal} color='primary' autoFocus>
-									Cerrar
-								</Button>
-							</DialogActions>
-						</Dialog>
-					</Grid>
-					<Grid item style={{ marginBottom: '20px' }}>
-						<Grid container direction='column'>
-							<Grid item>
-								<TextField
-									color='success'
-									sx={{ width: '180px' }}
-									name='first_name'
-									label='Name'
-									variant='standard'
-									value={signupForm.values.first_name}
-									onChange={signupForm.handleChange}
-									onBlur={signupForm.handleBlur}
-									error={
-										signupForm.touched.first_name &&
-										signupForm.errors.first_name !== undefined
-									}
-									helperText={
-										signupForm.touched.first_name &&
-										signupForm.errors.first_name
-									}
-									required
-								/>
-							</Grid>
-							<Grid item>
-								<TextField
-									color='success'
-									sx={{ width: '180px' }}
-									name='last_name'
-									label='Last name'
-									variant='standard'
-									value={signupForm.values.last_name}
-									onChange={signupForm.handleChange}
-									onBlur={signupForm.handleBlur}
-									error={
-										signupForm.touched.last_name &&
-										signupForm.errors.last_name !== undefined
-									}
-									helperText={
-										signupForm.touched.last_name && signupForm.errors.last_name
-									}
-									required
-								/>
-							</Grid>
-						</Grid>
-					</Grid>
-
-					<Grid
-						style={{
+					<Box
+						sx={{
 							borderBottom: '1px solid grey',
-							width: '100%',
-							marginTop: '20px',
+							padding: '10px 16px',
 						}}
-					></Grid>
+					>
+						<Box
+							sx={{
+								display: 'flex',
+								alignItems: 'center',
+								marginLeft: '10px',
+							}}
+						>
+							<Grid>
+								<input
+									type='file'
+									accept='image/jpeg, image/png'
+									onChange={handleImageUpload}
+									style={{ display: 'none' }}
+									id='avatar-upload'
+								/>
+								<label htmlFor='avatar-upload'>
+									<Avatar
+										component='span'
+										sx={{ width: 90, height: 90, cursor: 'pointer' }}
+										src={image}
+									>
+										{!image &&
+										signupForm.values.first_name &&
+										signupForm.values.last_name
+											? signupForm.values.first_name.charAt(0).toUpperCase() +
+											  signupForm.values.last_name.charAt(0).toUpperCase()
+											: null}
+									</Avatar>
+								</label>
+								<Dialog open={showModal} onClose={handleCloseModal}>
+									<DialogTitle>Imagen demasiado grande</DialogTitle>
+									<DialogContent>
+										<p>
+											El tamaño de la imagen excede el límite permitido de 60KB.
+											Por favor, selecciona una imagen más pequeña.
+										</p>
+									</DialogContent>
+									<DialogActions>
+										<Button
+											onClick={handleCloseModal}
+											color='primary'
+											autoFocus
+										>
+											Cerrar
+										</Button>
+									</DialogActions>
+								</Dialog>
+							</Grid>
+							<Grid item style={{ marginBottom: '20px', padding: '16px' }}>
+								<Grid container direction='column'>
+									<Grid item>
+										<TextField
+											color='success'
+											sx={{ width: '180px' }}
+											name='first_name'
+											label='Name'
+											variant='standard'
+											value={signupForm.values.first_name}
+											onChange={signupForm.handleChange}
+											onBlur={signupForm.handleBlur}
+											error={
+												signupForm.touched.first_name &&
+												signupForm.errors.first_name !== undefined
+											}
+											helperText={
+												signupForm.touched.first_name &&
+												signupForm.errors.first_name
+											}
+											required
+										/>
+									</Grid>
+									<Grid item>
+										<TextField
+											color='success'
+											sx={{ width: '180px' }}
+											name='last_name'
+											label='Last name'
+											variant='standard'
+											value={signupForm.values.last_name}
+											onChange={signupForm.handleChange}
+											onBlur={signupForm.handleBlur}
+											error={
+												signupForm.touched.last_name &&
+												signupForm.errors.last_name !== undefined
+											}
+											helperText={
+												signupForm.touched.last_name &&
+												signupForm.errors.last_name
+											}
+											required
+										/>
+									</Grid>
+								</Grid>
+							</Grid>
+
+							<Grid
+								style={{
+									borderBottom: '1px solid grey',
+									width: '100%',
+									marginTop: '20px',
+								}}
+							></Grid>
+						</Box>
+					</Box>
 					<Box
 						sx={{
 							padding: '16px',
@@ -468,19 +481,6 @@ const Register = () => {
 				>
 					NEW ACCOUNT
 				</LoadingButton>
-
-				<Grid item xs={12} sm={6} md={4} lg={3} style={{ marginTop: '40px' }}>
-					<img
-						src={globantImage}
-						alt='Globant Logo'
-						style={{
-							width: '60%',
-							height: 'auto',
-							maxWidth: '400px',
-							marginLeft: '69px',
-						}}
-					/>
-				</Grid>
 			</Box>
 		</>
 	);
