@@ -16,8 +16,6 @@ import {
 	InputAdornment,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-
-import OfficeMap from './OfficeMap';
 import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
@@ -27,11 +25,8 @@ const ReportCamOff = () => {
 	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
-	const [office, setOffice] = useState([]);
-
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
-	const [selectedOffice, setSelectedOffice] = useState(null);
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -47,16 +42,9 @@ const ReportCamOff = () => {
 	const handleItemChange = event => {
 		setItem(event.target.value);
 	};
-	const handleOfficeChange = event => {
-		const selectedLocation = event.target.value;
-		const selectedOfficeData = office.find(
-			item => item.location === selectedLocation,
-		);
-		setSelectedOffice(selectedOfficeData);
-	};
 	const handleDescripcionChange = event => {
 		const inputValue = event.target.value;
-		const singleSpaceValue = inputValue.replace(/\s+/g, ' '); // Replace multiple spaces with a single space
+		const singleSpaceValue = inputValue.replace(/\s+/g, ' ');
 
 		setDescripcion(singleSpaceValue);
 
@@ -227,27 +215,6 @@ const ReportCamOff = () => {
 					variant='outlined'
 					style={{ width: '90%' }}
 				/>
-
-				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='item-label' required>
-						office
-					</InputLabel>
-					<Select
-						label='office'
-						id='office-select'
-						value={selectedOffice ? selectedOffice.location : ''}
-						onChange={handleOfficeChange}
-						required
-					>
-						<MenuItem value=''>Select an office</MenuItem>
-						{office?.map((item, index) => (
-							<MenuItem key={index} value={item.location}>
-								{item.name},{item.location}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-				{selectedOffice && <OfficeMap officeId={selectedOffice} />}
 				<Button
 					type='submit'
 					variant='contained'
