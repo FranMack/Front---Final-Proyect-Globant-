@@ -21,7 +21,7 @@ import LoginModal from './view/LoginModal.view';
 import ReportModal from './view/ReportModal.view';
 import Footer from './components/Footer';
 import ReportDetail from './view/ReportDetail';
-
+import OfficeSelection from './view/OfficeSelection';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -77,7 +77,7 @@ function App() {
 				<Route path='/report-cam-off' element={<ReportCamOff />} />
 
 				<Route path='*' element={<NotFound />} />
-			
+				<Route path='/office-list' element={<OfficeSelection />} />
 			</Routes>
 			<Footer />
 		</>
