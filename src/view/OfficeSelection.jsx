@@ -22,6 +22,8 @@ const OfficeSelection = () => {
 
 	const userLocation = useUserLocation();
 
+	console.log(officeList);
+
 	const filterNearbyOffices = radius => {
 		radius = 32;
 		if (!userLocation) return []; // Return an empty array if userLocation is not available
