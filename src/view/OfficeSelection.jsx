@@ -13,20 +13,22 @@ import OfficeMap from '../components/OfficeMap';
 import { haversineDistance } from '../utils/calculus';
 import useUserLocation from '../utils/hookUserLocation';
 import { fakeData } from '../utils/fakeData';
+import { useSelector } from 'react-redux';
 
 const OfficeSelection = () => {
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
+	const user = useSelector((state)=> state.user)
+	const report = useSelector((state)=> state.report)
+	
 
 	const isOfficeSelected = !!selectedOffice;
 
 	const userLocation = useUserLocation();
 
-	console.log(officeList);
-
 	const filterNearbyOffices = radius => {
 		radius = 32;
-		if (!userLocation) return []; // Return an empty array if userLocation is not available
+		if (!userLocation) return []; 
 
 		const nearbyOffices = fakeData.filter(office => {
 			const distance = haversineDistance(
@@ -42,6 +44,12 @@ const OfficeSelection = () => {
 		return nearbyOffices;
 	};
 
+	const officeLocation = ()=>{
+        return fakeData.filter(office =>{
+			return office.direccion;
+		}) 
+	}
+
 	const handleNearbyOfficeChange = event => {
 		setSelectedOffice(event.target.value);
 	};
@@ -55,10 +63,27 @@ const OfficeSelection = () => {
 			});
 	}, []);
 
+	const handleSubmitNewReport = (e)=>{
+		e.preventDefault();
+		axios.post('http://localhost:5000/api/v1/report/newReport',{
+         user: user.username,
+		 url_img: report.url_img.name,
+		 device: report.device,
+         description: report.description,
+		 location: officeLocation,
+		 latitude: userLocation.lat,
+		 longitude: userLocation.lng,
+		 status_report: "Open",
+		 date_report: Date(),
+		})
+	}
+
 	return (
 		<>
 			<ResponsiveAppBar />
 			<Box
+			    component='form'
+				onSubmit={handleSubmitNewReport}
 				style={{
 					display: 'flex',
 					alignItems: 'center',
@@ -104,7 +129,7 @@ const OfficeSelection = () => {
 						))}
 					</Select>
 				</FormControl>
-				{isOfficeSelected && <OfficeMap />}{' '}
+				{isOfficeSelected && <OfficeMap />}
 				<Button
 					type='submit'
 					variant='contained'
