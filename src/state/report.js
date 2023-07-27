@@ -5,7 +5,7 @@ export const setReport = createAction("SET_REPORT");
 export const initialState = {
   url_image: null,
   device: null,
-  descrption: null,
+  description: null,
 };
 
 const reducerReport = createReducer(initialState, {

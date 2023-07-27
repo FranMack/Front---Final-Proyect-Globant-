@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import technicalServiceImage from '../assets/technical-service-image.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +19,7 @@ import ResponsiveAppBar from './Navbar';
 import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { setReport } from '../state/report';
 
 const ReportCamOff = () => {
 	const maxChars = 100;
@@ -32,7 +32,11 @@ const ReportCamOff = () => {
 
 	const dispatch = useDispatch();
 
-	console.log(office);
+	const date = {
+		url_img : selectedFile,
+		device: item,
+		description: descripcion,
+	}
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -63,6 +67,7 @@ const ReportCamOff = () => {
 
 	const handleSubmit = event => {
 		event.preventDefault();
+		dispatch(setReport(date));
 
 		if (descripcionError) {
 			toast.error(descripcionError);
