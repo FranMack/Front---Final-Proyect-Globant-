@@ -20,10 +20,10 @@ import OfficeMap from './components/OfficeMap';
 
 import LoginModal from './view/LoginModal.view';
 import ReportModal from './view/ReportModal.view';
+import OfficeHomeModal from './view/OfficeHomeModal';
 import Footer from './components/Footer';
 import ReportDetail from './view/ReportDetail';
 import OfficeSelection from './view/OfficeSelection';
-
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -65,6 +65,7 @@ function App() {
 			<ToastContainer />
 			<LoginModal />
 			<ReportModal />
+			<OfficeHomeModal />
 			<Routes>
 				<Route path='/' element={<Start />}></Route>
 				<Route path='/register' element={<Register />}></Route>
