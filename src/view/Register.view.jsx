@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -25,6 +25,10 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
 } from '@mui/material';
 
 const Register = () => {
@@ -33,6 +37,9 @@ const Register = () => {
 	const [errorMessage, setErrorMessage] = useState();
 	const [isLoginRequest, setIsLoginRequest] = useState(false);
 	const [showModal, setShowModal] = useState(false);
+	const [formInitialized, setFormInitialized] = useState(false);
+	const [countries, setCountries] = useState([]);
+	const [selectedCountry, setSelectedCountry] = useState('');
 
 	const handleImageUpload = e => {
 		const file = e.target.files[0];
@@ -96,7 +103,7 @@ const Register = () => {
 					{
 						first_name: values.first_name,
 						last_name: values.last_name,
-						phone_number: Number(number),
+						phone_number: '+' + selectedCountry + '' + Number(number),
 						location: values.location,
 						email: values.email,
 						username: values.username,
@@ -125,6 +132,35 @@ const Register = () => {
 		setShowModal(false);
 	};
 
+	useEffect(() => {
+		if (!formInitialized && signupForm.isValid) {
+			setFormInitialized(true);
+		}
+	}, [formInitialized, signupForm.isValid]);
+
+	useEffect(() => {
+		const fetchCountries = async () => {
+			try {
+				const response = await axios.get('https://restcountries.com/v2/all');
+				setCountries(response.data);
+			} catch (error) {
+				console.error('Error fetching countries:', error);
+			}
+		};
+
+		fetchCountries();
+	}, []);
+
+	const handleCountryChange = event => {
+		setSelectedCountry(event.target.value);
+	};
+
+	const handlePhoneNumberChange = e => {
+		const inputValue = e.target.value;
+		const numericValue = inputValue.replace(/[^0-9]/g, '').slice(0, 9);
+		setNumber(numericValue);
+	};
+
 	const buttonStyles = {
 		borderRadius: '50px',
 		boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
@@ -132,6 +168,10 @@ const Register = () => {
 		border: '2px solid #808080',
 		padding: '8px 50px',
 		marginTop: '20px',
+		backgroundColor:
+			!formInitialized || !signupForm.isValid || !signupForm.dirty
+				? '#F0F0F0'
+				: 'initial',
 	};
 	return (
 		<>
@@ -229,6 +269,7 @@ const Register = () => {
 									variant='standard'
 									value={signupForm.values.first_name}
 									onChange={signupForm.handleChange}
+									onBlur={signupForm.handleBlur}
 									error={
 										signupForm.touched.first_name &&
 										signupForm.errors.first_name !== undefined
@@ -237,6 +278,7 @@ const Register = () => {
 										signupForm.touched.first_name &&
 										signupForm.errors.first_name
 									}
+									required
 								/>
 							</Grid>
 							<Grid item>
@@ -248,6 +290,7 @@ const Register = () => {
 									variant='standard'
 									value={signupForm.values.last_name}
 									onChange={signupForm.handleChange}
+									onBlur={signupForm.handleBlur}
 									error={
 										signupForm.touched.last_name &&
 										signupForm.errors.last_name !== undefined
@@ -255,6 +298,7 @@ const Register = () => {
 									helperText={
 										signupForm.touched.last_name && signupForm.errors.last_name
 									}
+									required
 								/>
 							</Grid>
 						</Grid>
@@ -285,11 +329,13 @@ const Register = () => {
 								variant='standard'
 								value={signupForm.values.email}
 								onChange={signupForm.handleChange}
+								onBlur={signupForm.handleBlur}
 								error={
 									signupForm.touched.email &&
 									signupForm.errors.email !== undefined
 								}
 								helperText={signupForm.touched.email && signupForm.errors.email}
+								required
 							/>
 						</Grid>
 						<Grid item>
@@ -301,6 +347,7 @@ const Register = () => {
 								variant='standard'
 								value={signupForm.values.username}
 								onChange={signupForm.handleChange}
+								onBlur={signupForm.handleBlur}
 								error={
 									signupForm.touched.username &&
 									signupForm.errors.username !== undefined
@@ -308,6 +355,7 @@ const Register = () => {
 								helperText={
 									signupForm.touched.username && signupForm.errors.username
 								}
+								required
 							/>
 						</Grid>
 						<Grid item>
@@ -320,6 +368,7 @@ const Register = () => {
 								type='password'
 								value={signupForm.values.password}
 								onChange={signupForm.handleChange}
+								onBlur={signupForm.handleBlur}
 								error={
 									signupForm.touched.password &&
 									signupForm.errors.password !== undefined
@@ -327,37 +376,73 @@ const Register = () => {
 								helperText={
 									signupForm.touched.password && signupForm.errors.password
 								}
+								required
 							/>
 						</Grid>
 						<Grid item>
-							<Grid container spacing={2}>
+							<TextField
+								color='success'
+								sx={{ width: '300px' }}
+								name='location'
+								label='Location'
+								variant='standard'
+								value={signupForm.values.location}
+								onChange={signupForm.handleChange}
+								onBlur={signupForm.handleBlur}
+								error={
+									signupForm.touched.location &&
+									signupForm.errors.location !== undefined
+								}
+								helperText={
+									signupForm.touched.location && signupForm.errors.location
+								}
+								required
+							/>
+						</Grid>
+						<Grid item sx={{ width: '300px' }}>
+							<Grid
+								container
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									columnGap: '5px',
+								}}
+							>
 								<Grid item>
-									<TextField
-										color='success'
-										sx={{ width: '140px' }}
-										name='location'
-										label='Location'
-										variant='standard'
-										value={signupForm.values.location}
-										onChange={signupForm.handleChange}
-										error={
-											signupForm.touched.location &&
-											signupForm.errors.location !== undefined
-										}
-										helperText={
-											signupForm.touched.location && signupForm.errors.location
-										}
-									/>
+									<FormControl
+										variant='outlined'
+										size='small'
+										sx={{ width: '98px', marginTop: '16px' }}
+									>
+										<InputLabel id='country-select-label'>Country</InputLabel>
+										<Select
+											labelId='country-select-label'
+											label='Country'
+											value={selectedCountry}
+											onChange={handleCountryChange}
+											renderValue={value => `+${value}`}
+										>
+											{countries.map(country => (
+												<MenuItem
+													key={country.alpha2Code}
+													value={country.callingCodes[0]}
+												>
+													{`${country.name} (+${country.callingCodes[0]})`}
+												</MenuItem>
+											))}
+										</Select>
+									</FormControl>
 								</Grid>
 								<Grid item>
 									<TextField
 										color='success'
-										sx={{ width: '140px' }}
 										name='phone_number'
 										label='Phone number'
 										variant='standard'
+										sx={{ width: '197px' }}
 										value={number}
-										onChange={e => setNumber(e.target.value)}
+										onChange={handlePhoneNumberChange}
 									/>
 								</Grid>
 							</Grid>
@@ -377,6 +462,9 @@ const Register = () => {
 					variant='outlined'
 					style={buttonStyles}
 					loading={isLoginRequest}
+					disabled={
+						!formInitialized || !signupForm.isValid || !signupForm.dirty
+					}
 				>
 					NEW ACCOUNT
 				</LoadingButton>

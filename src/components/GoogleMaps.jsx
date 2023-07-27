@@ -10,6 +10,7 @@ const includesGlobant = (name) => {
 
 const GoogleMaps = () => {
   const [userLocation, setUserLocation] = useState(null);
+  const [userAddress, setUserAddress] = useState(null); 
   const [mcdonaldsNearby, setMcdonaldsNearby] = useState([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyAKmP_5wDtUG3gM479BwLoqp9URpz4Wktw',
@@ -25,6 +26,17 @@ const GoogleMaps = () => {
 
   useEffect(() => {
     if (isLoaded && userLocation) {
+
+      const geocoder = new window.google.maps.Geocoder();
+      const latlng = { lat: userLocation.lat, lng: userLocation.lng };
+  
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === 'OK' && results.length > 0) {
+          setUserAddress(results[0].formatted_address);
+        } else {
+          console.error('Error al obtener la dirección del usuario:', status);
+        }
+      });
       const service = new window.google.maps.places.PlacesService(document.createElement('div'));
 
    
@@ -81,7 +93,9 @@ const GoogleMaps = () => {
             </InfoWindow>
           )}
         </GoogleMap>
+        
       )}
+         {userAddress && <div>Tu dirección: {userAddress}</div>} {/* Muestra la dirección del usuario */}
     </Box>
   );
 };

@@ -1,30 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 
-import { Box, Button, Stack } from '@mui/material';
+import {
+	Box,
+	Button,
+	Checkbox,
+	FormControl,
+	InputLabel,
+	ListItemText,
+	MenuItem,
+	OutlinedInput,
+	Select,
+	Stack,
+} from '@mui/material';
 import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { TransformISOdate } from '../utils/functions';
 import { orderByDate } from '../utils/functions';
 
-const ReportHistory = () => {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+	PaperProps: {
+		style: {
+			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+			width: 250,
+		},
+	},
+};
+
+const names = ['Open', 'In progress'];
+
+const ReportHome = () => {
 	const [reports, setReports] = useState([]);
 	const [search, setSearch] = useState('');
 	const [date, setDate] = useState(null);
 	const [isoDate, setIsoDate] = useState(null);
 	const [allReports, setAllreports] = useState(false);
+	const [stateReport, setStateReport] = useState(['Open']);
 
 	const handleShowMore = () => {
 		setAllreports(!allReports);
 	};
-
 	const handleDate = newDate => {
 		setDate(newDate);
 
 		setIsoDate(TransformISOdate(newDate.$d));
 	};
-
+	console.log(stateReport);
 	const handleSearch = e => {
 		setSearch(e.target.value);
 	};
@@ -32,26 +55,38 @@ const ReportHistory = () => {
 	const showAllTheReports = event => {
 		event.preventDefault();
 		axios
-			.get('http://localhost:5000/api/v1/report/status/Close')
+			.get(
+				'http://localhost:5000/api/v1/report/status/' +
+					(stateReport.length ? stateReport : ['Open', 'In progress']),
+			)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
 			});
 	};
-
-	useEffect(() => {
-		axios
-			.get('http://localhost:5000/api/v1/report/status/Close')
-			.then(res => setReports(res.data))
-			.catch(error => {
-				console.log(error);
-			});
-	}, []);
+	const handleChange = event => {
+		const { value } = event.target;
+		setStateReport(typeof value === 'string' ? value.split(',') : value);
+	};
 
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:5000/api/v1/report/search?device=${search}&status=Close`,
+				'http://localhost:5000/api/v1/report/status/' +
+					(stateReport.length ? stateReport : ['Open', 'In progress']),
+			)
+			.then(res => setReports(res.data))
+			.catch(error => {
+				console.log(error);
+			});
+	}, [stateReport]);
+
+	useEffect(() => {
+		axios
+			.get(
+				`http://localhost:5000/api/v1/report/search?device=${search}&status=${
+					stateReport.length ? stateReport : ['Open', 'In progress']
+				}`,
 			)
 			.then(res => setReports(res.data))
 			.catch(err => console.log(err));
@@ -61,34 +96,17 @@ const ReportHistory = () => {
 		if (date) {
 			axios
 				.get(
-					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&status=Close`,
+					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&status=${
+						stateReport.length ? stateReport : ['Open', 'In progress']
+					}`,
 				)
 				.then(res => setReports(res.data))
 				.catch(err => console.log(err));
 		}
 	}, [date]);
 
-	console.log('date', isoDate);
-	console.log('date', date);
-	console.log('reports', reports);
-
 	return (
 		<>
-			<Navbar />
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					width: '100%',
-					height: '10%',
-					borderBottom: '1px solid grey',
-				}}
-			>
-				<Box sx={{marginLeft:{xs:"10%", md:"3%"}}}>
-
-				<h3 style={{ color: 'grey' }}>Inactive report history</h3>
-				</Box>
-			</Box>
 			<Box
 				sx={{
 					height: '100vh',
@@ -117,7 +135,36 @@ const ReportHistory = () => {
 					/>
 				</Box>
 
-				<Stack sx={{ marginTop: '10%' }}>
+				<Box sx={{ textAlign: 'center' }}>
+					<FormControl
+						sx={{
+							width: '80%',
+							margin: '10px 0',
+						}}
+					>
+						<InputLabel id='demo-multiple-checkbox-label'>State</InputLabel>
+						<Select
+							labelId='demo-multiple-checkbox-label'
+							id='demo-multiple-checkbox'
+							multiple
+							value={stateReport}
+							onChange={handleChange}
+							input={<OutlinedInput label='State' />}
+							renderValue={selected => selected.join(', ')}
+							MenuProps={MenuProps}
+							sx={{ borderRadius: '30px' }}
+						>
+							{names.map(name => (
+								<MenuItem key={name} value={name}>
+									<Checkbox checked={stateReport.indexOf(name) > -1} />
+									<ListItemText primary={name} />
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</Box>
+
+				<Stack>
 					{allReports
 						? orderByDate(reports).map((report, i) => {
 								return (
@@ -154,4 +201,4 @@ const ReportHistory = () => {
 	);
 };
 
-export default ReportHistory;
+export default ReportHome;

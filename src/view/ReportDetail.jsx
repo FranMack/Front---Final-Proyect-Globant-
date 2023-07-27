@@ -131,21 +131,25 @@ console.log(report)
 
 						<h3 style={{color:"grey"}}>SHARE REPORT</h3>
 
-						<FormControl sx={{ width: '%100', marginTop: '10px' }}>
+						<Box component="form" onSubmit={sendEmail} sx={{ width: '%100', marginTop: '10px',display:"flex", flexDirection:"column", justifyContent:"space-between",alignItems:"center"  }}>
+
+						<FormControl  sx={{ width: '100%', marginTop: '10px'}}>
 							<Input
 							value={email}
 								onChange={handleEmail}
 								id='name'
 								type='email'
+								required
 								aria-describedby='email-helper'
 								placeholder='EMAIL'
 							
 							/>
 						</FormControl>
 
-						<Button variant='contained' sx={{ marginTop: '10%',marginBottom:"10%", paddingInline:"12%",backgroundColor:"#2e7d32"  }} onClick={sendEmail}>
+						<Button  type="submit" variant='contained' sx={{ marginTop: '15%',marginBottom:"10%", paddingInline:"12%",backgroundColor:"#2e7d32" }} >
 							Send
 						</Button>
+						</Box>
 					</Box>
 				</Modal>
 			)}

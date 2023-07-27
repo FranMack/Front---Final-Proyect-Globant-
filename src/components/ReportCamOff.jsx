@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { fakeData } from '../utils/fakeData';
 import technicalServiceImage from '../assets/technical-service-image.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,19 +16,20 @@ import {
 	InputAdornment,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-
-import OfficeMap from './OfficeMap';
 import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 const ReportCamOff = () => {
 	const maxChars = 100;
 	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
-	const [office, setOffice] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
+	const [office, setOffice] = useState([]);
+
+	console.log(office);
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -45,12 +45,9 @@ const ReportCamOff = () => {
 	const handleItemChange = event => {
 		setItem(event.target.value);
 	};
-	const handleOfficeChange = event => {
-		setOffice(event.target.value);
-	};
 	const handleDescripcionChange = event => {
 		const inputValue = event.target.value;
-		const singleSpaceValue = inputValue.replace(/\s+/g, ' '); // Replace multiple spaces with a single space
+		const singleSpaceValue = inputValue.replace(/\s+/g, ' ');
 
 		setDescripcion(singleSpaceValue);
 
@@ -75,9 +72,23 @@ const ReportCamOff = () => {
 			}, 1000);
 		}
 	};
-	const isOfficeSelected = !!office;
 
 	const remainingChars = maxChars - descripcion.length;
+
+	useEffect(() => {
+		const getOffices = async () => {
+			try {
+				const response = await axios.get(
+					'http://localhost:5000/api/v1/office/allOffices',
+				);
+
+				setOffice(response.data);
+			} catch (error) {
+				console.error('Error:', error);
+			}
+		};
+		getOffices();
+	}, []);
 
 	return (
 		<>
@@ -207,27 +218,6 @@ const ReportCamOff = () => {
 					variant='outlined'
 					style={{ width: '90%' }}
 				/>
-
-				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='item-label' required>
-						office
-					</InputLabel>
-					<Select
-						label='office'
-						id='office-select'
-						value={office}
-						onChange={handleOfficeChange}
-						required
-					>
-						<MenuItem value=''>Selecciona una oficina</MenuItem>
-						{fakeData.map((item, index) => (
-							<MenuItem key={index} value={item.localidad}>
-								{item.localidad},{item.direccion}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-				{isOfficeSelected && <OfficeMap />}
 				<Button
 					type='submit'
 					variant='contained'
