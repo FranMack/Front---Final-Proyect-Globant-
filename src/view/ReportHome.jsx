@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 
 import {
 	Box,
@@ -43,13 +42,12 @@ const ReportHome = () => {
 	const handleShowMore = () => {
 		setAllreports(!allReports);
 	};
-	console.log(reports);
 	const handleDate = newDate => {
 		setDate(newDate);
 
 		setIsoDate(TransformISOdate(newDate.$d));
 	};
-
+	console.log(stateReport);
 	const handleSearch = e => {
 		setSearch(e.target.value);
 	};
@@ -57,13 +55,15 @@ const ReportHome = () => {
 	const showAllTheReports = event => {
 		event.preventDefault();
 		axios
-			.get('http://localhost:5000/api/v1/report/status/Open')
+			.get(
+				'http://localhost:5000/api/v1/report/status/' +
+					(stateReport.length ? stateReport : ['Open', 'In progress']),
+			)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
 			});
 	};
-
 	const handleChange = event => {
 		const { value } = event.target;
 		setStateReport(typeof value === 'string' ? value.split(',') : value);
@@ -71,17 +71,22 @@ const ReportHome = () => {
 
 	useEffect(() => {
 		axios
-			.get('http://localhost:5000/api/v1/report/status/' + stateReport)
+			.get(
+				'http://localhost:5000/api/v1/report/status/' +
+					(stateReport.length ? stateReport : ['Open', 'In progress']),
+			)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
 			});
-	}, []);
+	}, [stateReport]);
 
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:5000/api/v1/report/search?device=${search}&state=${stateReport}`,
+				`http://localhost:5000/api/v1/report/search?device=${search}&status=${
+					stateReport.length ? stateReport : ['Open', 'In progress']
+				}`,
 			)
 			.then(res => setReports(res.data))
 			.catch(err => console.log(err));
@@ -91,7 +96,9 @@ const ReportHome = () => {
 		if (date) {
 			axios
 				.get(
-					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&state=${stateReport}`,
+					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&status=${
+						stateReport.length ? stateReport : ['Open', 'In progress']
+					}`,
 				)
 				.then(res => setReports(res.data))
 				.catch(err => console.log(err));

@@ -1,15 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
-import { Box, Button, Stack, IconButton } from '@mui/material';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { Box, Button, Stack } from '@mui/material';
 import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
-import { Link } from 'react-router-dom';
 import { TransformISOdate } from '../utils/functions';
 import { orderByDate } from '../utils/functions';
 
@@ -37,7 +32,7 @@ const ReportHistory = () => {
 	const showAllTheReports = event => {
 		event.preventDefault();
 		axios
-			.get('http://localhost:5000/api/v1/report/all')
+			.get('http://localhost:5000/api/v1/report/status/Close')
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
@@ -46,7 +41,7 @@ const ReportHistory = () => {
 
 	useEffect(() => {
 		axios
-			.get('http://localhost:5000/api/v1/report/all')
+			.get('http://localhost:5000/api/v1/report/status/Close')
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
@@ -55,7 +50,9 @@ const ReportHistory = () => {
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:5000/api/v1/report/search?device=${search}`)
+			.get(
+				`http://localhost:5000/api/v1/report/search?device=${search}&status=Close`,
+			)
 			.then(res => setReports(res.data))
 			.catch(err => console.log(err));
 	}, [search]);
@@ -64,7 +61,7 @@ const ReportHistory = () => {
 		if (date) {
 			axios
 				.get(
-					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}`,
+					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&status=Close`,
 				)
 				.then(res => setReports(res.data))
 				.catch(err => console.log(err));

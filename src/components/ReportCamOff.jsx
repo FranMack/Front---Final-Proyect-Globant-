@@ -27,6 +27,9 @@ const ReportCamOff = () => {
 	const [descripcion, setDescripcion] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
+	const [office, setOffice] = useState([]);
+
+	console.log(office);
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
