@@ -22,18 +22,21 @@ function ResponsiveAppBar() {
 	const location = useLocation();
 	const currentPath = location.pathname.slice(1);
 
+
 	const handleLogout = () => {
 		dispatch(setUser(null));
 		navigate('/');
 		dispatch(setLoginModalOpen(true));
 	};
 
+	console.log(currentPath)
+
 	return (
 		<AppBar position='static' sx={{ background: 'white' }}>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<ButtonHome />
-					{currentPath != 'report-cam-off' && (
+					{(currentPath != 'report-cam-off' && currentPath != 'reports/64c033117a8c2257ae1d716a') && (
 						<Tooltip title='¡New report!' placement='left'>
 							<Button
 								variant='contained'
