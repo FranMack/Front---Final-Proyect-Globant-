@@ -22,44 +22,42 @@ function ResponsiveAppBar() {
 	const location = useLocation();
 	const currentPath = location.pathname.slice(1);
 
-
 	const handleLogout = () => {
 		dispatch(setUser(null));
 		navigate('/');
 		dispatch(setLoginModalOpen(true));
 	};
 
-	console.log(currentPath)
-
 	return (
 		<AppBar position='static' sx={{ background: 'white' }}>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<ButtonHome />
-					{(currentPath != 'report-cam-off' && currentPath != 'reports/64c033117a8c2257ae1d716a') && (
-						<Tooltip title='¡New report!' placement='left'>
-							<Button
-								variant='contained'
-								color='success'
-								className='button-new-report'
-								sx={{
-									marginRight: '10px',
-									backgroundColor: '#3AB54A',
-									minWidth: '60px',
-									width: '60px',
-									height: '60px',
-									borderRadius: '50%',
-									position: 'fixed',
-									right: 0,
-									bottom: '100px',
-									zIndex: 99,
-								}}
-								onClick={() => dispatch(setReportModalOpen(true))}
-							>
-								<PostAddIcon className='icon-new-report' fontSize='large' />
-							</Button>
-						</Tooltip>
-					)}
+					{currentPath != 'report-cam-off' &&
+						currentPath != 'reports/64c033117a8c2257ae1d716a' && (
+							<Tooltip title='¡New report!' placement='left'>
+								<Button
+									variant='contained'
+									color='success'
+									className='button-new-report'
+									sx={{
+										marginRight: '10px',
+										backgroundColor: '#3AB54A',
+										minWidth: '60px',
+										width: '60px',
+										height: '60px',
+										borderRadius: '50%',
+										position: 'fixed',
+										right: 0,
+										bottom: '100px',
+										zIndex: 99,
+									}}
+									onClick={() => dispatch(setReportModalOpen(true))}
+								>
+									<PostAddIcon className='icon-new-report' fontSize='large' />
+								</Button>
+							</Tooltip>
+						)}
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
 					<Button
