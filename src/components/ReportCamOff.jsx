@@ -17,17 +17,20 @@ import {
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import ResponsiveAppBar from './Navbar';
-import { useNavigate } from 'react-router';
+import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 const ReportCamOff = () => {
 	const maxChars = 100;
-	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
 	const [office, setOffice] = useState([]);
+	const [isFormValid, setIsFormValid] = useState(false);
+
+	const dispatch = useDispatch();
 
 	console.log(office);
 
@@ -64,12 +67,7 @@ const ReportCamOff = () => {
 		if (descripcionError) {
 			toast.error(descripcionError);
 		} else {
-			toast.success('Report create successful');
-			setItem('');
-			setDescripcion('');
-			setTimeout(() => {
-				navigate('/home');
-			}, 1000);
+			setIsFormValid(true);
 		}
 	};
 
@@ -174,9 +172,7 @@ const ReportCamOff = () => {
 				</Box>
 
 				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='demo-simple-select-label' required>
-						Item
-					</InputLabel>
+					<InputLabel id='demo-simple-select-label'>Item</InputLabel>
 					<Select
 						id='demo-simple-select'
 						value={item}
@@ -202,7 +198,6 @@ const ReportCamOff = () => {
 					label='Description'
 					multiline
 					rows={4}
-					required
 					value={descripcion}
 					onChange={handleDescripcionChange}
 					error={!!descripcionError}
@@ -217,18 +212,26 @@ const ReportCamOff = () => {
 					margin='normal'
 					variant='outlined'
 					style={{ width: '90%' }}
+					required
 				/>
 				<Button
-					type='submit'
 					variant='contained'
+					type='submit'
 					style={{
 						backgroundColor: '#3AB54A',
 						color: '#FFFFFF',
 						borderRadius: '20px',
 						margin: '20px',
 					}}
+					onClick={() => {
+						if (isFormValid) {
+							dispatch(setOfficeHomeModalOpen(true));
+						} else {
+							toast.error('Please complete the form before proceeding.');
+						}
+					}}
 				>
-					New Report
+					Next
 				</Button>
 			</Box>
 		</>
