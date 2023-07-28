@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import technicalServiceImage from '../assets/technical-service-image.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,19 +16,27 @@ import {
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import ResponsiveAppBar from './Navbar';
-import { useNavigate } from 'react-router';
+import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setReport } from '../state/report';
 
 const ReportCamOff = () => {
 	const maxChars = 100;
-	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
 	const [office, setOffice] = useState([]);
+	const [isFormValid, setIsFormValid] = useState(false);
 
-	console.log(office);
+	const dispatch = useDispatch();
+
+	const date = {
+		url_img: selectedFile,
+		device: item,
+		description: descripcion,
+	};
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -44,6 +51,7 @@ const ReportCamOff = () => {
 
 	const handleItemChange = event => {
 		setItem(event.target.value);
+		if (descripcionError === '' && descripcion != '') setIsFormValid(true);
 	};
 	const handleDescripcionChange = event => {
 		const inputValue = event.target.value;
@@ -53,23 +61,21 @@ const ReportCamOff = () => {
 
 		if (singleSpaceValue.length < 10 || singleSpaceValue.length > maxChars) {
 			setDescripcionError('Description must be between 10 and 100 characters.');
+			setIsFormValid(false);
 		} else {
 			setDescripcionError('');
+			if (item) setIsFormValid(true);
 		}
 	};
 
 	const handleSubmit = event => {
 		event.preventDefault();
-
-		if (descripcionError) {
+		dispatch(setReport(date));
+		if (descripcionError && item === '') {
 			toast.error(descripcionError);
+			setIsFormValid(false);
 		} else {
-			toast.success('Report create successful');
-			setItem('');
-			setDescripcion('');
-			setTimeout(() => {
-				navigate('/home');
-			}, 1000);
+			setIsFormValid(true);
 		}
 	};
 
@@ -174,9 +180,7 @@ const ReportCamOff = () => {
 				</Box>
 
 				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='demo-simple-select-label' required>
-						Item
-					</InputLabel>
+					<InputLabel id='demo-simple-select-label'>Item</InputLabel>
 					<Select
 						id='demo-simple-select'
 						value={item}
@@ -202,7 +206,6 @@ const ReportCamOff = () => {
 					label='Description'
 					multiline
 					rows={4}
-					required
 					value={descripcion}
 					onChange={handleDescripcionChange}
 					error={!!descripcionError}
@@ -217,18 +220,26 @@ const ReportCamOff = () => {
 					margin='normal'
 					variant='outlined'
 					style={{ width: '90%' }}
+					required
 				/>
 				<Button
-					type='submit'
 					variant='contained'
+					type='submit'
 					style={{
 						backgroundColor: '#3AB54A',
 						color: '#FFFFFF',
 						borderRadius: '20px',
 						margin: '20px',
 					}}
+					onClick={() => {
+						if (isFormValid) {
+							dispatch(setOfficeHomeModalOpen(true));
+						} else {
+							toast.error('Please complete the form before proceeding.');
+						}
+					}}
 				>
-					New Report
+					Next
 				</Button>
 			</Box>
 		</>

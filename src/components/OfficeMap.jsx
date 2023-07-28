@@ -1,13 +1,18 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
+import OfficeSelection from '../view/OfficeSelection';
 
 function OfficeMap(props) {
-	/* eslint-disable no-unused-vars */
-	/* eslint-disable react/prop-types */
-	console.log(props);
 	const [selectedDesk, setSelectedDesk] = useState(null);
+	const [selectedFloor, setSelectedFloor] = useState('');
+
+	const handleChange = event => {
+		setSelectedFloor(event.target.value); // Update the selected floor when the value changes
+	};
 
 	const handleDeskClick = async boxNumber => {
 		const desk = props.officeId.desks.find(
@@ -15,24 +20,10 @@ function OfficeMap(props) {
 		);
 
 		if (desk && desk.isOccupied) {
-			//AGREGAR UN TOASTY O UNA ALERTA
 			return console.log('El escritorio está ocupado');
 		}
-		try {
-			const response = await axios.put(
-				'http://localhost:5000/api/v1/office/selectDesk',
-				{
-					officeId: props.officeId._id,
-					deskNumber: boxNumber,
-				},
-			);
-
-			if (response.status === 200) {
-				setSelectedDesk(boxNumber);
-			}
-		} catch (error) {
-			console.error('Error to select desk:', error);
-		}
+		props.setSelectedDeskNumber(boxNumber);
+		setSelectedDesk(boxNumber);
 	};
 
 	const renderBoxes = (start, end) => {
@@ -44,7 +35,7 @@ function OfficeMap(props) {
 			const deskClassName = `column ${isSelected ? 'selected' : ''} ${
 				isOccupied ? 'red-background' : ''
 			}`;
-			console.log(desk);
+
 			boxes.push(
 				<div
 					key={i}
@@ -69,7 +60,13 @@ function OfficeMap(props) {
 				<InputLabel id='item-label' required>
 					floor
 				</InputLabel>
-				<Select label='floor' id='office-select' required>
+				<Select
+					label='floor'
+					id='office-select'
+					value={selectedFloor}
+					onChange={handleChange}
+					required
+				>
 					<MenuItem value='1'>1</MenuItem>
 					<MenuItem value='2'>2</MenuItem>
 				</Select>
@@ -252,6 +249,10 @@ function OfficeMap(props) {
 										: ''
 								}`}
 								onClick={() => handleDeskClick(32)}
+							/>
+							<OfficeSelection
+								selectedDesk={selectedDesk}
+								selectedFloor={selectedFloor}
 							/>
 						</div>
 					</div>
