@@ -33,10 +33,10 @@ const ReportCamOff = () => {
 	const dispatch = useDispatch();
 
 	const date = {
-		url_img : selectedFile,
+		url_img: selectedFile,
 		device: item,
 		description: descripcion,
-	}
+	};
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
@@ -51,6 +51,7 @@ const ReportCamOff = () => {
 
 	const handleItemChange = event => {
 		setItem(event.target.value);
+		if (descripcionError === '' && descripcion != '') setIsFormValid(true);
 	};
 	const handleDescripcionChange = event => {
 		const inputValue = event.target.value;
@@ -60,17 +61,19 @@ const ReportCamOff = () => {
 
 		if (singleSpaceValue.length < 10 || singleSpaceValue.length > maxChars) {
 			setDescripcionError('Description must be between 10 and 100 characters.');
+			setIsFormValid(false);
 		} else {
 			setDescripcionError('');
+			if (item) setIsFormValid(true);
 		}
 	};
 
 	const handleSubmit = event => {
 		event.preventDefault();
 		dispatch(setReport(date));
-
-		if (descripcionError) {
+		if (descripcionError && item === '') {
 			toast.error(descripcionError);
+			setIsFormValid(false);
 		} else {
 			setIsFormValid(true);
 		}
