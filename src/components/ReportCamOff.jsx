@@ -27,7 +27,7 @@ const ReportCamOff = () => {
 	const [descripcion, setDescripcion] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
-	const [office, setOffice] = useState([]);
+
 	const [isFormValid, setIsFormValid] = useState(false);
 
 	const dispatch = useDispatch();
@@ -78,6 +78,7 @@ const ReportCamOff = () => {
 			setIsFormValid(true);
 		}
 	};
+	console.log(selectedFile);
 
 	const remainingChars = maxChars - descripcion.length;
 
@@ -87,8 +88,6 @@ const ReportCamOff = () => {
 				const response = await axios.get(
 					'http://localhost:5000/api/v1/office/allOffices',
 				);
-
-				setOffice(response.data);
 			} catch (error) {
 				console.error('Error:', error);
 			}
