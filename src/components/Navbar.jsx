@@ -39,7 +39,7 @@ function ResponsiveAppBar() {
 								<Button
 									variant='contained'
 									color='success'
-									className='button-new-report'
+									className='button-rotate'
 									sx={{
 										marginRight: '10px',
 										backgroundColor: '#3AB54A',
@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
 									}}
 									onClick={() => dispatch(setReportModalOpen(true))}
 								>
-									<PostAddIcon className='icon-new-report' fontSize='large' />
+									<PostAddIcon className='icon-rotate' fontSize='large' />
 								</Button>
 							</Tooltip>
 						)}

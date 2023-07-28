@@ -88,6 +88,7 @@ const ReportCamOff = () => {
 				const response = await axios.get(
 					'http://localhost:5000/api/v1/office/allOffices',
 				);
+				console.log(response);
 			} catch (error) {
 				console.error('Error:', error);
 			}
