@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ResponsiveAppBar from '../components/Navbar';
@@ -15,14 +17,16 @@ import { haversineDistance } from '../utils/calculus';
 import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
 
-const OfficeSelection = () => {
+const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
+
+
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
+  const dateReport = new Date().toLocaleDateString('es-AR');
 
 	const user = useSelector(state => state.user);
 	const report = useSelector(state => state.report);
-
 	const userLocation = useUserLocation();
 
 	const filterNearbyOffices = radius => {
@@ -59,24 +63,35 @@ const OfficeSelection = () => {
 
 	const handleSubmitNewReport = async e => {
 		e.preventDefault();
+
+		const reportOffice = {
+			user: user.username,
+			url_img: report.url_img.name,
+			device: report.device,
+			description: report.description,
+			location: selectedOffice.location, 
+			latitude: userLocation.lat,
+			longitude: userLocation.lng,
+			homeoffice: false,
+			box_number: selectedDesk,
+			floor_number: selectedFloor,
+			status_report: 'Open',
+			date_report: dateReport,
+		};
 		try {
-			axios.post('http://localhost:5000/api/v1/report/newReport', {
-				user: user.username,
-				url_img: report.url_img.name,
-				device: report.device,
-				description: report.description,
-				location: selectedOffice.location,
-				latitude: userLocation.lat,
-				longitude: userLocation.lng,
-				status_report: 'Open',
-				date_report: Date(),
-			});
+			const response = await axios.post(
+				'http://localhost:5000/api/v1/report/newReport',
+				reportOffice,
+			);
+			console.log('Report submitted successfully:', response.data);
+			dispatch(setReport(response.data));
+
 			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
 				officeId: selectedOffice._id,
 				deskNumber: selectedDeskNumber,
 			});
 		} catch (error) {
-			console.error('Error al enviar el informe:', error);
+			console.error('Error submitting report:', error);
 		}
 	};
 
