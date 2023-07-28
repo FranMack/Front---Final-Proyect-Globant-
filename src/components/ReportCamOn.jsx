@@ -15,20 +15,28 @@ import {
 	Button,
 	InputAdornment,
 } from '@mui/material';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
+
 import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
+import { setReport } from '../state/report';
+import { useDispatch } from 'react-redux';
 
-const ReportCamOn = ({objectInCamera,capturedImage,handleConfirmObject}) => {
+const ReportCamOn = ({
+	objectInCamera,
+	capturedImage,
+	handleConfirmObject,
+}) => {
 	const maxChars = 100;
 	const navigate = useNavigate();
 	const [item, setItem] = useState('');
 	const [descripcion, setDescripcion] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
-	const [office, setOffice] = useState([]);
+	const dispatch = useDispatch();
 
+	const [isFormValid, setIsFormValid] = useState(false);
 	const handleFileChange = e => {
 		const file = e.target.files[0];
 		setselectedFile(file);
@@ -38,6 +46,11 @@ const ReportCamOn = ({objectInCamera,capturedImage,handleConfirmObject}) => {
 		if (file) {
 			reader.readAsDataURL(file);
 		}
+	};
+	const date = {
+		url_img: selectedFile,
+		device: item,
+		description: descripcion,
 	};
 
 	const handleDescripcionChange = event => {
@@ -53,18 +66,14 @@ const ReportCamOn = ({objectInCamera,capturedImage,handleConfirmObject}) => {
 		}
 	};
 
-	const handleSubmit = event => {
+	const handleSubmit = async event => {
 		event.preventDefault();
-
-		if (descripcionError) {
+		dispatch(setReport(date));
+		if (descripcionError && item === '') {
 			toast.error(descripcionError);
+			setIsFormValid(false);
 		} else {
-			toast.success('Report create successful');
-			setItem('');
-			setDescripcion('');
-			setTimeout(() => {
-				navigate('/home');
-			}, 1000);
+			setIsFormValid(true);
 		}
 	};
 
@@ -73,14 +82,9 @@ const ReportCamOn = ({objectInCamera,capturedImage,handleConfirmObject}) => {
 	useEffect(() => {
 		const getOffices = async () => {
 			try {
-				const response = await axios.get(
-					'http://localhost:5000/api/v1/office/allOffices',
-                    
-				);
-                setItem(objectInCamera)
-                setselectedFile(capturedImage)
-
-				setOffice(response.data);
+				await axios.get('http://localhost:5000/api/v1/office/allOffices');
+				setItem(objectInCamera);
+				setselectedFile(capturedImage);
 			} catch (error) {
 				console.error('Error:', error);
 			}
@@ -88,137 +92,134 @@ const ReportCamOn = ({objectInCamera,capturedImage,handleConfirmObject}) => {
 		getOffices();
 	}, []);
 
-    console.log("item",item)
-
 	return (
 		<>
-					<ResponsiveAppBar />
-					<Box
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							borderBottom: '1px solid grey',
-						}}
-					>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								marginLeft: '15px',
-							}}
-						>
-							<h3 style={{ marginLeft: '16px', color: 'grey' }}>New Report</h3>
-						</div>
-					</Box>
-					<Box
-						component='form'
-						onSubmit={handleSubmit}
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-						}}
-					>
-						<h3
-							style={{
-								textAlign: 'center',
-								fontSize: '26px',
-								color: 'rgb(77, 75, 75)',
-							}}
-						>
-							Enter the Damaged item manually
-						</h3>
+			<ResponsiveAppBar />
+			<Box
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					borderBottom: '1px solid grey',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						marginLeft: '15px',
+					}}
+				>
+					<h3 style={{ marginLeft: '16px', color: 'grey' }}>New Report</h3>
+				</div>
+			</Box>
+			<Box
+				component='form'
+				onSubmit={handleSubmit}
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}
+			>
+				<h3
+					style={{
+						textAlign: 'center',
+						fontSize: '26px',
+						color: 'rgb(77, 75, 75)',
+					}}
+				>
+					Enter the Damaged item manually
+				</h3>
+				<img
+					src={technicalServiceImage}
+					alt='Technical Service'
+					style={{ width: '200px', margin: '20px' }}
+				/>
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						width: '90%',
+						paddingBottom: '20px',
+					}}
+				>
+					{selectedFile ? (
 						<img
-							src={technicalServiceImage}
-							alt='Technical Service'
-							style={{ width: '200px', margin: '20px' }}
+							src={selectedFile}
+							alt='Uploaded File'
+							style={{ width: '200px' }}
 						/>
-						<Box
-							sx={{
-								
-								display: 'flex',
-								alignItems: 'center',
-                                justifyContent:"center",
-								width: '90%',
-								paddingBottom: '20px',
-                            
-							}}
-						>
-							{selectedFile ? (
-								<img
-									src={selectedFile}
-									alt='Uploaded File'
-									style={{ width: '200px' }}
-								/>
-							) : null}
-							
-						</Box>
+					) : null}
+				</Box>
 
-						<FormControl style={{ width: '90%' }}>
-							<InputLabel id='demo-simple-select-label' required>
-								Item
-							</InputLabel>
-							<Select
-								id='demo-simple-select'
-								value={objectInCamera}
-								label='item'
-								onChange={handleConfirmObject}
-								required
-							>
-								<MenuItem value='notebook-charger'>Notebook Charger</MenuItem>
-								<MenuItem value='cell-phone-charger'>
-									Cellphone Charger
-								</MenuItem>
-								<MenuItem value='port-adapter'>Port Adapter</MenuItem>
-								<MenuItem value='cable-hdmi'>HDMI Cable</MenuItem>
-								<MenuItem value='cell-phone'>Cellphone</MenuItem>
-								<MenuItem value='chair'>Chair</MenuItem>
-								<MenuItem value='headset'>Headset</MenuItem>
-								<MenuItem value='keyboard'>Keyboard</MenuItem>
-								<MenuItem value='laptop'>Laptop</MenuItem>
-								<MenuItem value='modem'>Modem</MenuItem>
-								<MenuItem value='monitor'>Monitor</MenuItem>
-								<MenuItem value='mouse'>Mouse</MenuItem>
-								<MenuItem value={objectInCamera}>{objectInCamera}</MenuItem>
-							</Select>
-						</FormControl>
-						<TextField
-							label='Description'
-							multiline
-							rows={4}
-							required
-							value={descripcion}
-							onChange={handleDescripcionChange}
-							error={!!descripcionError}
-							helperText={descripcionError}
-							InputProps={{
-								endAdornment: (
-									<InputAdornment
-										position='end'
-										style={{ alignSelf: 'flex-end' }}
-									>
-										Max chars.: {remainingChars}/{maxChars}
-									</InputAdornment>
-								),
-							}}
-							margin='normal'
-							variant='outlined'
-							style={{ width: '90%' }}
-						/>
-						<Button
-							type='submit'
-							variant='contained'
-							style={{
-								backgroundColor: '#3AB54A',
-								color: '#FFFFFF',
-								borderRadius: '20px',
-								margin: '20px',
-							}}
-						>
-							New Report
-						</Button>
-					</Box>
-				</>
+				<FormControl style={{ width: '90%' }}>
+					<InputLabel id='demo-simple-select-label' required>
+						Item
+					</InputLabel>
+					<Select
+						id='demo-simple-select'
+						value={objectInCamera}
+						label='item'
+						onChange={handleConfirmObject}
+						required
+					>
+						<MenuItem value='notebook-charger'>Notebook Charger</MenuItem>
+						<MenuItem value='cell-phone-charger'>Cellphone Charger</MenuItem>
+						<MenuItem value='port-adapter'>Port Adapter</MenuItem>
+						<MenuItem value='cable-hdmi'>HDMI Cable</MenuItem>
+						<MenuItem value='cell-phone'>Cellphone</MenuItem>
+						<MenuItem value='chair'>Chair</MenuItem>
+						<MenuItem value='headset'>Headset</MenuItem>
+						<MenuItem value='keyboard'>Keyboard</MenuItem>
+						<MenuItem value='laptop'>Laptop</MenuItem>
+						<MenuItem value='modem'>Modem</MenuItem>
+						<MenuItem value='monitor'>Monitor</MenuItem>
+						<MenuItem value='mouse'>Mouse</MenuItem>
+						<MenuItem value={objectInCamera}>{objectInCamera}</MenuItem>
+					</Select>
+				</FormControl>
+				<TextField
+					label='Description'
+					multiline
+					rows={4}
+					required
+					value={descripcion}
+					onChange={handleDescripcionChange}
+					error={!!descripcionError}
+					helperText={descripcionError}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position='end' style={{ alignSelf: 'flex-end' }}>
+								Max chars.: {remainingChars}/{maxChars}
+							</InputAdornment>
+						),
+					}}
+					margin='normal'
+					variant='outlined'
+					style={{ width: '90%' }}
+				/>
+				<Button
+					variant='contained'
+					type='submit'
+					style={{
+						backgroundColor: '#3AB54A',
+						color: '#FFFFFF',
+						borderRadius: '20px',
+						margin: '20px',
+					}}
+					onClick={() => {
+						if (isFormValid) {
+							dispatch(setOfficeHomeModalOpen(true));
+						} else {
+							toast.error('Please complete the form before proceeding.');
+						}
+					}}
+				>
+					Next
+				</Button>
+			</Box>
+		</>
 	);
 };
 
