@@ -2,10 +2,8 @@
 /* eslint-disable react/prop-types */ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import axios from 'axios';
 
 function OfficeMap(props) {
-	console.log('las props', props);
 	const [selectedDesk, setSelectedDesk] = useState(null);
 
 	const handleDeskClick = async boxNumber => {
@@ -14,24 +12,10 @@ function OfficeMap(props) {
 		);
 
 		if (desk && desk.isOccupied) {
-			//AGREGAR UN TOASTY O UNA ALERTA
 			return console.log('El escritorio está ocupado');
 		}
-		try {
-			const response = await axios.put(
-				'http://localhost:5000/api/v1/office/selectDesk',
-				{
-					officeId: props.officeId._id,
-					deskNumber: boxNumber,
-				},
-			);
-
-			if (response.status === 200) {
-				setSelectedDesk(boxNumber);
-			}
-		} catch (error) {
-			console.error('Error to select desk:', error);
-		}
+		props.setSelectedDeskNumber(boxNumber);
+		setSelectedDesk(boxNumber);
 	};
 
 	const renderBoxes = (start, end) => {
@@ -43,7 +27,7 @@ function OfficeMap(props) {
 			const deskClassName = `column ${isSelected ? 'selected' : ''} ${
 				isOccupied ? 'red-background' : ''
 			}`;
-			console.log(desk);
+
 			boxes.push(
 				<div
 					key={i}

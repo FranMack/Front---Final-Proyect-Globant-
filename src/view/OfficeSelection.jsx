@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux';
 const OfficeSelection = () => {
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
+	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
+
 	const user = useSelector(state => state.user);
 	const report = useSelector(state => state.report);
 
@@ -42,9 +44,9 @@ const OfficeSelection = () => {
 	};
 
 	const handleOfficeChange = event => {
-		const selectedLocation = event.target.value; // Check the selected office ID
+		const selectedLocation = event.target.value;
 		const selectedOfficeData = officeList.find(
-			office => office._id === selectedLocation, // Check the selected office data
+			office => office._id === selectedLocation,
 		);
 		setSelectedOffice(selectedOfficeData);
 	};
@@ -52,23 +54,30 @@ const OfficeSelection = () => {
 	useEffect(() => {
 		axios.get('http://localhost:5000/api/v1/office/allOffices').then(res => {
 			setOfficeList(res.data);
-			console.log('Fetched office data:', res.data);
 		});
-	}, []); /// officeList tiene todas la informacion de oficinas en array
+	}, []);
 
-	const handleSubmitNewReport = e => {
+	const handleSubmitNewReport = async e => {
 		e.preventDefault();
-		axios.post('http://localhost:5000/api/v1/report/newReport', {
-			user: user.username,
-			url_img: report.url_img.name,
-			device: report.device,
-			description: report.description,
-			location: selectedOffice.location, // selectedOffice state holds the currently selected office data
-			latitude: userLocation.lat,
-			longitude: userLocation.lng,
-			status_report: 'Open',
-			date_report: Date(),
-		});
+		try {
+			axios.post('http://localhost:5000/api/v1/report/newReport', {
+				user: user.username,
+				url_img: report.url_img.name,
+				device: report.device,
+				description: report.description,
+				location: selectedOffice.location,
+				latitude: userLocation.lat,
+				longitude: userLocation.lng,
+				status_report: 'Open',
+				date_report: Date(),
+			});
+			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
+				officeId: selectedOffice._id,
+				deskNumber: selectedDeskNumber,
+			});
+		} catch (error) {
+			console.error('Error al enviar el informe:', error);
+		}
 	};
 
 	return (
@@ -124,7 +133,11 @@ const OfficeSelection = () => {
 				</FormControl>
 				{selectedOffice ? (
 					<>
-						<OfficeMap officeId={selectedOffice} />
+						<OfficeMap
+							officeId={selectedOffice}
+							selectedDeskNumber={selectedDeskNumber}
+							setSelectedDeskNumber={setSelectedDeskNumber}
+						/>
 						<Button
 							type='submit'
 							variant='contained'
