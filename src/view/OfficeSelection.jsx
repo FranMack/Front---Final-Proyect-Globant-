@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ResponsiveAppBar from '../components/Navbar';
@@ -13,15 +15,19 @@ import {
 import OfficeMap from '../components/OfficeMap';
 import { haversineDistance } from '../utils/calculus';
 import useUserLocation from '../utils/hookUserLocation';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setReport } from '../state/report';
 
-const OfficeSelection = () => {
+const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
+	console.log('Desk elegidoo', selectedDesk);
+	console.log('flor elegido', selectedFloor);
+
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const user = useSelector(state => state.user);
 	const report = useSelector(state => state.report);
-
 	const userLocation = useUserLocation();
+	const dispatch = useDispatch();
 
 	const filterNearbyOffices = radius => {
 		radius = 32;
@@ -52,13 +58,13 @@ const OfficeSelection = () => {
 	useEffect(() => {
 		axios.get('http://localhost:5000/api/v1/office/allOffices').then(res => {
 			setOfficeList(res.data);
-			console.log('Fetched office data:', res.data);
 		});
 	}, []); /// officeList tiene todas la informacion de oficinas en array
 
-	const handleSubmitNewReport = e => {
+	const handleSubmitNewReport = async e => {
 		e.preventDefault();
-		axios.post('http://localhost:5000/api/v1/report/newReport', {
+
+		const reportOffice = {
 			user: user.username,
 			url_img: report.url_img.name,
 			device: report.device,
@@ -66,9 +72,22 @@ const OfficeSelection = () => {
 			location: selectedOffice.location, // selectedOffice state holds the currently selected office data
 			latitude: userLocation.lat,
 			longitude: userLocation.lng,
+			homeoffice: false,
+			box_number: selectedDesk,
+			floor_number: selectedFloor,
 			status_report: 'Open',
 			date_report: Date(),
-		});
+		};
+		try {
+			const response = await axios.post(
+				'http://localhost:5000/api/v1/report/newReport',
+				reportOffice,
+			);
+			console.log('Report submitted successfully:', response.data);
+			dispatch(setReport(response.data));
+		} catch (error) {
+			console.error('Error submitting report:', error);
+		}
 	};
 
 	return (
