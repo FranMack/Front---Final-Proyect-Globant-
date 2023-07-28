@@ -16,14 +16,16 @@ import OfficeMap from '../components/OfficeMap';
 import { haversineDistance } from '../utils/calculus';
 import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
-const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
-
-
+const OfficeSelection = () => {
+	const navigate = useNavigate();
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
-  const dateReport = new Date().toLocaleDateString('es-AR');
+
+	const dateReport = new Date().toLocaleDateString('es-AR');
 
 	const user = useSelector(state => state.user);
 	const report = useSelector(state => state.report);
@@ -63,28 +65,28 @@ const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
 
 	const handleSubmitNewReport = async e => {
 		e.preventDefault();
-
-		const reportOffice = {
-			user: user.username,
-			url_img: report.url_img.name,
-			device: report.device,
-			description: report.description,
-			location: selectedOffice.location, 
-			latitude: userLocation.lat,
-			longitude: userLocation.lng,
-			homeoffice: false,
-			box_number: selectedDesk,
-			floor_number: selectedFloor,
-			status_report: 'Open',
-			date_report: dateReport,
-		};
 		try {
+			const reportOffice = {
+				user: user.username,
+				url_img: report.url_img.name,
+				device: report.device,
+				description: report.description,
+				location: selectedOffice.location,
+				latitude: userLocation.lat,
+				longitude: userLocation.lng,
+				homeoffice: false,
+				box_number: selectedDeskNumber,
+				status_report: 'Open',
+				date_report: dateReport,
+			};
+
 			const response = await axios.post(
 				'http://localhost:5000/api/v1/report/newReport',
 				reportOffice,
 			);
 			console.log('Report submitted successfully:', response.data);
-			dispatch(setReport(response.data));
+			toast.success('Report create successfully');
+			navigate('/home');
 
 			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
 				officeId: selectedOffice._id,
@@ -94,13 +96,10 @@ const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
 			console.error('Error submitting report:', error);
 		}
 	};
-
 	return (
-		<>
+		<Box component='form' onSubmit={handleSubmitNewReport}>
 			<ResponsiveAppBar />
 			<Box
-				component='form'
-				onSubmit={handleSubmitNewReport}
 				style={{
 					display: 'flex',
 					alignItems: 'center',
@@ -150,7 +149,6 @@ const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
 					<>
 						<OfficeMap
 							officeId={selectedOffice}
-							selectedDeskNumber={selectedDeskNumber}
 							setSelectedDeskNumber={setSelectedDeskNumber}
 						/>
 						<Button
@@ -172,7 +170,7 @@ const OfficeSelection = ({ selectedDesk, selectedFloor }) => {
 					</Typography>
 				)}
 			</Box>
-		</>
+		</Box>
 	);
 };
 

@@ -2,27 +2,23 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Typography } from '@mui/material';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import axios from 'axios';
+
 import OfficeSelection from '../view/OfficeSelection';
 
-function OfficeMap(props) {
-	const [selectedDesk, setSelectedDesk] = useState(null);
-	const [selectedFloor, setSelectedFloor] = useState('');
+function OfficeMap({
+	officeId,
 
-	const handleChange = event => {
-		setSelectedFloor(event.target.value); // Update the selected floor when the value changes
-	};
+	setSelectedDeskNumber,
+}) {
+	const [selectedDesk, setSelectedDesk] = useState(null);
 
 	const handleDeskClick = async boxNumber => {
-		const desk = props.officeId.desks.find(
-			desk => desk.deskNumber === boxNumber,
-		);
+		const desk = officeId.desks.find(desk => desk.deskNumber === boxNumber);
 
 		if (desk && desk.isOccupied) {
 			return console.log('El escritorio está ocupado');
 		}
-		props.setSelectedDeskNumber(boxNumber);
+		setSelectedDeskNumber(boxNumber);
 		setSelectedDesk(boxNumber);
 	};
 
@@ -30,7 +26,7 @@ function OfficeMap(props) {
 		const boxes = [];
 		for (let i = start; i <= end; i++) {
 			const isSelected = selectedDesk === i;
-			const desk = props.officeId.desks.find(desk => desk.deskNumber === i);
+			const desk = officeId.desks.find(desk => desk.deskNumber === i);
 			const isOccupied = desk ? desk.isOccupied : false;
 			const deskClassName = `column ${isSelected ? 'selected' : ''} ${
 				isOccupied ? 'red-background' : ''
@@ -52,25 +48,6 @@ function OfficeMap(props) {
 			<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
 				Select your floor
 			</Typography>
-			<FormControl
-				style={{
-					width: '90%',
-				}}
-			>
-				<InputLabel id='item-label' required>
-					floor
-				</InputLabel>
-				<Select
-					label='floor'
-					id='office-select'
-					value={selectedFloor}
-					onChange={handleChange}
-					required
-				>
-					<MenuItem value='1'>1</MenuItem>
-					<MenuItem value='2'>2</MenuItem>
-				</Select>
-			</FormControl>
 
 			{!selectedDesk ? (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
@@ -88,8 +65,7 @@ function OfficeMap(props) {
 							className={`top-container ${
 								selectedDesk === 1 ? 'selected' : ''
 							} ${
-								props.officeId.desks.find(desk => desk.deskNumber === 1)
-									?.isOccupied
+								officeId.desks.find(desk => desk.deskNumber === 1)?.isOccupied
 									? 'red-background'
 									: ''
 							}`}
@@ -101,8 +77,7 @@ function OfficeMap(props) {
 								className={`top-container ${
 									selectedDesk === 8 ? 'selected' : ''
 								} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 8)
-										?.isOccupied
+									officeId.desks.find(desk => desk.deskNumber === 8)?.isOccupied
 										? 'red-background'
 										: ''
 								}`}
@@ -115,8 +90,7 @@ function OfficeMap(props) {
 							className={`top-container ${
 								selectedDesk === 9 ? 'selected' : ''
 							} ${
-								props.officeId.desks.find(desk => desk.deskNumber === 9)
-									?.isOccupied
+								officeId.desks.find(desk => desk.deskNumber === 9)?.isOccupied
 									? 'red-background'
 									: ''
 							}`}
@@ -129,7 +103,7 @@ function OfficeMap(props) {
 								className={`top-container ${
 									selectedDesk === 16 ? 'selected' : ''
 								} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 16)
+									officeId.desks.find(desk => desk.deskNumber === 16)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -143,8 +117,7 @@ function OfficeMap(props) {
 							className={`top-container ${
 								selectedDesk === 17 ? 'selected' : ''
 							} ${
-								props.officeId.desks.find(desk => desk.deskNumber === 17)
-									?.isOccupied
+								officeId.desks.find(desk => desk.deskNumber === 17)?.isOccupied
 									? 'red-background'
 									: ''
 							}`}
@@ -157,7 +130,7 @@ function OfficeMap(props) {
 								className={`top-container ${
 									selectedDesk === 24 ? 'selected' : ''
 								} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 24)
+									officeId.desks.find(desk => desk.deskNumber === 24)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -172,7 +145,7 @@ function OfficeMap(props) {
 						<div className='column1'>
 							<div
 								className={`circle ${selectedDesk === 25 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 25)
+									officeId.desks.find(desk => desk.deskNumber === 25)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -181,7 +154,7 @@ function OfficeMap(props) {
 							/>
 							<div
 								className={`circle ${selectedDesk === 26 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 26)
+									officeId.desks.find(desk => desk.deskNumber === 26)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -192,7 +165,7 @@ function OfficeMap(props) {
 						<div className='column2'>
 							<div
 								className={`circle ${selectedDesk === 27 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 27)
+									officeId.desks.find(desk => desk.deskNumber === 27)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -201,7 +174,7 @@ function OfficeMap(props) {
 							/>
 							<div
 								className={`circle ${selectedDesk === 28 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 28)
+									officeId.desks.find(desk => desk.deskNumber === 28)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -214,7 +187,7 @@ function OfficeMap(props) {
 						<div className='column1'>
 							<div
 								className={`circle ${selectedDesk === 29 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 29)
+									officeId.desks.find(desk => desk.deskNumber === 29)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -223,7 +196,7 @@ function OfficeMap(props) {
 							/>
 							<div
 								className={`circle ${selectedDesk === 30 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 30)
+									officeId.desks.find(desk => desk.deskNumber === 30)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -234,7 +207,7 @@ function OfficeMap(props) {
 						<div className='column2'>
 							<div
 								className={`circle ${selectedDesk === 31 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 31)
+									officeId.desks.find(desk => desk.deskNumber === 31)
 										?.isOccupied
 										? 'red-background'
 										: ''
@@ -243,16 +216,12 @@ function OfficeMap(props) {
 							/>
 							<div
 								className={`circle ${selectedDesk === 32 ? 'selected' : ''} ${
-									props.officeId.desks.find(desk => desk.deskNumber === 32)
+									officeId.desks.find(desk => desk.deskNumber === 32)
 										?.isOccupied
 										? 'red-background'
 										: ''
 								}`}
 								onClick={() => handleDeskClick(32)}
-							/>
-							<OfficeSelection
-								selectedDesk={selectedDesk}
-								selectedFloor={selectedFloor}
 							/>
 						</div>
 					</div>
