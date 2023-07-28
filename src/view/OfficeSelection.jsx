@@ -25,7 +25,11 @@ const OfficeSelection = () => {
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
 
-	const dateReport = new Date().toLocaleDateString('es-AR');
+	const dateReport = new Date()
+		.toLocaleDateString('es-AR')
+		.split('/')
+		.reverse()
+		.join('-');
 
 	const user = useSelector(state => state.user);
 	const report = useSelector(state => state.report);
@@ -68,7 +72,7 @@ const OfficeSelection = () => {
 		try {
 			const reportOffice = {
 				user: user.username,
-				url_img: report.url_img.name,
+				url_img: report.url_img.name || report.url_img,
 				device: report.device,
 				description: report.description,
 				location: selectedOffice.location,
