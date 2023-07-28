@@ -68,7 +68,7 @@ const ReportCamOff = () => {
 		}
 	};
 
-	const handleSubmit = event => {
+	const handleSubmit = async event => {
 		event.preventDefault();
 		dispatch(setReport(date));
 		if (descripcionError && item === '') {
@@ -78,16 +78,13 @@ const ReportCamOff = () => {
 			setIsFormValid(true);
 		}
 	};
-	console.log(selectedFile);
 
 	const remainingChars = maxChars - descripcion.length;
 
 	useEffect(() => {
 		const getOffices = async () => {
 			try {
-				const response = await axios.get(
-					'http://localhost:5000/api/v1/office/allOffices',
-				);
+				await axios.get('http://localhost:5000/api/v1/office/allOffices');
 			} catch (error) {
 				console.error('Error:', error);
 			}

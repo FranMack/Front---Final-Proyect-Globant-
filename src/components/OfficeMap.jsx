@@ -45,10 +45,6 @@ function OfficeMap({
 
 	return (
 		<>
-			<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
-				Select your floor
-			</Typography>
-
 			{!selectedDesk ? (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
 					Please select your desk
