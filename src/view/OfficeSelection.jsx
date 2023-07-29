@@ -36,7 +36,7 @@ const OfficeSelection = () => {
 	const userLocation = useUserLocation();
 
 	const filterNearbyOffices = radius => {
-		radius = 32;
+		radius = 500;
 		if (!userLocation) return [];
 
 		const nearbyOffices = officeList.filter(office => {
@@ -72,7 +72,7 @@ const OfficeSelection = () => {
 		try {
 			const reportOffice = {
 				user: user.username,
-				url_img: report.url_img.name || report.url_img,
+				url_img: report.url_img || report.url_img,
 				device: report.device,
 				description: report.description,
 				location: selectedOffice.location,
