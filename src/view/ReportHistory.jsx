@@ -7,6 +7,7 @@ import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { TransformISOdate } from '../utils/functions';
 import { orderByDate } from '../utils/functions';
+import { useSelector } from 'react-redux';
 
 const ReportHistory = () => {
 	const [reports, setReports] = useState([]);
@@ -14,6 +15,7 @@ const ReportHistory = () => {
 	const [date, setDate] = useState(null);
 	const [isoDate, setIsoDate] = useState(null);
 	const [allReports, setAllreports] = useState(false);
+	const user = useSelector(state => state.user);
 
 	const handleShowMore = () => {
 		setAllreports(!allReports);
@@ -32,7 +34,7 @@ const ReportHistory = () => {
 	const showAllTheReports = event => {
 		event.preventDefault();
 		axios
-			.get('http://localhost:5000/api/v1/report/status/Close')
+			.get(`http://localhost:5000/api/v1/report/status/${user.username}/Close`)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
@@ -41,7 +43,7 @@ const ReportHistory = () => {
 
 	useEffect(() => {
 		axios
-			.get('http://localhost:5000/api/v1/report/status/Close')
+			.get(`http://localhost:5000/api/v1/report/status/${user.username}/Close`)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
@@ -51,7 +53,7 @@ const ReportHistory = () => {
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:5000/api/v1/report/search?device=${search}&status=Close`,
+				`http://localhost:5000/api/v1/report/search?username=${user.username}&device=${search}&status=Close`,
 			)
 			.then(res => setReports(res.data))
 			.catch(err => console.log(err));
@@ -61,7 +63,7 @@ const ReportHistory = () => {
 		if (date) {
 			axios
 				.get(
-					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&status=Close`,
+					`http://localhost:5000/api/v1/report/search-by-date?username=${user.username}&date=${isoDate}&status=Close`,
 				)
 				.then(res => setReports(res.data))
 				.catch(err => console.log(err));
@@ -84,9 +86,8 @@ const ReportHistory = () => {
 					borderBottom: '1px solid grey',
 				}}
 			>
-				<Box sx={{marginLeft:{xs:"10%", md:"3%"}}}>
-
-				<h3 style={{ color: 'grey' }}>Inactive report history</h3>
+				<Box sx={{ marginLeft: { xs: '10%', md: '3%' } }}>
+					<h3 style={{ color: 'grey' }}>Inactive report history</h3>
 				</Box>
 			</Box>
 			<Box

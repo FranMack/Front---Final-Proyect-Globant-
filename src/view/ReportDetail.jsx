@@ -7,7 +7,6 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { emailReport } from '../utils/functions';
 
-
 import {
 	Box,
 	Button,
@@ -16,8 +15,9 @@ import {
 	Avatar,
 	Modal,
 	IconButton,
+	Tooltip,
 } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
 
@@ -25,38 +25,40 @@ import { ConvertISOdateToRegular } from '../utils/functions';
 
 const ReportDetail = () => {
 	const [open, setOpen] = useState(false);
-	const[email,setEmail]=useState("")
-	const [contentEmail,setContentEmail]=useState("")
-
+	const [email, setEmail] = useState('');
+	const [contentEmail, setContentEmail] = useState('');
 
 	const handleModal = () => {
 		setOpen(!open);
-		setEmail("")
+		setEmail('');
 	};
 
-	const handleEmail = (element) => {
-		
+	const handleEmail = element => {
 		setEmail(element.target.value);
 	};
 
-	const sendEmail = async (event) => {
+	const sendEmail = async event => {
 		event.preventDefault();
-		
-	
-		  await axios.post("http://localhost:5000/api/v1/report/send-email", { email,contentEmail })
-		  .then(()=>{
-		  toast.success('¡Email sent successfully', {
-			position: toast.POSITION.TOP_RIGHT,
-			autoClose: 3000, 
-			hideProgressBar: false,
-		  });
-		  setEmail("");
-		  setOpen(false) })
-		  
-	.catch((error)=>{console.log(error)})
-	  };
 
+		await axios
+			.post('http://localhost:5000/api/v1/report/send-email', {
+				email,
+				contentEmail,
+			})
+			.then(() => {
+				toast.success('¡Email sent successfully', {
+					position: toast.POSITION.TOP_RIGHT,
+					autoClose: 3000,
+					hideProgressBar: false,
+				});
+				setEmail('');
+				setOpen(false);
+			})
 
+			.catch(error => {
+				console.log(error);
+			});
+	};
 
 	const reportId = useParams().id;
 
@@ -65,36 +67,39 @@ const ReportDetail = () => {
 	useEffect(() => {
 		axios
 			.get(`http://localhost:5000/api/v1/report/single/${reportId}`)
-			.then((res)=>{ setReport(res.data)
-				setContentEmail(emailReport(res.data))
+			.then(res => {
+				setReport(res.data);
+				setContentEmail(emailReport(res.data));
 			});
 	}, []);
 
-
-console.log(report)
+	console.log(report);
 	return (
 		<>
-		<ToastContainer/>
-			<Button
-				onClick={handleModal}
-				variant='contained'
-				style={{
-					marginRight: '16px',
-					backgroundColor: '#3ab54a',
-					color: '#FFFFFF',
-					minWidth: '40px',
-					width: '40px',
-					height: '40px',
-					borderRadius: '50%',
-					position: 'fixed',
-					right: 0,
-					bottom: '50px',
-					zIndex: 99,
-				}}
-			>
-				<SendIcon />
-			</Button>
+			<ToastContainer />
 			<Navbar />
+			<Tooltip title='¡Send report!' placement='left'>
+				<Button
+					onClick={handleModal}
+					variant='contained'
+					className='button-rotate'
+					style={{
+						marginRight: '10px',
+						backgroundColor: '#2b7690',
+						color: '#FFFFFF',
+						minWidth: '60px',
+						width: '60px',
+						height: '60px',
+						borderRadius: '50%',
+						position: 'fixed',
+						right: 0,
+						bottom: '25px',
+						zIndex: 99,
+					}}
+				>
+					<ForwardToInboxIcon className='icon-rotate' fontSize='large' />
+				</Button>
+			</Tooltip>
 
 			{open && (
 				<Modal
@@ -129,26 +134,45 @@ console.log(report)
 							</IconButton>
 						</Box>
 
-						<h3 style={{color:"grey"}}>SHARE REPORT</h3>
+						<h3 style={{ color: 'grey' }}>SHARE REPORT</h3>
 
-						<Box component="form" onSubmit={sendEmail} sx={{ width: '%100', marginTop: '10px',display:"flex", flexDirection:"column", justifyContent:"space-between",alignItems:"center"  }}>
+						<Box
+							component='form'
+							onSubmit={sendEmail}
+							sx={{
+								width: '%100',
+								marginTop: '10px',
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'space-between',
+								alignItems: 'center',
+							}}
+						>
+							<FormControl sx={{ width: '100%', marginTop: '10px' }}>
+								<Input
+									value={email}
+									onChange={handleEmail}
+									id='name'
+									type='email'
+									required
+									aria-describedby='email-helper'
+									placeholder='EMAIL'
+								/>
+							</FormControl>
 
-						<FormControl  sx={{ width: '100%', marginTop: '10px'}}>
-							<Input
-							value={email}
-								onChange={handleEmail}
-								id='name'
-								type='email'
-								required
-								aria-describedby='email-helper'
-								placeholder='EMAIL'
-							
-							/>
-						</FormControl>
-
-						<Button  type="submit" variant='contained' sx={{ marginTop: '15%',marginBottom:"10%", paddingInline:"12%",backgroundColor:"#2e7d32" }} >
-							Send
-						</Button>
+							<Button
+								type='submit'
+								variant='contained'
+								color='success'
+								sx={{
+									marginTop: '15%',
+									marginBottom: '10%',
+									paddingInline: '12%',
+									backgroundColor: '#2e7d32',
+								}}
+							>
+								Send
+							</Button>
 						</Box>
 					</Box>
 				</Modal>

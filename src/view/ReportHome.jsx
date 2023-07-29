@@ -17,6 +17,7 @@ import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { TransformISOdate } from '../utils/functions';
 import { orderByDate } from '../utils/functions';
+import { useSelector } from 'react-redux';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -38,6 +39,7 @@ const ReportHome = () => {
 	const [isoDate, setIsoDate] = useState(null);
 	const [allReports, setAllreports] = useState(false);
 	const [stateReport, setStateReport] = useState(['Open']);
+	const user = useSelector(state => state.user);
 
 	const handleShowMore = () => {
 		setAllreports(!allReports);
@@ -55,7 +57,7 @@ const ReportHome = () => {
 		event.preventDefault();
 		axios
 			.get(
-				'http://localhost:5000/api/v1/report/status/' +
+				`http://localhost:5000/api/v1/report/status/${user.username}/` +
 					(stateReport.length ? stateReport : ['Open', 'In progress']),
 			)
 			.then(res => setReports(res.data))
@@ -71,7 +73,7 @@ const ReportHome = () => {
 	useEffect(() => {
 		axios
 			.get(
-				'http://localhost:5000/api/v1/report/status/' +
+				`http://localhost:5000/api/v1/report/status/${user.username}/` +
 					(stateReport.length ? stateReport : ['Open', 'In progress']),
 			)
 			.then(res => setReports(res.data))
@@ -83,7 +85,9 @@ const ReportHome = () => {
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:5000/api/v1/report/search?device=${search}&status=${
+				`http://localhost:5000/api/v1/report/search?username=${
+					user.username
+				}&device=${search}&status=${
 					stateReport.length ? stateReport : ['Open', 'In progress']
 				}`,
 			)
@@ -95,7 +99,9 @@ const ReportHome = () => {
 		if (date) {
 			axios
 				.get(
-					`http://localhost:5000/api/v1/report/search-by-date?date=${isoDate}&status=${
+					`http://localhost:5000/api/v1/report/search-by-date?username=${
+						user.username
+					}&date=${isoDate}&status=${
 						stateReport.length ? stateReport : ['Open', 'In progress']
 					}`,
 				)

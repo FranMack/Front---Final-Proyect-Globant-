@@ -141,6 +141,6 @@
 	}
 }
 
-.button-new-report:hover .icon-new-report {
+.button-rotate:hover .icon-rotate {
 	animation: rotateIcon 0.5s linear;
 }
