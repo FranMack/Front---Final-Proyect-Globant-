@@ -19,6 +19,8 @@ import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import ReportCamOn from './ReportCamOn';
+import Loading from "../view/Loading"
+import Pako from 'pako';
 
 const ObjectDetection = () => {
 	const Navigate = useNavigate();
@@ -50,12 +52,65 @@ const ObjectDetection = () => {
 		runObjectDetection();
 	}, []);
 
+
+	const compressImage = async (imageDataUrl, maxWidth, maxHeight) => {
+		return new Promise((resolve, reject) => {
+		  const image = new Image();
+		  image.src = imageDataUrl;
+	  
+		  image.onload = () => {
+			const canvas = document.createElement('canvas');
+			const context = canvas.getContext('2d');
+	  
+			let width = image.width;
+			let height = image.height;
+	  
+			if (width > maxWidth) {
+			  height *= maxWidth / width;
+			  width = maxWidth;
+			}
+	  
+			if (height > maxHeight) {
+			  width *= maxHeight / height;
+			  height = maxHeight;
+			}
+	  
+			canvas.width = width;
+			canvas.height = height;
+	  
+			context.drawImage(image, 0, 0, width, height);
+	  
+			canvas.toBlob(
+			  (compressedBlob) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(compressedBlob);
+				reader.onloadend = () => {
+				  const compressedImageDataUrl = reader.result;
+				  resolve(compressedImageDataUrl);
+				};
+			  },
+			  'image/jpeg', // Change this to 'image/png' if your image format is PNG
+			  0.9 // Adjust the compression quality as needed (0.0 to 1.0)
+			);
+		  };
+	  
+		  image.onerror = (error) => {
+			reject(error);
+		  };
+		});
+	  };
+
+
+
+
 	const captureImage = async () => {
 		const canvas = canvasRef.current;
 		const context = canvas.getContext('2d');
 
 		canvas.width = videoRef.current.videoWidth;
 		canvas.height = videoRef.current.videoHeight;
+		console.log("witdh",canvas.width)
+		console.log("height",canvas.width)
 
 		context.drawImage(
 			videoRef.current,
@@ -66,8 +121,18 @@ const ObjectDetection = () => {
 		);
 
 		const image = new Image();
-		image.src = canvas.toDataURL();
-		setCapturedImage(image.src);
+		 image.src = canvas.toDataURL();
+
+    const compressedImageDataUrl = await compressImage(
+      image.src,
+      300, // Ancho máximo deseado (ajústalo según tus necesidades)
+      300  // Altura máxima deseada (ajústalo según tus necesidades)
+    );
+
+    setCapturedImage(compressedImageDataUrl);
+
+
+
 		const model = await cocoSsd.load();
 		const predictions = await model.detect(image);
 
@@ -158,9 +223,19 @@ const ObjectDetection = () => {
 		getOffices();
 	}, []);
 
-	console.log('file', selectedFile);
+	
+
+
+	if(capturedImage){
+		const urlCompressed=Pako.gzip(capturedImage,{to:"string"})
+		console.log("compressed",urlCompressed)
+	}
+	
 	return (
+
 		<>
+			{!modelStart ?<Loading/>:
+			<>
 			{!confirm ? (
 				<div title='Scanner'>
 					<Box
@@ -296,6 +371,12 @@ const ObjectDetection = () => {
 					handleConfirmObject={handleConfirmObject}
 				/>
 			)}
+
+
+			</>
+		}
+	
+			
 		</>
 	);
 };
