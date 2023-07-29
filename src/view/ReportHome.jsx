@@ -205,7 +205,7 @@ const ReportHome = () => {
 							textDecoration: 'none',
 						}}
 					>
-						{allReports ? `Mostrar menos` : `Mostrar mas...`}
+						{allReports ? `Show less` : `Show all...`}
 					</Button>
 				</Box>
 			</Box>

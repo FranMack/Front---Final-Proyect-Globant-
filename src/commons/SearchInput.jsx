@@ -62,7 +62,7 @@ const handleCalendar=()=>{
 					value={search}
 					onChange={handleSearch}
 					disableUnderline={true}
-					placeholder='Buscar'
+					placeholder='Search'
 					sx={{
 						height: '100%', // Cambiamos la altura a 100%
 					}}
