@@ -1,9 +1,6 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Typography } from '@mui/material';
-
-import OfficeSelection from '../view/OfficeSelection';
 
 function OfficeMap({
 	officeId,

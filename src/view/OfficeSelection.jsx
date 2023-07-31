@@ -138,6 +138,15 @@ const OfficeSelection = () => {
 						value={selectedOffice ? selectedOffice._id : ''}
 						onChange={handleOfficeChange}
 						label='Nearby Offices'
+						MenuProps={{
+							PaperProps: {
+								style: {
+									maxHeight: '200px',
+									width: 'auto',
+									overflowX: 'auto',
+								},
+							},
+						}}
 					>
 						<MenuItem value=''>
 							<em>None</em>
