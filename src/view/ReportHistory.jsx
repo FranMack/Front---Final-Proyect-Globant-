@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Pagination, Stack } from '@mui/material';
 import SearchInput from '../commons/SearchInput';
 import ReportItem from '../commons/ReportItem';
 import { TransformISOdate } from '../utils/functions';
@@ -14,11 +14,18 @@ const ReportHistory = () => {
 	const [search, setSearch] = useState('');
 	const [date, setDate] = useState(null);
 	const [isoDate, setIsoDate] = useState(null);
-	const [allReports, setAllreports] = useState(false);
+
 	const user = useSelector(state => state.user);
 
-	const handleShowMore = () => {
-		setAllreports(!allReports);
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const itemsPerPage = 8;
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const paginatedReports = orderByDate(reports).slice(startIndex, endIndex);
+
+	const handlePageChange = (event, newPage) => {
+		setCurrentPage(newPage);
 	};
 
 	const handleDate = newDate => {
@@ -70,10 +77,6 @@ const ReportHistory = () => {
 		}
 	}, [date]);
 
-	console.log('date', isoDate);
-	console.log('date', date);
-	console.log('reports', reports);
-
 	return (
 		<>
 			<Navbar />
@@ -119,36 +122,54 @@ const ReportHistory = () => {
 				</Box>
 
 				<Stack sx={{ marginTop: '10%' }}>
-					{allReports
-						? orderByDate(reports).map((report, i) => {
-								return (
-									<div key={i}>
-										<ReportItem report={report} />
-									</div>
-								);
-						  })
-						: orderByDate(reports)
-								.slice(0, 4)
-								.map((report, i) => {
-									return (
-										<div key={i}>
-											<ReportItem report={report} />
-										</div>
-									);
-								})}
+					{paginatedReports.map((report, i) => {
+						return (
+							<div key={i}>
+								<ReportItem report={report} />
+							</div>
+						);
+					})}
 				</Stack>
-
-				<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-					<Button
-						onClick={handleShowMore}
+				<Box
+					sx={{
+						width: '100%',
+						display: 'flex',
+						justifyContent: 'center',
+						marginTop: '1rem',
+					}}
+				>
+					<Box
 						sx={{
-							color: '#3AB54A',
-							marginLeft: '5px',
-							textDecoration: 'none',
+							width: '100%',
+							display: 'flex',
+							justifyContent: 'center',
+							marginTop: '1rem',
 						}}
 					>
-						{allReports ? `Show less` : `Show all...`}
-					</Button>
+						{reports.length === 0 ? (
+							<Button
+								sx={{
+									color: '#3AB54A',
+									marginLeft: '5px',
+									textDecoration: 'none',
+								}}
+							>
+								Nothing to show
+							</Button>
+						) : (
+							reports.length > 6 && (
+								<Pagination
+									count={Math.ceil(reports.length / itemsPerPage)}
+									page={currentPage}
+									onChange={handlePageChange}
+									color='primary'
+									showFirstButton
+									showLastButton
+									size='large'
+								/>
+							)
+						)}
+					</Box>
 				</Box>
 			</Box>
 		</>
