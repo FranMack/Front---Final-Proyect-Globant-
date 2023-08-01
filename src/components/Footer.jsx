@@ -13,7 +13,7 @@ const FooterWrapper = styled('footer')({
 const Footer = () => {
 	return (
 		<FooterWrapper>
-			<Container maxWidth='lg'>
+			<Container maxWidth='auto' style={{ padding: '10px' }}>
 				<Box
 					sx={{
 						display: 'flex',
