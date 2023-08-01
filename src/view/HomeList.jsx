@@ -20,8 +20,8 @@ const HomeList = () => {
 
 
 	const [adress, setAdress] = useState(null);
-	const [eddit, setEddit] = useState(false);
-	const [edditButton, setEditButton] = useState('EDIT');
+	const [edit, setEdit] = useState(false);
+	const [editButton, setEditButton] = useState('EDIT');
 
 
 
@@ -29,14 +29,14 @@ const HomeList = () => {
 		setAdress(event.target.value);
 	};
 
-	const handleEddit = () => {
-		if (eddit) {
+	const handleEdit = () => {
+		if (edit) {
 			setEditButton('EDIT');
-			setEddit(!eddit);
+			setEdit(!edit);
 		} else {
 			setAdress(null);
 			setEditButton('GPS ADRESS');
-			setEddit(!eddit);
+			setEdit(!edit);
 		}
 	};
 
@@ -134,12 +134,12 @@ const HomeList = () => {
 				<FormControl style={{ width: '90%' }}>
 					<Input
 						sx={{ textAlign: 'center' }}
-						disabled={!eddit}
+						disabled={!edit}
 						value={adress === null ? geocodeUserLocation : adress}
 						onChange={handleAdress}
 					/>
-					<Button onClick={handleEddit} sx={{ color: '#3AB54A' }}>
-						{edditButton}
+					<Button onClick={handleEdit} sx={{ color: '#3AB54A' }}>
+						{editButton}
 					</Button>
 				</FormControl>
 
