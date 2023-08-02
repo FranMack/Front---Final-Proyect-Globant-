@@ -37,6 +37,7 @@ const ReportCamOn = ({
 	const dispatch = useDispatch();
 
 	const [isFormValid, setIsFormValid] = useState(false);
+
 	const handleFileChange = e => {
 		const file = e.target.files[0];
 		setselectedFile(file);
@@ -69,13 +70,18 @@ const ReportCamOn = ({
 	const handleSubmit = async event => {
 		event.preventDefault();
 		dispatch(setReport(date));
-		if (descripcionError && item === '') {
+		if (descripcionError || item === '') {
 			toast.error(descripcionError);
 			setIsFormValid(false);
-		} else {
+		} 
+	};
+
+	useEffect(()=>{
+		if(descripcion && !descripcionError && item){
 			setIsFormValid(true);
 		}
-	};
+
+	},[descripcion])
 
 	const remainingChars = maxChars - descripcion.length;
 
@@ -91,6 +97,12 @@ const ReportCamOn = ({
 		};
 		getOffices();
 	}, []);
+
+
+	console.log("item",item)
+	console.log("description",descripcion)
+	console.log("todoListo",isFormValid)
+	console.log("descriptionError",descripcionError)
 
 	return (
 		<>
