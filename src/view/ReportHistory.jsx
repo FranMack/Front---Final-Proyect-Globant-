@@ -8,6 +8,7 @@ import ReportItem from '../commons/ReportItem';
 import { TransformISOdate } from '../utils/functions';
 import { orderByDate } from '../utils/functions';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 
 const ReportHistory = () => {
 	const [reports, setReports] = useState([]);
@@ -15,7 +16,8 @@ const ReportHistory = () => {
 	const [date, setDate] = useState(null);
 	const [isoDate, setIsoDate] = useState(null);
 
-	const user = useSelector(state => state.user);
+	const user = useParams().username || useSelector(state => state.user).username;
+	
 
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -41,7 +43,7 @@ const ReportHistory = () => {
 	const showAllTheReports = event => {
 		event.preventDefault();
 		axios
-			.get(`http://localhost:5000/api/v1/report/status/${user.username}/Close`)
+			.get(`http://localhost:5000/api/v1/report/status/${user}/Close`)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
@@ -50,7 +52,7 @@ const ReportHistory = () => {
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:5000/api/v1/report/status/${user.username}/Close`)
+			.get(`http://localhost:5000/api/v1/report/status/${user}/Close`)
 			.then(res => setReports(res.data))
 			.catch(error => {
 				console.log(error);
@@ -60,7 +62,7 @@ const ReportHistory = () => {
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:5000/api/v1/report/search?username=${user.username}&device=${search}&status=Close`,
+				`http://localhost:5000/api/v1/report/search?username=${user}&device=${search}&status=Close`,
 			)
 			.then(res => setReports(res.data))
 			.catch(err => console.log(err));
@@ -70,13 +72,15 @@ const ReportHistory = () => {
 		if (date) {
 			axios
 				.get(
-					`http://localhost:5000/api/v1/report/search-by-date?username=${user.username}&date=${isoDate}&status=Close`,
+					`http://localhost:5000/api/v1/report/search-by-date?username=${user}&date=${isoDate}&status=Close`,
 				)
 				.then(res => setReports(res.data))
 				.catch(err => console.log(err));
 		}
 	}, [date]);
 
+
+console.log(useParams().username)
 	return (
 		<>
 			<Navbar />
