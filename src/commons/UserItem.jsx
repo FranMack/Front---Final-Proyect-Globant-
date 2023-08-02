@@ -33,7 +33,7 @@ const UserItem = ({ user }) => {
 			>
 				<Avatar
 					component='span'
-					sx={{ width: `85%`, height: `85%`, cursor: 'pointer' }}
+					sx={{height: `85%`, cursor: 'pointer' }}
 					src={user.url_img}
 				>
 					{!user.url_img && user.first_name && user.last_name
