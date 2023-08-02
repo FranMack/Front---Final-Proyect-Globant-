@@ -26,6 +26,7 @@ import ReportDetail from './view/ReportDetail';
 import OfficeSelection from './view/OfficeSelection';
 import HomeList from './view/HomeList';
 import AdminUsersList from './view/Admin.users.list';
+import AdminReports from './view/Admin.reports.state';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -83,9 +84,9 @@ function App() {
 				<Route path='/home-list' element={<HomeList />} />
 				<Route path='/users-list' element={<AdminUsersList />} />
 				<Route path='/users-list/:id' element={<NotFound />} />
-
+				<Route path='/admin-reports' element={<AdminReports />} />
 			</Routes>
-			
+
 			<Footer />
 		</>
 	);
