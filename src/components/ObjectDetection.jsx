@@ -2,8 +2,8 @@
 /* eslint-disable react/prop-types */
 
 import React, { useRef, useEffect, useState } from 'react';
-import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import '@tensorflow/tfjs';
+import * as tmImage from '@teachablemachine/image';
 
 import technicalServiceImage from '../assets/technical-service-image.png';
 import { toast } from 'react-toastify';
@@ -25,10 +25,25 @@ const ObjectDetection = () => {
 	const [capturedImage, setCapturedImage] = useState(null);
 	const [objectInCamera, setObjectInCamera] = useState('');
 	const [confirm, setConfirm] = useState(false);
+	/////////////////////
+	const [model, setModel] = useState(null);
+	const [labelContainer, setLabelContainer] = useState(null);
+	const [maxPredictions, setMaxPredictions] = useState(0);
+	const imageInputRef = useRef(null);
+	const labelContainerRef = useRef(null);
 
+	const URL = 'https://teachablemachine.withgoogle.com/models/Fnqyc2KVZ/';
 	useEffect(() => {
 		const runObjectDetection = async () => {
-			await cocoSsd.load();
+			try {
+				const modelURL = URL + 'model.json';
+				const metadataURL = URL + 'metadata.json';
+
+				const loadedModel = await tmImage.load(modelURL, metadataURL);
+				setModel(loadedModel);
+			} catch (error) {
+				console.error('Error loading model:', error);
+			}
 			setModelStart(true);
 
 			if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -45,7 +60,16 @@ const ObjectDetection = () => {
 		};
 
 		runObjectDetection();
-	}, []);
+	}, [URL]);
+
+	useEffect(() => {
+		if (labelContainerRef.current) {
+			setLabelContainer(labelContainerRef.current);
+			for (let i = 0; i < maxPredictions; i++) {
+				labelContainerRef.current.appendChild(document.createElement('div'));
+			}
+		}
+	}, [maxPredictions]);
 
 	const compressImage = async (imageDataUrl, maxWidth, maxHeight) => {
 		return new Promise((resolve, reject) => {
@@ -122,13 +146,21 @@ const ObjectDetection = () => {
 
 		setCapturedImage(compressedImageDataUrl);
 
-		const model = await cocoSsd.load();
-		const predictions = await model.detect(image);
+		if (model) {
+			const prediction = await model.predict(image);
+			console.log('prediction', prediction);
 
-		if (predictions[0]) {
-			setObjectInCamera(predictions[0].class);
-		} else {
-			setObjectInCamera('');
+			// Obtener la clase con la probabilidad más alta
+			let maxProbability = 0;
+			let detectedClass = '';
+			prediction.forEach(classPrediction => {
+				if (classPrediction.probability > maxProbability) {
+					maxProbability = classPrediction.probability;
+					detectedClass = classPrediction.className;
+				}
+			});
+
+			setObjectInCamera(detectedClass);
 		}
 	};
 
@@ -258,38 +290,6 @@ const ObjectDetection = () => {
 											videoRef.current ? videoRef.current.videoHeight : 480
 										}
 									></canvas>
-									<Box
-										position='relative'
-										top={5}
-										left={0}
-										right={0}
-										textAlign='center'
-										margin='0 auto'
-										paddingTop={2}
-										width='75%'
-									>
-										{!modelStart && (
-											<div>
-												<Typography
-													variant='body1'
-													marginBottom={2}
-													fontWeight='bold'
-												>
-													Please wait for the scanner to start...
-												</Typography>
-											</div>
-										)}
-									</Box>
-									<Box
-										position='relative'
-										top={5}
-										left={0}
-										right={0}
-										textAlign='center'
-										margin='0 auto'
-										paddingTop={2}
-										width='75%'
-									></Box>
 								</Box>
 
 								{capturedImage ? (
