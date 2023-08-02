@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import globantImage from '../assets/Globant-Original1.png';
-import globantBackground from '../assets/Globant-start-view.png';
+import globantBackground from '../assets/start.png';
 import RegisterButton from '../commons/ButtonRegister';
 import { Box, Grid } from '@mui/material';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
@@ -30,33 +30,31 @@ const Start = () => {
 					minHeight: '98vh',
 					padding: '5px',
 					backgroundImage: `url(${globantBackground})`,
-					backgroundSize: 'cover',
-					backgroundPosition: 'center',
+					backgroundSize: 'center',
+					backgroundPosition: 'center bottom',
 				}}
 			>
 				<Grid
-				item 
-				xs ={12}
-					  style={{
+					item
+					xs={12}
+					style={{
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'flex-end',
 						marginTop: 'auto',
-					  }}
+					}}
 				>
-
-						<img
-							src={globantImage}
-							alt='Globant Logo'
-							style={{
-								position: 'absolute',
-								bottom: '76%',
-								width: '80%',
-								height: 'auto',
-								maxWidth: '400px',
-							}}
-						/>
-					
+					<img
+						src={globantImage}
+						alt='Globant Logo'
+						style={{
+							position: 'absolute',
+							bottom: '76%',
+							width: '80%',
+							height: 'auto',
+							maxWidth: '400px',
+						}}
+					/>
 				</Grid>
 				<Grid
 					container

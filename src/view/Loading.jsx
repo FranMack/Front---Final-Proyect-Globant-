@@ -4,19 +4,29 @@ import Box from '@mui/material/Box';
 import Logo from '../commons/logo';
 
 function Loading() {
-  return (
-    <Box sx={{height:"100vh", display: 'flex',flexDirection:"column",justifyContent:"center", alignItems:"center" }}>
+	return (
+		<Box
+			sx={{
+				height: '100vh',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+		>
+			<Box sx={{ height: '18%', marginBottom: '21%' }}>
+				<Logo />
+			</Box>
 
-        <Box sx={{height:"18%",marginBottom:"21%"}}><Logo/></Box>
-        
-      <CircularProgress thickness={5} size={50} sx={{color:"#bed733"}}>
+			<CircularProgress
+				thickness={5}
+				size={50}
+				sx={{ color: '#bed733' }}
+			></CircularProgress>
 
-      </CircularProgress>
-      
-      <h2>Loading</h2>
-    </Box>
-  );
+			<h2>Loading</h2>
+		</Box>
+	);
 }
-
 
 export default Loading;

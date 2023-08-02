@@ -63,37 +63,39 @@ const GoogleMaps = () => {
 		<Box sx={{ width: '100%' }}>
 			{!isLoaded && <div>Loading...</div>}
 			{isLoaded && userLocation && (
-				<GoogleMap
-					mapContainerClassName='map-container'
-					center={userLocation}
-					zoom={14}
-				>
-					<Marker position={userLocation} />
-					{mcdonaldsNearby.map(place => (
-						<Marker
-							key={place.place_id}
-							position={{
-								lat: place.geometry.location.lat(),
-								lng: place.geometry.location.lng(),
-							}}
-							onClick={() => setSelectedMarker(place)}
-						/>
-					))}
-					{selectedMarker && (
-						<InfoWindow
-							position={{
-								lat: selectedMarker.geometry.location.lat(),
-								lng: selectedMarker.geometry.location.lng(),
-							}}
-							onCloseClick={() => setSelectedMarker(null)}
-						>
-							<div>
-								<div>{selectedMarker.name}</div>
-								<div>{selectedMarker.vicinity} </div>
-							</div>
-						</InfoWindow>
-					)}
-				</GoogleMap>
+				<div style={{ padding: '20px' }}>
+					<GoogleMap
+						mapContainerClassName='map-container'
+						center={userLocation}
+						zoom={14}
+					>
+						<Marker position={userLocation} />
+						{mcdonaldsNearby.map(place => (
+							<Marker
+								key={place.place_id}
+								position={{
+									lat: place.geometry.location.lat(),
+									lng: place.geometry.location.lng(),
+								}}
+								onClick={() => setSelectedMarker(place)}
+							/>
+						))}
+						{selectedMarker && (
+							<InfoWindow
+								position={{
+									lat: selectedMarker.geometry.location.lat(),
+									lng: selectedMarker.geometry.location.lng(),
+								}}
+								onCloseClick={() => setSelectedMarker(null)}
+							>
+								<div>
+									<div>{selectedMarker.name}</div>
+									<div>{selectedMarker.vicinity} </div>
+								</div>
+							</InfoWindow>
+						)}
+					</GoogleMap>
+				</div>
 			)}
 		</Box>
 	);
