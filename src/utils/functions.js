@@ -33,6 +33,16 @@ export function orderByDate(array) {
 	return array;
 }
 
+
+export function orderAlphabetically(array){
+    array.sort((a, b) => a.last_name.localeCompare(b.last_name, undefined, { sensitivity: "base" }));
+    return array;
+}
+
+
+
+
+
 export function emailReport(report) {
 	return `
       <head>
