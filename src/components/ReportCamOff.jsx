@@ -42,9 +42,11 @@ const ReportCamOff = () => {
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
-		setselectedFile(file);
 
 		const reader = new FileReader();
+		reader.onload = () => {
+			setselectedFile(reader.result);
+		};
 
 		if (file) {
 			reader.readAsDataURL(file);
@@ -148,7 +150,7 @@ const ReportCamOff = () => {
 				>
 					{selectedFile ? (
 						<img
-							src={URL.createObjectURL(selectedFile)}
+							src={selectedFile}
 							alt='Uploaded File'
 							style={{ width: '150px', marginRight: '10px' }}
 						/>
