@@ -20,9 +20,10 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 export default function SwipeableTemporaryDrawer() {
-	const user = useSelector(state => state.user);
+	const user = useSelector((state=> state.user))
 	const [state, setState] = React.useState({
 		right: false,
 	});
@@ -87,11 +88,22 @@ export default function SwipeableTemporaryDrawer() {
 						icon: <SignalCellularAltOutlinedIcon sx={{ color: '#3AB54A' }} />,
 						path: '/reports',
 					},
+
 					{
 						text: 'Profile',
 						icon: <AccountCircleOutlinedIcon sx={{ color: '#3AB54A' }} />,
 						path: '/profile',
 					},
+					...(user.is_admin
+						? [
+							{
+							  text: 'List users',
+							  icon: <PeopleAltIcon sx={{ color: '#3AB54A' }} />,
+							  path: '/users-list',
+							},
+						  ]
+						: []),
+					
 				].map(item => (
 					<ListItem key={item.text} disablePadding>
 						<ListItemButton component={Link} to={item.path}>

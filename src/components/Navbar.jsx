@@ -14,9 +14,10 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import { setReportModalOpen } from '../state/features/reportModalSlice';
 import ButtonHome from '../commons/ButtonHome';
 import { Tooltip } from '@mui/material';
+import ButtonAdmin from '../commons/ButtonAdmin';
 
 function ResponsiveAppBar() {
-	const user = useSelector(state => state.user);
+	
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -27,7 +28,7 @@ function ResponsiveAppBar() {
 		navigate('/');
 		dispatch(setLoginModalOpen(true));
 	};
-
+    const user = useSelector((state=> state.user))
 	return (
 		<AppBar position='static' sx={{ background: 'white' }}>
 			<Container maxWidth='xl'>
@@ -60,6 +61,7 @@ function ResponsiveAppBar() {
 						)}
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
+					{user.is_admin === true && <ButtonAdmin />}
 					<Button
 						component={Link}
 						to='/reports'
@@ -67,7 +69,7 @@ function ResponsiveAppBar() {
 						sx={{
 							color: '#3AB54A',
 							display: { xs: 'none', md: 'flex' },
-							mr: 2,
+							mr: 1,
 						}}
 					>
 						Reports
