@@ -25,6 +25,7 @@ import Footer from './components/Footer';
 import ReportDetail from './view/ReportDetail';
 import OfficeSelection from './view/OfficeSelection';
 import HomeList from './view/HomeList';
+import AdminUsersList from './view/Admin.users.list';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -80,6 +81,9 @@ function App() {
 				<Route path='*' element={<NotFound />} />
 				<Route path='/office-list' element={<OfficeSelection />} />
 				<Route path='/home-list' element={<HomeList />} />
+				<Route path='/users-list' element={<AdminUsersList />} />
+				<Route path='/users-list/:id' element={<NotFound />} />
+
 			</Routes>
 			
 			<Footer />
