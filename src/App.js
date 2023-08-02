@@ -83,7 +83,7 @@ function App() {
 				<Route path='/office-list' element={<OfficeSelection />} />
 				<Route path='/home-list' element={<HomeList />} />
 				<Route path='/users-list' element={<AdminUsersList />} />
-				<Route path='/users-list/:id' element={<NotFound />} />
+				<Route path='/users-list/:username' element={<ReportHistory />} />
 				<Route path='/admin-reports' element={<AdminReports />} />
 			</Routes>
 

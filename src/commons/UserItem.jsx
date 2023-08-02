@@ -45,7 +45,7 @@ const UserItem = ({ user }) => {
 
 			<Box
 				component={Link}
-				to={`/reports/${user._id}`}
+				to={`/users-list/${user.username}`}
 				sx={{
 					height: '60%', // Cambiamos la altura a 100%
 					width: '60%',
