@@ -9,6 +9,7 @@ import ResponsiveAppBar from './Navbar';
 import ReportCamOn from './ReportCamOn';
 import Loading from '../view/Loading';
 import { Box, Button } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ObjectDetection = () => {
@@ -158,6 +159,18 @@ const ObjectDetection = () => {
 	const handleScanAgain = () => {
 		setCapturedImage(null);
 		setObjectInCamera('');
+		restartVideo();
+	};
+	const restartVideo = async () => {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: { facingMode: 'environment' },
+			});
+
+			videoRef.current.srcObject = stream;
+		} catch (error) {
+			Navigate('/device-list');
+		}
 	};
 
 	const handleConfirmObject = () => {
@@ -204,87 +217,100 @@ const ObjectDetection = () => {
 								overflow='overflow'
 								mt={-5}
 							>
-								<Box>
-									{capturedImage ? (
+								{capturedImage ? (
+									<Box
+										position='relative'
+										display='flex'
+										flexDirection='column'
+										alignItems='center'
+										margin={'0 auto'}
+										width='50%'
+									>
+										<img
+											src={capturedImage}
+											alt='Uploaded File'
+											style={{ width: '100%', marginTop: '60px' }}
+										/>
+										<div
+											style={{
+												padding: '5px',
+												fontWeight: 'bold',
+												fontSize: '16px',
+												color: '#333',
+											}}
+										>
+											{objectInCamera ? `Detect a ${objectInCamera}` : ''}
+										</div>
+
+										<Box display={'flex'} alignItems={'center'}>
+											<Button
+												onClick={handleConfirmObject}
+												type={'success'}
+												props={{ width: '100%' }}
+											>
+												Confirm
+											</Button>
+
+											<Button
+												type={'error'}
+												onClick={handleScanAgain}
+												width='100%'
+											>
+												New Image
+											</Button>
+										</Box>
+									</Box>
+								) : (
+									<Box
+										position='relative'
+										display='flex'
+										flexDirection='column'
+										alignItems='center'
+										margin={'0 auto'}
+										width='50%'
+									>
+										<video
+											ref={videoRef}
+											style={{ width: '100%', marginTop: '60px' }}
+											autoPlay
+										></video>
 										<Box
 											position='relative'
 											display='flex'
 											flexDirection='column'
 											alignItems='center'
 											margin={'0 auto'}
-											marginTop={3}
 											width='75%'
 										>
-											<img
-												src={capturedImage}
-												alt='Uploaded File'
-												style={{ width: '100%', marginRight: '10px' }}
-											/>
-											<div
-												style={{
-													padding: '5px',
-													fontWeight: 'bold',
-													fontSize: '16px',
-													color: '#333',
-												}}
-											>
-												{objectInCamera ? `Detect a ${objectInCamera}` : ''}
-											</div>
-
-											<Box display={'flex'} alignItems={'center'}>
-												<Button
-													onClick={handleConfirmObject}
-													type={'success'}
-													props={{ width: '100%' }}
-												>
-													Confirm
-												</Button>
-
-												<Button
-													type={'error'}
-													onClick={handleScanAgain}
-													width='100%'
-												>
-													Capture New Image
-												</Button>
-											</Box>
-										</Box>
-									) : (
-										<Box>
-											<video
-												ref={videoRef}
-												style={{
-													maxWidth: '100%',
-													maxHeight: '100%',
-													marginTop: '70px',
-												}}
-												autoPlay
-											></video>
 											<Box
-												position='relative'
+												position='absolute'
+												top='-80px'
+												left='0'
+												right='0'
+												bottom='0'
 												display='flex'
-												flexDirection='column'
+												justifyContent='center'
 												alignItems='center'
-												margin={'0 auto'}
-												width='75%'
 											>
-												<Box
-													display={'flex'}
-													flexDirection={'column'}
-													alignItems={'center'}
+												<Button
+													type={'success'}
+													onClick={handleCaptureImage}
+													variant='contained'
+													style={{
+														borderRadius: '50%',
+														minWidth: '60px',
+														height: '60px',
+														padding: '6px',
+														background: 'rgb(180 183 187)',
+													}}
 												>
-													<Button
-														type={'success'}
-														onClick={handleCaptureImage}
-														width='100%'
-													>
-														Capture Image
-													</Button>
-												</Box>
+													<CameraIcon style={{ fontSize: '40px' }} />
+												</Button>
 											</Box>
 										</Box>
-									)}
-								</Box>
+									</Box>
+								)}
+
 								<canvas
 									ref={canvasRef}
 									style={{ display: 'none' }}
