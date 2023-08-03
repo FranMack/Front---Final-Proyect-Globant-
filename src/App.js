@@ -32,7 +32,6 @@ import AdminDeskState from './view/AdminDeskState';
 
 import AdminDashboard from './components/AdminDashboard';
 
-
 function App() {
 	const user = useSelector(state => state.user);
 
@@ -67,6 +66,7 @@ function App() {
 	if (loading) {
 		return <Loading />;
 	}
+	const isAdmin = user && user.is_admin;
 
 	return (
 		<>
@@ -87,14 +87,16 @@ function App() {
 				<Route path='*' element={<NotFound />} />
 				<Route path='/office-list' element={<OfficeSelection />} />
 				<Route path='/home-list' element={<HomeList />} />
-				<Route path='/users-list' element={<AdminUsersList />} />
 				<Route path='/users-list/:username' element={<ReportHistory />} />
-				<Route path='/admin-reports' element={<AdminReports />} />
 
-				<Route path='/desk-status' element={<AdminDeskState />} />
-
-				<Route path='/admin-dashboard' element={<AdminDashboard />} />
-
+				{isAdmin && (
+					<>
+						<Route path='/users-list' element={<AdminUsersList />} />
+						<Route path='/admin-reports' element={<AdminReports />} />
+						<Route path='/admin-dashboard' element={<AdminDashboard />} />
+						<Route path='/desk-status' element={<AdminDeskState />} />
+					</>
+				)}
 			</Routes>
 
 			<Footer />
