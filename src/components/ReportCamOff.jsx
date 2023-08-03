@@ -80,6 +80,7 @@ const ReportCamOff = () => {
 			setIsFormValid(false);
 		} else {
 			setIsFormValid(true);
+			
 		}
 	};
 
@@ -234,6 +235,14 @@ const ReportCamOff = () => {
 					onClick={() => {
 						if (isFormValid) {
 							dispatch(setOfficeHomeModalOpen(true));
+							const reportData={
+								device:item,
+								description:descripcion,
+								url_img:selectedFile
+							}
+							const reportDataJson=JSON.stringify(reportData);
+							localStorage.setItem("reportData",reportDataJson)
+						
 						} else {
 							toast.error('Please complete the form before proceeding.');
 						}

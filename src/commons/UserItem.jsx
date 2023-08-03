@@ -23,7 +23,7 @@ const UserItem = ({ user }) => {
 					width: '10%',
 					border: '1px solid grey',
 					display: 'flex',
-					justifyContent: 'center',
+					justifyContent: 'start',
 					alignItems: 'center',
 					borderTopLeftRadius: '30px',
 					borderBottomLeftRadius: '30px',
@@ -33,7 +33,7 @@ const UserItem = ({ user }) => {
 			>
 				<Avatar
 					component='span'
-					sx={{height: `85%`, cursor: 'pointer' }}
+					sx={{height: `85%`, cursor: 'pointer',marginLeft:"10%" }}
 					src={user.url_img}
 				>
 					{!user.url_img && user.first_name && user.last_name

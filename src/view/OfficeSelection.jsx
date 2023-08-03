@@ -18,6 +18,7 @@ import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import NotFound from './NotFound.view';
 
 const OfficeSelection = () => {
 	const navigate = useNavigate();
@@ -32,7 +33,8 @@ const OfficeSelection = () => {
 		.join('-');
 
 	const user = useSelector(state => state.user);
-	const report = useSelector(state => state.report);
+	const reportJson = localStorage.getItem("reportData")
+	const report=JSON.parse(reportJson)
 	const userLocation = useUserLocation();
 
 	const filterNearbyOffices = radius => {
@@ -92,16 +94,23 @@ const OfficeSelection = () => {
 			toast.success('Report create successfully');
 			navigate('/home');
 
+			localStorage.removeItem("reportData")
+
 			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
 				officeId: selectedOffice._id,
 				deskNumber: selectedDeskNumber,
 			});
+
+			
 		} catch (error) {
 			console.error('Error submitting report:', error);
 		}
 	};
+
+	console.log("reportJson",reportJson)
 	return (
-		<Box component='form' onSubmit={handleSubmitNewReport}>
+		<>
+		{reportJson ? (<Box component='form' onSubmit={handleSubmitNewReport}>
 			<ResponsiveAppBar />
 			<Box
 				style={{
@@ -183,7 +192,10 @@ const OfficeSelection = () => {
 					</Typography>
 				)}
 			</Box>
-		</Box>
+		</Box>):(<NotFound/>)}
+		
+
+		</>
 	);
 };
 
