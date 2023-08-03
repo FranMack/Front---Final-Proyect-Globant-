@@ -1,21 +1,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-
 import React, { useRef, useEffect, useState } from 'react';
-import '@tensorflow/tfjs';
-import * as tmImage from '@teachablemachine/image';
-
-import technicalServiceImage from '../assets/technical-service-image.png';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Box, Button, Typography } from '@mui/material';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import * as tmImage from '@teachablemachine/image';
+import '@tensorflow/tfjs';
+import Pako from 'pako';
+import ResponsiveAppBar from './Navbar';
 import ReportCamOn from './ReportCamOn';
 import Loading from '../view/Loading';
-import Pako from 'pako';
+import { Box, Button } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/ObjectDetection.css';
 
 const ObjectDetection = () => {
 	const Navigate = useNavigate();
@@ -25,12 +23,12 @@ const ObjectDetection = () => {
 	const [capturedImage, setCapturedImage] = useState(null);
 	const [objectInCamera, setObjectInCamera] = useState('');
 	const [confirm, setConfirm] = useState(false);
-	/////////////////////
 	const [model, setModel] = useState(null);
 	const [labelContainer, setLabelContainer] = useState(null);
 	const [maxPredictions, setMaxPredictions] = useState(0);
-	const imageInputRef = useRef(null);
 	const labelContainerRef = useRef(null);
+	const [item, setItem] = useState('');
+	const [selectedFile, setselectedFile] = useState(null);
 
 	const URL = 'https://teachablemachine.withgoogle.com/models/Fnqyc2KVZ/';
 	useEffect(() => {
@@ -107,8 +105,8 @@ const ObjectDetection = () => {
 							resolve(compressedImageDataUrl);
 						};
 					},
-					'image/jpeg', // Change this to 'image/png' if your image format is PNG
-					0.9, // Adjust the compression quality as needed (0.0 to 1.0)
+					'image/jpeg',
+					0.9,
 				);
 			};
 
@@ -124,8 +122,6 @@ const ObjectDetection = () => {
 
 		canvas.width = videoRef.current.videoWidth;
 		canvas.height = videoRef.current.videoHeight;
-		console.log('witdh', canvas.width);
-		console.log('height', canvas.width);
 
 		context.drawImage(
 			videoRef.current,
@@ -138,19 +134,13 @@ const ObjectDetection = () => {
 		const image = new Image();
 		image.src = canvas.toDataURL();
 
-		const compressedImageDataUrl = await compressImage(
-			image.src,
-			300, // Ancho máximo deseado (ajústalo según tus necesidades)
-			300, // Altura máxima deseada (ajústalo según tus necesidades)
-		);
+		const compressedImageDataUrl = await compressImage(image.src, 300, 300);
 
 		setCapturedImage(compressedImageDataUrl);
 
 		if (model) {
 			const prediction = await model.predict(image);
-			console.log('prediction', prediction);
 
-			// Obtener la clase con la probabilidad más alta
 			let maxProbability = 0;
 			let detectedClass = '';
 			prediction.forEach(classPrediction => {
@@ -172,6 +162,18 @@ const ObjectDetection = () => {
 	const handleScanAgain = () => {
 		setCapturedImage(null);
 		setObjectInCamera('');
+		restartVideo();
+	};
+	const restartVideo = async () => {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: { facingMode: 'environment' },
+			});
+
+			videoRef.current.srcObject = stream;
+		} catch (error) {
+			Navigate('/device-list');
+		}
 	};
 
 	const handleConfirmObject = () => {
@@ -180,187 +182,102 @@ const ObjectDetection = () => {
 		setConfirm(!confirm);
 	};
 
-	const maxChars = 100;
-	const navigate = useNavigate();
-	const [item, setItem] = useState('');
-	const [descripcion, setDescripcion] = useState('');
-	const [selectedFile, setselectedFile] = useState(null);
-	const [descripcionError, setDescripcionError] = useState('');
-	const [office, setOffice] = useState([]);
-
-	const handleFileChange = e => {
-		const file = e.target.files[0];
-		setselectedFile(file);
-
-		const reader = new FileReader();
-
-		if (file) {
-			reader.readAsDataURL(file);
-		}
-	};
-
-	const handleDescripcionChange = event => {
-		const inputValue = event.target.value;
-		const singleSpaceValue = inputValue.replace(/\s+/g, ' ');
-
-		setDescripcion(singleSpaceValue);
-
-		if (singleSpaceValue.length < 10 || singleSpaceValue.length > maxChars) {
-			setDescripcionError('Description must be between 10 and 100 characters.');
-		} else {
-			setDescripcionError('');
-		}
-	};
-
-	const handleSubmit = event => {
-		event.preventDefault();
-
-		if (descripcionError) {
-			toast.error(descripcionError);
-		} else {
-			toast.success('Report create successful');
-			setItem('');
-			setDescripcion('');
-			setTimeout(() => {
-				navigate('/home');
-			}, 1000);
-		}
-	};
-
-	const remainingChars = maxChars - descripcion.length;
-
-	useEffect(() => {
-		const getOffices = async () => {
-			try {
-				const response = await axios.get(
-					'http://localhost:5000/api/v1/office/allOffices',
-				);
-
-				setOffice(response.data);
-			} catch (error) {
-				console.error('Error:', error);
-			}
-		};
-		getOffices();
-	}, []);
-
 	if (capturedImage) {
 		const urlCompressed = Pako.gzip(capturedImage, { to: 'string' });
-		console.log('compressed', urlCompressed);
 	}
 
 	return (
 		<>
+			<ResponsiveAppBar />
 			{!modelStart ? (
 				<Loading />
 			) : (
 				<>
 					{!confirm ? (
 						<div title='Scanner'>
-							<Box
-								display='flex'
-								justifyContent='center'
-								alignItems='center'
-								flexDirection='column'
-								overflow='overflow'
-								mt={-5}
-							>
-								<Box>
-									{capturedImage ? (
-										<img
-											src={capturedImage.src}
-											alt='Captured'
-											style={{ maxWidth: '100%', maxHeight: '100%' }}
-										/>
-									) : (
-										<video
-											ref={videoRef}
-											style={{ maxWidth: '100%', maxHeight: '100%' }}
-											autoPlay
-										></video>
-									)}
-									<div style={{ fontFamily: 'Heebo, sans-serif' }}>
-										{objectInCamera ? `We detect a ${objectInCamera}` : ''}
-									</div>
-									<canvas
-										ref={canvasRef}
-										style={{ display: 'none' }}
-										width={videoRef.current ? videoRef.current.videoWidth : 640}
-										height={
-											videoRef.current ? videoRef.current.videoHeight : 480
-										}
-									></canvas>
-								</Box>
-
+							<Box className='container-title'>
+								<h3 className='title'>Camera</h3>
+							</Box>
+							<Box className='camera'>
 								{capturedImage ? (
-									<Box
-										position='relative'
-										display='flex'
-										flexDirection='column'
-										alignItems='center'
-										margin={'0 auto'}
-										marginTop={3}
-										width='75%'
-									>
+									<Box className='container-camera-style'>
 										<img
 											src={capturedImage}
+											className='image-detected'
 											alt='Uploaded File'
-											style={{ width: '100%', marginRight: '10px' }}
 										/>
-										<div
-											style={{
-												padding: '5px',
-												fontWeight: 'bold',
-												fontSize: '16px',
-												color: '#333',
-											}}
-										>
-											{objectInCamera ? `Detect a ${objectInCamera}` : ''}
-										</div>
 
-										<Box display={'flex'} alignItems={'center'}>
+										<Box className='container-button'>
 											<Button
 												onClick={handleConfirmObject}
 												type={'success'}
 												props={{ width: '100%' }}
 											>
-												Confirm
+												<CheckCircleIcon className='icon' />
 											</Button>
 
+											<div className='text-detected'>
+												{objectInCamera ? `Detect a ${objectInCamera}` : ''}
+											</div>
 											<Button
 												type={'error'}
 												onClick={handleScanAgain}
 												width='100%'
 											>
-												Capture New Image
+												<CameraswitchIcon className='icon' />
 											</Button>
 										</Box>
 									</Box>
 								) : (
-									<Box
-										position='relative'
-										display='flex'
-										flexDirection='column'
-										alignItems='center'
-										margin={'0 auto'}
-										marginTop={3}
-										width='75%'
-									>
+									<Box className='container-camera-style'>
+										<video
+											ref={videoRef}
+											style={{ width: '100%' }}
+											autoPlay
+										></video>
 										<Box
-											display={'flex'}
-											flexDirection={'column'}
-											alignItems={'center'}
+											position='relative'
+											display='flex'
+											flexDirection='column'
+											alignItems='center'
+											margin={'0 auto'}
+											width='75%'
 										>
-											<Button
-												type={'success'}
-												onClick={handleCaptureImage}
-												width='100%'
+											<Box
+												position='absolute'
+												top='-80px'
+												left='0'
+												right='0'
+												bottom='0'
+												display='flex'
+												justifyContent='center'
+												alignItems='center'
 											>
-												Capture Image
-											</Button>
+												<Button
+													type={'success'}
+													onClick={handleCaptureImage}
+													variant='contained'
+													style={{
+														borderRadius: '50%',
+														minWidth: '60px',
+														height: '60px',
+														padding: '6px',
+														background: 'rgb(180 183 187)',
+													}}
+												>
+													<CameraIcon style={{ fontSize: '40px' }} />
+												</Button>
+											</Box>
 										</Box>
 									</Box>
 								)}
+
+								<canvas
+									ref={canvasRef}
+									style={{ display: 'none' }}
+									width={videoRef.current ? videoRef.current.videoWidth : 640}
+									height={videoRef.current ? videoRef.current.videoHeight : 480}
+								></canvas>
 							</Box>
 						</div>
 					) : (
@@ -375,5 +292,4 @@ const ObjectDetection = () => {
 		</>
 	);
 };
-
 export default ObjectDetection;
