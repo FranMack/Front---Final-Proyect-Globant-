@@ -1,4 +1,4 @@
-import './App.css';
+import './styles/App.css';
 import React, { useEffect, useState } from 'react';
 import Start from './view/Start.view';
 import Profile from './components/Profile.jsx';

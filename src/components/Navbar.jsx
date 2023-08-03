@@ -1,4 +1,4 @@
-import '../App.css';
+import '../styles/App.css';
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,7 +17,6 @@ import { Tooltip } from '@mui/material';
 import ButtonAdmin from '../commons/ButtonAdmin';
 
 function ResponsiveAppBar() {
-	
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -28,7 +27,7 @@ function ResponsiveAppBar() {
 		navigate('/');
 		dispatch(setLoginModalOpen(true));
 	};
-    const user = useSelector((state=> state.user))
+	const user = useSelector(state => state.user);
 	return (
 		<AppBar position='static' sx={{ background: 'white' }}>
 			<Container maxWidth='xl'>
