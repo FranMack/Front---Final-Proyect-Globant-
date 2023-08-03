@@ -10,7 +10,10 @@ import ReportCamOn from './ReportCamOn';
 import Loading from '../view/Loading';
 import { Box, Button } from '@mui/material';
 import CameraIcon from '@mui/icons-material/Camera';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import 'react-toastify/dist/ReactToastify.css';
+import '../styles/ObjectDetection.css';
 
 const ObjectDetection = () => {
 	const Navigate = useNavigate();
@@ -192,86 +195,44 @@ const ObjectDetection = () => {
 				<>
 					{!confirm ? (
 						<div title='Scanner'>
-							<Box
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-									borderBottom: '1px solid grey',
-								}}
-							>
-								<div
-									style={{
-										display: 'flex',
-										alignItems: 'center',
-										marginLeft: '15px',
-									}}
-								>
-									<h3 style={{ marginLeft: '16px', color: 'grey' }}>Camera</h3>
-								</div>
+							<Box className='container-title'>
+								<h3 className='title'>Camera</h3>
 							</Box>
-							<Box
-								display='flex'
-								justifyContent='center'
-								alignItems='center'
-								flexDirection='column'
-								overflow='overflow'
-								mt={-5}
-							>
+							<Box className='camera'>
 								{capturedImage ? (
-									<Box
-										position='relative'
-										display='flex'
-										flexDirection='column'
-										alignItems='center'
-										margin={'0 auto'}
-										width='50%'
-									>
+									<Box className='container-camera-style'>
 										<img
 											src={capturedImage}
+											className='image-detected'
 											alt='Uploaded File'
-											style={{ width: '100%', marginTop: '60px' }}
 										/>
-										<div
-											style={{
-												padding: '5px',
-												fontWeight: 'bold',
-												fontSize: '16px',
-												color: '#333',
-											}}
-										>
-											{objectInCamera ? `Detect a ${objectInCamera}` : ''}
-										</div>
 
-										<Box display={'flex'} alignItems={'center'}>
+										<Box className='container-button'>
 											<Button
 												onClick={handleConfirmObject}
 												type={'success'}
 												props={{ width: '100%' }}
 											>
-												Confirm
+												<CheckCircleIcon className='icon' />
 											</Button>
 
+											<div className='text-detected'>
+												{objectInCamera ? `Detect a ${objectInCamera}` : ''}
+											</div>
 											<Button
 												type={'error'}
 												onClick={handleScanAgain}
 												width='100%'
 											>
-												New Image
+												<CameraswitchIcon className='icon' />
 											</Button>
 										</Box>
 									</Box>
 								) : (
-									<Box
-										position='relative'
-										display='flex'
-										flexDirection='column'
-										alignItems='center'
-										margin={'0 auto'}
-										width='50%'
-									>
+									<Box className='container-camera-style'>
 										<video
 											ref={videoRef}
-											style={{ width: '100%', marginTop: '60px' }}
+											style={{ width: '100%' }}
 											autoPlay
 										></video>
 										<Box
