@@ -17,7 +17,6 @@ import {
 } from '@mui/material';
 import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
 
-import ResponsiveAppBar from './Navbar';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { setReport } from '../state/report';
@@ -73,15 +72,14 @@ const ReportCamOn = ({
 		if (descripcionError || item === '') {
 			toast.error(descripcionError);
 			setIsFormValid(false);
-		} 
+		}
 	};
 
-	useEffect(()=>{
-		if(descripcion && !descripcionError && item){
+	useEffect(() => {
+		if (descripcion && !descripcionError && item) {
 			setIsFormValid(true);
 		}
-
-	},[descripcion])
+	}, [descripcion]);
 
 	const remainingChars = maxChars - descripcion.length;
 
@@ -98,15 +96,13 @@ const ReportCamOn = ({
 		getOffices();
 	}, []);
 
-
-	console.log("item",item)
-	console.log("description",descripcion)
-	console.log("todoListo",isFormValid)
-	console.log("descriptionError",descripcionError)
+	console.log('item', item);
+	console.log('description', descripcion);
+	console.log('todoListo', isFormValid);
+	console.log('descriptionError', descripcionError);
 
 	return (
 		<>
-			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',
