@@ -158,6 +158,18 @@ const ObjectDetection = () => {
 	const handleScanAgain = () => {
 		setCapturedImage(null);
 		setObjectInCamera('');
+		restartVideo();
+	};
+	const restartVideo = async () => {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: { facingMode: 'environment' },
+			});
+
+			videoRef.current.srcObject = stream;
+		} catch (error) {
+			Navigate('/device-list');
+		}
 	};
 
 	const handleConfirmObject = () => {
