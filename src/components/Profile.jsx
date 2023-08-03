@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import {
 	Box,
+	Card,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -156,8 +157,6 @@ const Profile = () => {
 			<Box
 				sx={{
 					margin: { xs: 'inherit', md: '0px auto' },
-					padding: '0 0 20px 0',
-					boxSizing: 'border-box',
 				}}
 				onSubmit={profileForm.handleSubmit}
 			>
@@ -184,22 +183,24 @@ const Profile = () => {
 						flexDirection: 'column',
 						alignItems: 'center',
 						margin: '0 auto',
-						width: '400px',
+						width: '90%',
+						marginTop: '70px'
 					}}
 				>
-					<Box
-						sx={{
-							borderBottom: '1px solid grey',
-							padding: '10px 16px',
+					<Card
+						style={{
+							padding: "20px 5px",
+							border: "2px solid #2e7d32"
 						}}
 					>
 						<Box
 							sx={{
+								padding: '10px 16px',
 								display: 'flex',
 								alignItems: 'center',
-
 								marginLeft: '10px',
 								marginBottom: '20px',
+								borderBottom: '1px solid grey',
 							}}
 						>
 							<input
@@ -240,7 +241,7 @@ const Profile = () => {
 
 							<div style={{ padding: '16px' }}>
 								<Stack spac ing={2}>
-									<FormControl sx={{ width: '140px', marginTop: '10px' }}>
+									<FormControl sx={{ width: '100%', marginTop: '10px' }}>
 										<Input
 											value={profileForm.values.firstName}
 											onChange={profileForm.handleChange}
@@ -269,7 +270,7 @@ const Profile = () => {
 											</FormHelperText>
 										)}
 									</FormControl>
-									<FormControl sx={{ width: '140px' }}>
+									<FormControl sx={{ width: '100%' }}>
 										<Input
 											value={profileForm.values.lastName}
 											onChange={profileForm.handleChange}
@@ -301,158 +302,162 @@ const Profile = () => {
 								</Stack>
 							</div>
 						</Box>
-					</Box>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							padding: '16px',
-						}}
-					>
-						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
-							<Input
-								onChange={profileForm.handleChange}
-								value={profileForm.values.email}
-								disabled={!editing}
-								id='email'
-								type='email'
-								aria-describedby='email-helper'
-								sx={{ borderBottom: '1.5px solid #808080' }}
-							/>
 
-							{!profileForm.errors.email ? (
-								<FormHelperText
-									sx={{ fontSize: '11px', textAlign: 'center' }}
-									id='email-helper'
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								padding: '16px',
+							}}
+						>
+							<FormControl sx={{ width: '100%', marginTop: '10px' }}>
+								<Input
+									onChange={profileForm.handleChange}
+									value={profileForm.values.email}
+									disabled={!editing}
+									id='email'
+									type='email'
+									aria-describedby='email-helper'
+									sx={{ borderBottom: '1.5px solid #808080' }}
+								/>
+
+								{!profileForm.errors.email ? (
+									<FormHelperText
+										sx={{ fontSize: '11px', textAlign: 'center' }}
+										id='email-helper'
+									>
+										email
+									</FormHelperText>
+								) : (
+									<FormHelperText
+										sx={{
+											fontSize: '11px',
+											textAlign: 'center',
+											color: 'red',
+										}}
+									>
+										{profileForm.errors.email}
+									</FormHelperText>
+								)}
+							</FormControl>
+							<FormControl sx={{ width: '100%', marginTop: '10px' }}>
+								<Input
+									value={profileForm.values.ubication}
+									id='ubication'
+									type='text'
+									onChange={profileForm.handleChange}
+									disabled={!editing}
+									aria-describedby='ubication-helper'
+									sx={{ borderBottom: '1.5px solid #808080' }}
+								/>
+
+								{!profileForm.errors.ubication ? (
+									<FormHelperText
+										sx={{ fontSize: '11px', textAlign: 'center' }}
+										id='ubication-helper'
+									>
+										Location
+									</FormHelperText>
+								) : (
+									<FormHelperText
+										sx={{
+											fontSize: '11px',
+											textAlign: 'center',
+											color: 'red',
+										}}
+									>
+										{profileForm.errors.ubication}
+									</FormHelperText>
+								)}
+							</FormControl>
+							<FormControl sx={{ width: '100%', marginTop: '10px' }}>
+								<Input
+									value={profileForm.values.phoneNumber}
+									onChange={profileForm.handleChange}
+									id='phoneNumber'
+									type='text'
+									disabled={!editing}
+									aria-describedby='phoneNumber-helper'
+									sx={{ borderBottom: '1.5px solid #808080' }}
+								/>
+
+								{!profileForm.errors.phoneNumber ? (
+									<FormHelperText
+										sx={{ fontSize: '11px', textAlign: 'center' }}
+										id='phoneNumber-helper'
+									>
+										Phone Number
+									</FormHelperText>
+								) : (
+									<FormHelperText
+										sx={{
+											fontSize: '11px',
+											textAlign: 'center',
+											color: 'red',
+										}}
+									>
+										{profileForm.errors.phoneNumber}
+									</FormHelperText>
+								)}
+							</FormControl>
+							<FormControl sx={{ m: 1, width: '300px', marginTop: '30px' }}>
+								<Select
+									labelId='demo-controlled-open-select-label'
+									id='demo-controlled-open-select'
+									sx={{ height: '40px' }}
+									value={selectedOffice}
+									disabled={editing ? false : true}
+									onChange={handleChangeOffice}
 								>
-									email
-								</FormHelperText>
-							) : (
+									<MenuItem value=''>Select an office</MenuItem>
+									{office?.map((item, index) => (
+										<MenuItem
+											key={index}
+											value={`${item.name},${item.location}`}
+										>
+											{item.name},{item.location}
+										</MenuItem>
+									))}
+								</Select>
 								<FormHelperText
 									sx={{
 										fontSize: '11px',
 										textAlign: 'center',
-										color: 'red',
 									}}
+									id='name-helper'
 								>
-									{profileForm.errors.email}
+									Office
 								</FormHelperText>
-							)}
-						</FormControl>
-						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
-							<Input
-								value={profileForm.values.ubication}
-								id='ubication'
-								type='text'
-								onChange={profileForm.handleChange}
-								disabled={!editing}
-								aria-describedby='ubication-helper'
-								sx={{ borderBottom: '1.5px solid #808080' }}
-							/>
-
-							{!profileForm.errors.ubication ? (
-								<FormHelperText
-									sx={{ fontSize: '11px', textAlign: 'center' }}
-									id='ubication-helper'
+							</FormControl>
+						</Box>
+						<Box
+							sx={{
+								textAlign: 'center',
+							}}
+						>
+							{editing ? (
+								<Button
+									variant='contained'
+									type='submit'
+									color='success'
+									onClick={profileForm.handleSubmit}
+									style={{ width: '130px', borderRadius: '20px' }}
 								>
-									Location
-								</FormHelperText>
+									Save
+								</Button>
 							) : (
-								<FormHelperText
-									sx={{
-										fontSize: '11px',
-										textAlign: 'center',
-										color: 'red',
-									}}
+								<Button
+									variant='contained'
+									color='success'
+									onClick={handleEditClick}
+									style={{ width: '130px', borderRadius: '20px' }}
 								>
-									{profileForm.errors.ubication}
-								</FormHelperText>
+									Edit
+								</Button>
 							)}
-						</FormControl>
-						<FormControl sx={{ width: '300px', marginTop: '10px' }}>
-							<Input
-								value={profileForm.values.phoneNumber}
-								onChange={profileForm.handleChange}
-								id='phoneNumber'
-								type='text'
-								disabled={!editing}
-								aria-describedby='phoneNumber-helper'
-								sx={{ borderBottom: '1.5px solid #808080' }}
-							/>
-
-							{!profileForm.errors.phoneNumber ? (
-								<FormHelperText
-									sx={{ fontSize: '11px', textAlign: 'center' }}
-									id='phoneNumber-helper'
-								>
-									Phone Number
-								</FormHelperText>
-							) : (
-								<FormHelperText
-									sx={{
-										fontSize: '11px',
-										textAlign: 'center',
-										color: 'red',
-									}}
-								>
-									{profileForm.errors.phoneNumber}
-								</FormHelperText>
-							)}
-						</FormControl>
-						<FormControl sx={{ m: 1, width: '300px', marginTop: '30px' }}>
-							<Select
-								labelId='demo-controlled-open-select-label'
-								id='demo-controlled-open-select'
-								sx={{ height: '40px' }}
-								value={selectedOffice}
-								disabled={editing ? false : true}
-								onChange={handleChangeOffice}
-							>
-								<MenuItem value=''>Select an office</MenuItem>
-								{office?.map((item, index) => (
-									<MenuItem key={index} value={`${item.name},${item.location}`}>
-										{item.name},{item.location}
-									</MenuItem>
-								))}
-							</Select>
-							<FormHelperText
-								sx={{
-									fontSize: '11px',
-									textAlign: 'center',
-								}}
-								id='name-helper'
-							>
-								Office
-							</FormHelperText>
-						</FormControl>
-					</Box>
-					<Box
-						sx={{
-							textAlign: 'center',
-						}}
-					>
-						{editing ? (
-							<Button
-								variant='contained'
-								type='submit'
-								color='success'
-								onClick={profileForm.handleSubmit}
-								style={{ width: '130px', borderRadius: '20px' }}
-							>
-								Save
-							</Button>
-						) : (
-							<Button
-								variant='contained'
-								color='success'
-								onClick={handleEditClick}
-								style={{ width: '130px', borderRadius: '20px' }}
-							>
-								Edit
-							</Button>
-						)}
-					</Box>
+						</Box>
+					</Card>
 				</Box>
 			</Box>
 		</>

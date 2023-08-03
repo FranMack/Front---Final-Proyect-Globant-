@@ -27,6 +27,7 @@ import OfficeSelection from './view/OfficeSelection';
 import HomeList from './view/HomeList';
 import AdminUsersList from './view/Admin.users.list';
 import AdminReports from './view/Admin.reports.state';
+import AdminDashboard from './components/AdminDashboard';
 
 function App() {
 	const user = useSelector(state => state.user);
@@ -85,6 +86,7 @@ function App() {
 				<Route path='/users-list' element={<AdminUsersList />} />
 				<Route path='/users-list/:username' element={<ReportHistory />} />
 				<Route path='/admin-reports' element={<AdminReports />} />
+				<Route path='/admin-dashboard' element={<AdminDashboard />} />
 			</Routes>
 
 			<Footer />
