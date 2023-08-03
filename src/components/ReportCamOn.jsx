@@ -136,13 +136,9 @@ const ReportCamOn = ({
 						color: 'rgb(77, 75, 75)',
 					}}
 				>
-					Enter the Damaged item manually
+					Enter the Damaged item
 				</h3>
-				<img
-					src={technicalServiceImage}
-					alt='Technical Service'
-					style={{ width: '200px', margin: '20px' }}
-				/>
+
 				<Box
 					sx={{
 						display: 'flex',
