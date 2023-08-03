@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import GeocodeUser from '../utils/hookGeocodeUser';
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import axios from 'axios';
 import ResponsiveAppBar from '../components/Navbar';
 import { FormControl, Input, Box, Button } from '@mui/material';
@@ -9,6 +9,7 @@ import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import NotFound from './NotFound.view';
 
 const HomeList = () => {
 	const geocodeUserLocation = GeocodeUser();
@@ -32,13 +33,16 @@ const HomeList = () => {
 	const handleEdit = () => {
 		if (edit) {
 			setEditButton('EDIT');
-			setEdit(!edit);
-		} else {
+			setEdit(false);
+			setAdress(geocodeUserLocation)
+		} if(!edit) {
+			setEdit(true);
 			setAdress(null);
-			setEditButton('GPS ADRESS');
-			setEdit(!edit);
+			setEditButton('GPS ADDRES');
 		}
 	};
+
+	
 
 
 
@@ -49,7 +53,8 @@ const HomeList = () => {
 		.join('-');
 
 	const user = useSelector(state => state.user);
-	const report = useSelector(state => state.report);
+	const reportJson = localStorage.getItem("reportData")
+	const report=JSON.parse(reportJson)
 	const userLocation = useUserLocation();
 
 
@@ -79,18 +84,24 @@ const HomeList = () => {
 			toast.success('Report create successfully');
 			navigate('/home');
 
+			localStorage.removeItem("reportData")
+
 			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
 				officeId: selectedOffice._id,
 				deskNumber: selectedDeskNumber,
 			});
+
+			
 		} catch (error) {
 			console.error('Error submitting report:', error);
 		}
 	};
 
-	console.log('adress', adress);
+	console.log('edit', edit);
+	console.log("address",adress)
 	return (
-		<Box
+		<>
+		{report ? (<Box
 			component='form'
 			onSubmit={handleSubmitNewReport}
 			sx={{
@@ -158,7 +169,9 @@ const HomeList = () => {
 					</Button>
 				</>
 			</Box>
-		</Box>
+		</Box>):(<NotFound/>)}
+		
+		</>
 	);
 };
 
