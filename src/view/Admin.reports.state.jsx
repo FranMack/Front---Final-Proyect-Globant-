@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
 import axios from 'axios';
 import {
 	Button,
@@ -8,119 +9,76 @@ import {
 	Grid,
 	Typography,
 	Box,
-	MenuItem,
 	Select,
+	MenuItem,
+	CircularProgress,
 } from '@mui/material';
 
-const AdminReports = () => {
+const AdminReportView = () => {
 	const [reports, setReports] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [filterOption, setFilterOption] = useState('All');
-	const [filteredReports, setFilteredReports] = useState([]);
+	const [statusFilter, setStatusFilter] = useState('');
+	const [userFilter, setUserFilter] = useState('');
 
-	const showAllTheReports = () => {
-		axios
-			.get('http://localhost:5000/api/v1/report/all')
-			.then(res => {
-				setReports(res.data);
-				setLoading(false); // Data fetched successfully, set loading to false
-			})
-			.catch(error => {
-				console.log(error);
-				setLoading(false);
-			});
-	};
-
-	const handleFilterChange = event => {
-		const selectedOption = event.target.value;
-		setFilterOption(selectedOption);
-		if (selectedOption === 'All') {
-			// If 'All' is selected, show all the reports
-			setFilteredReports(reports);
-		} else {
-			// Filter the reports based on the selected status
-			const filteredReports = reports.filter(
-				report => report.status_report === selectedOption,
-			);
-			setFilteredReports(filteredReports);
+	const fetchReports = useCallback(async () => {
+		try {
+			const res = await axios.get('http://localhost:5000/api/v1/report/all');
+			setReports(res.data);
+			setLoading(false);
+		} catch (error) {
+			console.error(error);
+			setLoading(false);
 		}
-	};
-	const handleStatusChange = (reportId, newStatus) => {
-		axios
-			.put(`http://localhost:5000/api/v1/report/editStateReport/${reportId}`, {
-				status: newStatus,
-			})
-			.then(() => {
-				setReports(prevReports =>
-					prevReports.map(report =>
-						report._id === reportId
-							? { ...report, status_report: newStatus }
-							: report,
-					),
-				);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
-
-	const handleStartProgress = reportId => {
-		axios
-			.put(`http://localhost:5000/api/v1/report/editStateReport/${reportId}`, {
-				status: 'In progress',
-			})
-			.then(() => {
-				setReports(prevReports =>
-					prevReports.map(report =>
-						report._id === reportId
-							? { ...report, status_report: 'In progress' }
-							: report,
-					),
-				);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
-
-	const handleReopenReport = reportId => {
-		axios
-			.put(`http://localhost:5000/api/v1/report/editStateReport/${reportId}`, {
-				status: 'Open',
-			})
-			.then(() => {
-				setReports(prevReports =>
-					prevReports.map(report =>
-						report._id === reportId
-							? { ...report, status_report: 'Open' }
-							: report,
-					),
-				);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
-
-	const handleDeleteReport = reportId => {
-		axios
-			.delete(
-				`http://localhost:5000/api/v1/userAdmin/report/delete/${reportId}`,
-			)
-			.then(() => {
-				setReports(prevReports =>
-					prevReports.filter(report => report._id !== reportId),
-				);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
+	}, []);
 
 	useEffect(() => {
-		showAllTheReports();
-		handleFilterChange({ target: { value: filterOption } });
+		fetchReports();
 	}, [reports]);
+
+	const filteredReports = reports.filter(
+		report =>
+			(!statusFilter || report.status_report === statusFilter) &&
+			(!userFilter || report.user === userFilter),
+	);
+
+	const allUsers = [...new Set(reports.map(report => report.user))];
+
+	const formatDate = date => {
+		const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+		return new Date(date).toLocaleDateString(undefined, options);
+	};
+
+	const handleStatusChange = (reportId, newStatus) => {
+		axios
+			.put(`http://localhost:5000/api/v1/userAdmin/status-edit/${reportId}`, {
+				status_report: newStatus,
+			})
+			.then(() => {
+				setReports(prevReports =>
+					prevReports.map(report =>
+						report._id === reportId ? { ...report, status: newStatus } : report,
+					),
+				);
+				console.log('Status updated successfully');
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	};
+
+	const handleDeleteReport = async reportId => {
+		try {
+			await axios.delete(
+				`http://localhost:5000/api/v1/userAdmin/report/delete/${reportId}`,
+			);
+
+			setReports(prevReports =>
+				prevReports.filter(report => report._id !== reportId),
+			);
+		} catch (error) {
+			console.error('Error deleting report:', error);
+		}
+	};
 
 	return (
 		<Box
@@ -130,21 +88,51 @@ const AdminReports = () => {
 				justifyContent: 'center',
 			}}
 		>
-			<Box style={{ padding: '10px' }}>
-				<h2>Users Reports:</h2>
+			<Box
+				style={{
+					display: 'flex',
+					justifyContent: 'center', // Align the filters to the right
+					alignItems: 'center',
+				}}
+			>
+				<Typography component='label' htmlFor='status-filter'>
+					Filter by Report Status:
+				</Typography>
 				<Select
-					value={filterOption}
-					onChange={handleFilterChange}
-					style={{ width: '200px' }}
+					id='status-filter'
+					value={statusFilter}
+					onChange={event => setStatusFilter(event.target.value)}
+					style={{ margin: '10px' }}
 				>
-					<MenuItem value='All'>All</MenuItem>
+					<MenuItem value=''>All</MenuItem>
 					<MenuItem value='Open'>Open</MenuItem>
-					<MenuItem value='In progress'>In Progress</MenuItem>
+					<MenuItem value='In progress'>In progress</MenuItem>
 					<MenuItem value='Close'>Close</MenuItem>
+				</Select>
+
+				<Typography component='label' htmlFor='user-filter'>
+					Filter by Users Report:
+				</Typography>
+				<Select
+					id='user-filter'
+					value={userFilter}
+					onChange={event => setUserFilter(event.target.value)}
+					style={{ marginLeft: '10px' }}
+				>
+					<MenuItem value=''>All</MenuItem>
+					{allUsers.map(user => (
+						<MenuItem key={user} value={user}>
+							{user}
+						</MenuItem>
+					))}
 				</Select>
 			</Box>
 			{loading ? (
-				<Typography>Loading...</Typography>
+				<Box
+					sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+				>
+					<CircularProgress />
+				</Box>
 			) : (
 				<Grid container spacing={2}>
 					{filteredReports.map(report => (
@@ -158,6 +146,9 @@ const AdminReports = () => {
 											</Typography>
 											<Typography variant='h5' component='h2'>
 												{report.title}
+											</Typography>
+											<Typography variant='subtitle1' component='h2'>
+												Date: {formatDate(report.date_report)}
 											</Typography>
 											<Typography className='info-text' noWrap>
 												<strong>Device: {report.device}</strong>
@@ -177,7 +168,7 @@ const AdminReports = () => {
 													Location: {report.location}
 												</Typography>
 												<Typography className='info-text' noWrap>
-													Status Report: {report.status_report}
+													Status Report: {JSON.stringify(report.status_report)}
 												</Typography>
 											</div>
 											<Box
@@ -195,27 +186,38 @@ const AdminReports = () => {
 												/>
 											</Box>
 											<Box display='flex' justifyContent='space-between' mt={2}>
+												{report.status_report === 'Open' && (
+													<Button
+														variant='contained'
+														size='small'
+														onClick={() =>
+															handleStatusChange(report._id, 'In progress')
+														}
+													>
+														In progress
+													</Button>
+												)}
+
 												{report.status_report === 'In progress' && (
 													<Button
+														variant='contained'
+														size='small'
 														onClick={() =>
 															handleStatusChange(report._id, 'Close')
 														}
 													>
-														Resolved
-													</Button>
-												)}
-												{report.status_report === 'Open' && (
-													<Button
-														onClick={() => handleStartProgress(report._id)}
-													>
-														In Progress
+														Close
 													</Button>
 												)}
 												{report.status_report === 'Close' && (
 													<Button
-														onClick={() => handleReopenReport(report._id)}
+														variant='contained'
+														size='small'
+														onClick={() =>
+															handleStatusChange(report._id, 'Open')
+														}
 													>
-														Reopen
+														Re open
 													</Button>
 												)}
 
@@ -240,4 +242,4 @@ const AdminReports = () => {
 	);
 };
 
-export default AdminReports;
+export default AdminReportView;
