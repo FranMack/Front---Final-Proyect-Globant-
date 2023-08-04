@@ -47,7 +47,7 @@ const AdminDeskState = () => {
 	};
 
 	return (
-		<Box component='form' onSubmit={handleSubmit}>
+		<Box component='form' onSubmit={handleSubmit} sx={{ height: '110vh' }}>
 			<ResponsiveAppBar />
 			<Box
 				style={{

@@ -19,7 +19,7 @@ const UserItem = ({ user }) => {
 		>
 			<Box
 				sx={{
-					height: '60%', // Cambiamos la altura a 100%
+					height: '60%',
 					width: '10%',
 					border: '1px solid grey',
 					display: 'flex',
@@ -63,7 +63,6 @@ const UserItem = ({ user }) => {
 				}}
 			>
 				<p>{`${user.last_name} ${user.first_name} `}</p>
-              
 			</Box>
 
 			<Box
