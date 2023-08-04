@@ -11,11 +11,13 @@ import {
 import OfficeMap from '../components/OfficeMap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 const AdminDeskState = () => {
 	const [officeList, setOfficeList] = useState([]);
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
+	const navigate = useNavigate();
 
 	const handleOfficeChange = event => {
 		const selectedLocation = event.target.value;
@@ -39,7 +41,7 @@ const AdminDeskState = () => {
 			});
 
 			toast.success('Desk changed successfully');
-			window.location.reload();
+			navigate('/home');
 		} catch (error) {
 			console.error('Error submitting report:', error);
 		}
