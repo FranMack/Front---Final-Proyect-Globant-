@@ -27,7 +27,7 @@ const Start = () => {
 					flexDirection: 'column',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					minHeight: '98vh',
+					minHeight: '100vh',
 					padding: '5px',
 					backgroundImage: `url(${globantBackground})`,
 					backgroundSize: 'center',

@@ -21,7 +21,6 @@ import axios from 'axios';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
-import Navbar from '../components/Navbar';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -153,7 +152,6 @@ const Profile = () => {
 
 	return (
 		<>
-			<Navbar />
 			<Box
 				sx={{
 					margin: { xs: 'inherit', md: '0px auto' },

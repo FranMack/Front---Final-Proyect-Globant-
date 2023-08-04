@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import ResponsiveAppBar from '../components/Navbar';
 import {
 	FormControl,
 	InputLabel,
@@ -48,7 +47,6 @@ const AdminDeskState = () => {
 
 	return (
 		<Box component='form' onSubmit={handleSubmit} sx={{ height: '110vh' }}>
-			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',

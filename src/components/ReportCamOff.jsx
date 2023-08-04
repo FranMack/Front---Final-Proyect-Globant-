@@ -18,15 +18,13 @@ import {
 	Dialog,
 	DialogTitle,
 	DialogContent,
-	DialogActions
+	DialogActions,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import ResponsiveAppBar from './Navbar';
 import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setReport } from '../state/report';
-
 
 const ReportCamOff = () => {
 	const maxChars = 100;
@@ -50,13 +48,10 @@ const ReportCamOff = () => {
 		const file = e.target.files[0];
 		const maxSizeInBytes = 1024 * 60;
 
-
 		if (file && file.size > maxSizeInBytes) {
 			setShowModal(true);
 			return;
 		}
-
-
 
 		const reader = new FileReader();
 		reader.onload = () => {
@@ -95,14 +90,12 @@ const ReportCamOff = () => {
 			setIsFormValid(false);
 		} else {
 			setIsFormValid(true);
-			
 		}
 	};
 
 	const handleCloseModal = () => {
 		setShowModal(false);
 	};
-
 
 	const remainingChars = maxChars - descripcion.length;
 
@@ -120,19 +113,19 @@ const ReportCamOff = () => {
 	return (
 		<>
 			<Dialog open={showModal} onClose={handleCloseModal}>
-								<DialogTitle>Imagen demasiado grande</DialogTitle>
-								<DialogContent>
-									<p>
-										El tamaño de la imagen excede el límite permitido de 60KB.
-										Por favor, selecciona una imagen más pequeña.
-									</p>
-								</DialogContent>
-								<DialogActions>
-									<Button onClick={handleCloseModal} color='primary' autoFocus>
-										Cerrar
-									</Button>
-								</DialogActions>
-							</Dialog>
+				<DialogTitle>Imagen demasiado grande</DialogTitle>
+				<DialogContent>
+					<p>
+						El tamaño de la imagen excede el límite permitido de 60KB. Por
+						favor, selecciona una imagen más pequeña.
+					</p>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleCloseModal} color='primary' autoFocus>
+						Cerrar
+					</Button>
+				</DialogActions>
+			</Dialog>
 			<ResponsiveAppBar />
 			<Box
 				style={{
@@ -215,7 +208,7 @@ const ReportCamOff = () => {
 				</Box>
 
 				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='demo-simple-select-label'>Item</InputLabel>
+					<InputLabel id='demo-simple-select-label'>Element</InputLabel>
 					<Select
 						id='demo-simple-select'
 						value={item}
@@ -269,14 +262,13 @@ const ReportCamOff = () => {
 					onClick={() => {
 						if (isFormValid) {
 							dispatch(setOfficeHomeModalOpen(true));
-							const reportData={
-								device:item,
-								description:descripcion,
-								url_img:selectedFile
-							}
-							const reportDataJson=JSON.stringify(reportData);
-							localStorage.setItem("reportData",reportDataJson)
-						
+							const reportData = {
+								device: item,
+								description: descripcion,
+								url_img: selectedFile,
+							};
+							const reportDataJson = JSON.stringify(reportData);
+							localStorage.setItem('reportData', reportDataJson);
 						} else {
 							toast.error('Please complete the form before proceeding.');
 						}

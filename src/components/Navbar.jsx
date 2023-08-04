@@ -60,7 +60,7 @@ function ResponsiveAppBar() {
 						)}
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
-					{user.is_admin === true && <ButtonAdmin />}
+					{user?.is_admin === true && <ButtonAdmin />}
 					<Button
 						component={Link}
 						to='/reports'

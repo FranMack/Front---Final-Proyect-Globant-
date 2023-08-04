@@ -3,7 +3,6 @@
 import GeocodeUser from '../utils/hookGeocodeUser';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ResponsiveAppBar from '../components/Navbar';
 import { FormControl, Input, Box, Button } from '@mui/material';
 import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
@@ -40,11 +39,7 @@ const HomeList = () => {
 		}
 	};
 
-
-
-
-	const dateReport = new Date().toISOString()
-
+	const dateReport = new Date().toISOString();
 
 	const user = useSelector(state => state.user);
 	const reportJson = localStorage.getItem('reportData');

@@ -61,9 +61,8 @@ const GoogleMaps = () => {
 
 	return (
 		<Box sx={{ width: '100%' }}>
-			{!isLoaded && <div>Loading...</div>}
-			{isLoaded && userLocation && (
-				<div style={{ padding: '20px' }}>
+			<div style={{ padding: '20px' }}>
+				{isLoaded && userLocation ? (
 					<GoogleMap
 						mapContainerClassName='map-container'
 						center={userLocation}
@@ -95,8 +94,10 @@ const GoogleMaps = () => {
 							</InfoWindow>
 						)}
 					</GoogleMap>
-				</div>
-			)}
+				) : (
+					<p>Loading...</p>
+				)}
+			</div>
 		</Box>
 	);
 };

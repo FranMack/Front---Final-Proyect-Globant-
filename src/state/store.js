@@ -3,8 +3,8 @@ import loginModalSlice from './features/loginModalSlice';
 import reportModalSlice from './features/reportModalSlice';
 import officeHomeModalSlice from './features/officeHomeModalSlice';
 import userSlice from './features/userSlice';
+import appStateSlice from './features/appStateSlice';
 import reducerReport from './report';
-import reducerAdminReportStatus from './reducerAdminReportStatus';
 
 const store = configureStore({
 	reducer: {
@@ -13,7 +13,7 @@ const store = configureStore({
 		officeHomeModal: officeHomeModalSlice,
 		user: userSlice,
 		report: reducerReport,
-		adminReportStatus: reducerAdminReportStatus,
+		appState: appStateSlice,
 	},
 });
 

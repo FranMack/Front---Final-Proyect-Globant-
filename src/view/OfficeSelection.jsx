@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ResponsiveAppBar from '../components/Navbar';
 import {
 	FormControl,
 	InputLabel,
@@ -26,8 +25,7 @@ const OfficeSelection = () => {
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
 
-	const dateReport = new Date().toISOString()
-		
+	const dateReport = new Date().toISOString();
 
 	const user = useSelector(state => state.user);
 	const reportJson = localStorage.getItem('reportData');

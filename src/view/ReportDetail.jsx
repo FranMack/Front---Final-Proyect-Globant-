@@ -1,10 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-
 import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 import { emailReport } from '../utils/functions';
 
 import {
@@ -77,7 +73,6 @@ const ReportDetail = () => {
 	return (
 		<>
 			<ToastContainer />
-			<Navbar />
 			<Tooltip title='¡Send report!' placement='left'>
 				<Button
 					onClick={handleModal}
