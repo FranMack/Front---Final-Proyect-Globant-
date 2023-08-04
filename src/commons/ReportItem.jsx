@@ -16,27 +16,14 @@ const ReportItem = ({ report }) => {
 				height: '10vh',
 			}}
 		>
-			<Box
-				sx={{
-					height: '60%', // Cambiamos la altura a 100%
-					width: '10%',
-					border: '1px solid grey',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					borderTopLeftRadius: '30px',
-					borderBottomLeftRadius: '30px',
-					borderRight: '0px solid',
-					backgroundColor: 'lightgrey',
-				}}
-			></Box>
+		
 
 			<Box
 				component={Link}
 				to={`/reports/${report._id}`}
 				sx={{
 					height: '60%', // Cambiamos la altura a 100%
-					width: '60%',
+					width: '80%',
 					border: '1px solid grey',
 					display: 'flex',
 					justifyContent: 'space-between',
@@ -48,26 +35,16 @@ const ReportItem = ({ report }) => {
 					fontWeight: 'bolder',
 					textDecoration: 'none',
 					color: 'black',
-				}}
-			>
-				<p>{report.device}</p>
-				<p>{ConvertISOdateToRegular(report.date_report)}</p>
-			</Box>
-
-			<Box
-				sx={{
-					height: '60%', // Cambiamos la altura a 100%
-					width: '10%', // Cambiamos el ancho a 10%
-					border: '1px solid grey',
-					borderLeft: '0px solid',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
 					borderTopRightRadius: '30px',
 					borderBottomRightRadius: '30px',
-					backgroundColor: 'lightgrey',
+					borderTopLeftRadius:"30px",
+					WebkitBorderBottomLeftRadius:"30px"
 				}}
-			></Box>
+			>
+				<p style={{marginLeft:"5%"}}>{report.device}</p>
+				<p style={{marginRight:"2%",fontSize:"1rem"}}>{ConvertISOdateToRegular(report.date_report)}</p>
+			</Box>
+
 		</Box>
 	);
 };
