@@ -113,134 +113,133 @@ const AdminReportView = () => {
 				justifyContent: 'center',
 			}}
 		>
-
-{loading ? (
+			{loading ? (
 				<Box
-					sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						marginTop: '20px',
+					}}
 				>
 					<CircularProgress />
 				</Box>
 			) : (
-
-			<Grid>
-		<Grid container spacing={3} sx={{ marginBottom: '30px' }}>
-				<Grid item xs={12} sm={4} md={3}>
-					<Typography
-						component='label'
-						htmlFor='status-filter'
-						style={styles.label}
-					>
-						Status:
-					</Typography>
-					<Select
-						id='status-filter'
-						value={statusFilter}
-						onChange={event => setStatusFilter(event.target.value)}
-						style={styles.select}
-						sx={{
-							marginLeft: "33px"
-						}}
-					>
-						<MenuItem value=''>
-							<em>All</em>
-						</MenuItem>
-						<MenuItem value='Open'>Open</MenuItem>
-						<MenuItem value='In progress'>In progress</MenuItem>
-						<MenuItem value='Close'>Close</MenuItem>
-					</Select>
-				</Grid>
-
-				<Grid item xs={12} sm={4} md={3}>
-					<Typography
-						component='label'
-						htmlFor='status-filter'
-						style={styles.label}
-					>
-						Users:
-					</Typography>
-					<Select
-						id='user-filter'
-						value={userFilter}
-						onChange={event => setUserFilter(event.target.value)}
-						style={styles.select}
-						sx={{
-							marginLeft: "37px"
-						}}
-					>
-						<MenuItem value=''>All</MenuItem>
-						{allUsers.map(user => (
-							<MenuItem key={user} value={user}>
-								{user}
+				<Grid container spacing={3} sx={{ marginBottom: '10px' }}>
+					<Grid item xs={12} sm={4} md={3}>
+						<Typography
+							component='label'
+							htmlFor='status-filter'
+							style={styles.label}
+						>
+							Filter by Report Status:
+						</Typography>
+						<Select
+							id='status-filter'
+							value={statusFilter}
+							onChange={event => setStatusFilter(event.target.value)}
+							style={styles.select}
+						>
+							<MenuItem value=''>
+								<em>All</em>
 							</MenuItem>
-						))}
-					</Select>
-				</Grid>
+							<MenuItem value='Open'>Open</MenuItem>
+							<MenuItem value='In progress'>In progress</MenuItem>
+							<MenuItem value='Close'>Close</MenuItem>
+						</Select>
+					</Grid>
 
-				<Grid item xs={12} sm={4} md={3}>
-					<Typography
-						component='label'
-						htmlFor='location-filter'
-						style={styles.label}
-					>
-						Location:
-					</Typography>
-					<Select
-						id='location-filter'
-						value={locationFilter}
-						onChange={handleLocationFilterChange}
-						style={styles.select}
-						sx={{
-							marginLeft: "15px"
-						}}
-					>
-						<MenuItem value=''>All Locations</MenuItem>
-						{reports.map(report => {
-							const truncatedLocation =
-								report.location.length > MAX_LOCATION_LENGTH
-									? `${report.location.substring(0, MAX_LOCATION_LENGTH)}...`
-									: report.location;
-
-							return (
-								<MenuItem
-									key={report.location}
-									value={report.location}
-									title={report.location}
-								>
-									{truncatedLocation}
+					<Grid item xs={12} sm={4} md={3}>
+						<Typography
+							component='label'
+							htmlFor='status-filter'
+							style={styles.label}
+						>
+							Filter by Users Report:
+						</Typography>
+						<Select
+							id='user-filter'
+							value={userFilter}
+							onChange={event => setUserFilter(event.target.value)}
+							style={styles.select}
+						>
+							<MenuItem value=''>All</MenuItem>
+							{allUsers.map(user => (
+								<MenuItem key={user} value={user}>
+									{user}
 								</MenuItem>
-							);
-						})}
-					</Select>
-				</Grid>
+							))}
+						</Select>
+					</Grid>
 
-				<Grid item xs={12} sm={4} md={3}>
-					<Typography
-						component='label'
-						htmlFor='status-filter'
-						style={styles.label}
-					>
-						Device: 
-					</Typography>
-					<Select
-						id='device-filter'
-						value={deviceFilter}
-						onChange={event => setDeviceFilter(event.target.value)}
-						style={styles.select}
-						sx={{
-							marginLeft: "30px"
-						}}
-					>
-						<MenuItem value=''>All</MenuItem>
-						{allDevices.map(device => (
-							<MenuItem key={device} value={device}>
-								{device}
-							</MenuItem>
-						))}
-					</Select>
-				</Grid>
-			</Grid>
+					<Grid item xs={12} sm={4} md={3}>
+						<Typography
+							component='label'
+							htmlFor='location-filter'
+							style={styles.label}
+						>
+							Filter by Users Location:
+						</Typography>
+						<Select
+							id='location-filter'
+							value={locationFilter}
+							onChange={handleLocationFilterChange}
+							style={styles.select}
+						>
+							<MenuItem value=''>All Locations</MenuItem>
+							{reports.map(report => {
+								const truncatedLocation =
+									report.location.length > MAX_LOCATION_LENGTH
+										? `${report.location.substring(0, MAX_LOCATION_LENGTH)}...`
+										: report.location;
 
-	
+								return (
+									<MenuItem
+										key={report.location}
+										value={report.location}
+										title={report.location}
+									>
+										{truncatedLocation}
+									</MenuItem>
+								);
+							})}
+						</Select>
+					</Grid>
+
+					<Grid item xs={12} sm={4} md={3}>
+						<Typography
+							component='label'
+							htmlFor='status-filter'
+							style={styles.label}
+						>
+							Filter by Device:
+						</Typography>
+						<Select
+							id='device-filter'
+							value={deviceFilter}
+							onChange={event => setDeviceFilter(event.target.value)}
+							style={styles.select}
+						>
+							<MenuItem value=''>All</MenuItem>
+							{allDevices.map(device => (
+								<MenuItem key={device} value={device}>
+									{device}
+								</MenuItem>
+							))}
+						</Select>
+					</Grid>
+				</Grid>
+			)}
+
+			{!loading && filteredReports.length === 0 && (
+				<Typography
+					variant='h6'
+					sx={{ margin: '20px auto', textAlign: 'center' }}
+				>
+					No reports found matching the applied filters.
+				</Typography>
+			)}
+
+			{!loading && filteredReports.length > 0 && (
 				<Grid container spacing={2}>
 					{filteredReports.map(report => (
 						<Grid item key={report._id} xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -344,8 +343,8 @@ const AdminReportView = () => {
 								</Card>
 							</CardActionArea>
 						</Grid>
-					))} 
-				</Grid></Grid>
+					))}
+				</Grid>
 			)}
 		</Box>
 	);
