@@ -22,6 +22,7 @@ const AdminDashboard = () => {
 	return (
 		<>
 			<Navbar />
+
 			<Box style={{ padding: '10px' }}>
 				<h2>Admin Dashboard:</h2>
 			</Box>

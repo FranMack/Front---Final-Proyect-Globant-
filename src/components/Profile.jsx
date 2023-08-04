@@ -157,6 +157,7 @@ const Profile = () => {
 			<Box
 				sx={{
 					margin: { xs: 'inherit', md: '0px auto' },
+					paddingBottom: '70px',
 				}}
 				onSubmit={profileForm.handleSubmit}
 			>
@@ -184,13 +185,13 @@ const Profile = () => {
 						alignItems: 'center',
 						margin: '0 auto',
 						width: '90%',
-						marginTop: '70px'
+						marginTop: '70px',
 					}}
 				>
 					<Card
 						style={{
-							padding: "20px 5px",
-							border: "2px solid #2e7d32"
+							padding: '20px 5px',
+							border: '2px solid grey',
 						}}
 					>
 						<Box
