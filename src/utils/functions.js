@@ -33,15 +33,12 @@ export function orderByDate(array) {
 	return array;
 }
 
-
-export function orderAlphabetically(array){
-    array.sort((a, b) => a.last_name.localeCompare(b.last_name, undefined, { sensitivity: "base" }));
-    return array;
+export function orderAlphabetically(array) {
+	array.sort((a, b) =>
+		a.last_name.localeCompare(b.last_name, undefined, { sensitivity: 'base' }),
+	);
+	return array;
 }
-
-
-
-
 
 export function emailReport(report) {
 	return `
@@ -51,14 +48,14 @@ export function emailReport(report) {
       <title>Email Globant</title>
       <style>
           
-          .contenedor {height:100vh;}
-          .contenedor2 {height:85%;width:30%;background-color:#f1f3f4 ;border:solid 0,0,10px #cac4c4;padding:2%;margin:0 auto }
-          .contenedor3{width: 80%; margin: 0 auto;}
+          .contenedor {height:100%;}
+          .contenedor2 {height:100%;background-color:#f1f3f4 ;border:solid 0,0,10px #cac4c4;padding:2%;margin:0 auto }
+          .contenedor3{height:100%;margin: 0 auto;}
   
   
           
-          img {height:35%; display: block; margin: 0 auto;}
-          ul{ list-style:none;font-size:1.1rem; margin-top: 15%;}
+          img {display:none;height:35%;margin: 0 auto;}
+          ul{ list-style:none;font-size:1.1rem; margin-top: 5%;}
           li{margin-bottom:2%;}
           span{font-weight:bolder;}
           h2{text-align: center;}
@@ -68,8 +65,6 @@ export function emailReport(report) {
   <body>
   
       <div class="contenedor" >
-  
-  
           <div class="contenedor2">
           <h2>REPORT DETAIL</h2>
           <img src=${report.url_img} alt="foto"/>
@@ -79,7 +74,9 @@ export function emailReport(report) {
            <li style=><span> USER:</span> ${report.user}</li>
           <li style=><span> DATE:</span> ${report.date_report.slice(0, 9)}</li>
           <li style=><span> STATUS:</span> ${report.status_report}</li>
-          <li style=><span> DEVICE:</span> ${report.device}</li>
+          <li style=><span> DEVICE:</span> <span id="device">${
+						report.device
+					}</span></li>
           <li style=><span> DESCRIPTION:</span>${report.description}</li>
           <li style=><span> LOCATION:</span> ${report.location}</li>
           <li style=><span> FLOOR:</span> ${report.floor_number}</li>
