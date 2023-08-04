@@ -26,11 +26,8 @@ const OfficeSelection = () => {
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
 
-	const dateReport = new Date()
-		.toLocaleDateString('es-AR')
-		.split('/')
-		.reverse()
-		.join('-');
+	const dateReport = new Date().toISOString()
+		
 
 	const user = useSelector(state => state.user);
 	const reportJson = localStorage.getItem('reportData');
