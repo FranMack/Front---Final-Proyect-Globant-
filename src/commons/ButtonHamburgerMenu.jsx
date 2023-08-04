@@ -20,10 +20,11 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import DeskIcon from '@mui/icons-material/Desk';
 
 export default function SwipeableTemporaryDrawer() {
-	const user = useSelector((state=> state.user))
+	const user = useSelector(state => state.user);
 	const [state, setState] = React.useState({
 		right: false,
 	});
@@ -96,14 +97,18 @@ export default function SwipeableTemporaryDrawer() {
 					},
 					...(user.is_admin
 						? [
-							{
-							  text: 'List users',
-							  icon: <PeopleAltIcon sx={{ color: '#3AB54A' }} />,
-							  path: '/users-list',
-							},
+								{
+									text: 'Admin dashboard',
+									icon: <DashboardIcon sx={{ color: '#3AB54A' }} />,
+									path: '/admin-dashboard',
+								},
+								{
+									text: 'Desk status',
+									icon: <DeskIcon sx={{ color: '#3AB54A' }} />,
+									path: '/desk-status',
+								},
 						  ]
 						: []),
-					
 				].map(item => (
 					<ListItem key={item.text} disablePadding>
 						<ListItemButton component={Link} to={item.path}>

@@ -15,6 +15,10 @@ import {
 	IconButton,
 	Typography,
 	InputAdornment,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
@@ -28,6 +32,7 @@ const ReportCamOff = () => {
 	const [descripcion, setDescripcion] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
 	const [descripcionError, setDescripcionError] = useState('');
+	const [showModal, setShowModal] = useState(false);
 
 	const [isFormValid, setIsFormValid] = useState(false);
 
@@ -41,6 +46,12 @@ const ReportCamOff = () => {
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
+		const maxSizeInBytes = 1024 * 60;
+
+		if (file && file.size > maxSizeInBytes) {
+			setShowModal(true);
+			return;
+		}
 
 		const reader = new FileReader();
 		reader.onload = () => {
@@ -82,6 +93,10 @@ const ReportCamOff = () => {
 		}
 	};
 
+	const handleCloseModal = () => {
+		setShowModal(false);
+	};
+
 	const remainingChars = maxChars - descripcion.length;
 
 	useEffect(() => {
@@ -97,6 +112,21 @@ const ReportCamOff = () => {
 
 	return (
 		<>
+			<Dialog open={showModal} onClose={handleCloseModal}>
+				<DialogTitle>Imagen demasiado grande</DialogTitle>
+				<DialogContent>
+					<p>
+						El tamaño de la imagen excede el límite permitido de 60KB. Por
+						favor, selecciona una imagen más pequeña.
+					</p>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleCloseModal} color='primary' autoFocus>
+						Cerrar
+					</Button>
+				</DialogActions>
+			</Dialog>
+			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',
@@ -232,6 +262,13 @@ const ReportCamOff = () => {
 					onClick={() => {
 						if (isFormValid) {
 							dispatch(setOfficeHomeModalOpen(true));
+							const reportData = {
+								device: item,
+								description: descripcion,
+								url_img: selectedFile,
+							};
+							const reportDataJson = JSON.stringify(reportData);
+							localStorage.setItem('reportData', reportDataJson);
 						} else {
 							toast.error('Please complete the form before proceeding.');
 						}

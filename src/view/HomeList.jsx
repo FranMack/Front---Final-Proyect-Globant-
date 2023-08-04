@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import GeocodeUser from '../utils/hookGeocodeUser';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FormControl, Input, Box, Button } from '@mui/material';
 import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import NotFound from './NotFound.view';
 
 const HomeList = () => {
 	const geocodeUserLocation = GeocodeUser();
@@ -28,22 +29,21 @@ const HomeList = () => {
 	const handleEdit = () => {
 		if (edit) {
 			setEditButton('EDIT');
-			setEdit(!edit);
-		} else {
+			setEdit(false);
+			setAdress(geocodeUserLocation);
+		}
+		if (!edit) {
+			setEdit(true);
 			setAdress(null);
-			setEditButton('GPS ADRESS');
-			setEdit(!edit);
+			setEditButton('GPS ADDRES');
 		}
 	};
 
-	const dateReport = new Date()
-		.toLocaleDateString('es-AR')
-		.split('/')
-		.reverse()
-		.join('-');
+	const dateReport = new Date().toISOString();
 
 	const user = useSelector(state => state.user);
-	const report = useSelector(state => state.report);
+	const reportJson = localStorage.getItem('reportData');
+	const report = JSON.parse(reportJson);
 	const userLocation = useUserLocation();
 
 	const handleSubmitNewReport = async e => {
@@ -71,6 +71,8 @@ const HomeList = () => {
 			toast.success('Report create successfully');
 			navigate('/home');
 
+			localStorage.removeItem('reportData');
+
 			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
 				officeId: selectedOffice._id,
 				deskNumber: selectedDeskNumber,
@@ -80,76 +82,83 @@ const HomeList = () => {
 		}
 	};
 
-	console.log('adress', adress);
 	return (
-		<Box
-			component='form'
-			onSubmit={handleSubmitNewReport}
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-			}}
-		>
-			<Box
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					borderBottom: '1px solid grey',
-				}}
-			>
-				<div
-					style={{
+		<>
+			{report ? (
+				<Box
+					component='form'
+					onSubmit={handleSubmitNewReport}
+					sx={{
 						display: 'flex',
-						alignItems: 'center',
-						marginLeft: '15px',
+						flexDirection: 'column',
+						justifyContent: 'center',
 					}}
 				>
-					<h3 style={{ marginLeft: '16px', color: 'grey' }}>
-						Home office address
-					</h3>
-				</div>
-			</Box>
-			<Box
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					marginTop: '10px',
-				}}
-			>
-				<h3 style={{ marginBottom: '5%', marginTop: '5%' }}>
-					Please check your adress
-				</h3>
-
-				<FormControl style={{ width: '90%' }}>
-					<Input
-						sx={{ textAlign: 'center' }}
-						disabled={!edit}
-						value={adress === null ? geocodeUserLocation : adress}
-						onChange={handleAdress}
-					/>
-					<Button onClick={handleEdit} sx={{ color: '#3AB54A' }}>
-						{editButton}
-					</Button>
-				</FormControl>
-
-				<>
-					<Button
-						type='submit'
-						variant='contained'
+					<ResponsiveAppBar />
+					<Box
 						style={{
-							backgroundColor: '#3AB54A',
-							color: '#FFFFFF',
-							borderRadius: '20px',
-							margin: '20px',
+							display: 'flex',
+							alignItems: 'center',
+							borderBottom: '1px solid grey',
 						}}
 					>
-						New Report
-					</Button>
-				</>
-			</Box>
-		</Box>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								marginLeft: '15px',
+							}}
+						>
+							<h3 style={{ marginLeft: '16px', color: 'grey' }}>
+								Home office address
+							</h3>
+						</div>
+					</Box>
+					<Box
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							marginTop: '10px',
+							height: '80vh',
+						}}
+					>
+						<h3 style={{ marginBottom: '5%', marginTop: '5%' }}>
+							Please check your adress
+						</h3>
+
+						<FormControl style={{ width: '90%' }}>
+							<Input
+								sx={{ textAlign: 'center' }}
+								disabled={!edit}
+								value={adress === null ? geocodeUserLocation : adress}
+								onChange={handleAdress}
+							/>
+							<Button onClick={handleEdit} sx={{ color: '#3AB54A' }}>
+								{editButton}
+							</Button>
+						</FormControl>
+
+						<>
+							<Button
+								type='submit'
+								variant='contained'
+								style={{
+									backgroundColor: '#3AB54A',
+									color: '#FFFFFF',
+									borderRadius: '20px',
+									margin: '20px',
+								}}
+							>
+								New Report
+							</Button>
+						</>
+					</Box>
+				</Box>
+			) : (
+				<NotFound />
+			)}
+		</>
 	);
 };
 

@@ -2,19 +2,25 @@
 import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 
+import { useSelector } from 'react-redux';
+
 function OfficeMap({
 	officeId,
 
 	setSelectedDeskNumber,
 }) {
 	const [selectedDesk, setSelectedDesk] = useState(null);
+	const user = useSelector(state => state.user);
 
 	const handleDeskClick = async boxNumber => {
 		const desk = officeId.desks.find(desk => desk.deskNumber === boxNumber);
 
-		if (desk && desk.isOccupied) {
-			return console.log('El escritorio está ocupado');
+		if (user.is_admin === 'false') {
+			if (desk && desk.isOccupied) {
+				return console.log('El escritorio está ocupado');
+			}
 		}
+
 		setSelectedDeskNumber(boxNumber);
 		setSelectedDesk(boxNumber);
 	};
@@ -44,11 +50,11 @@ function OfficeMap({
 		<>
 			{!selectedDesk ? (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
-					Please select your desk
+					Please select a desk
 				</Typography>
 			) : (
 				<Typography sx={{ textAlign: 'center', marginTop: '5px' }} variant='h6'>
-					Your desk is: {selectedDesk}
+					Selected desktop: {selectedDesk}
 				</Typography>
 			)}
 			<div className='map'>

@@ -10,104 +10,111 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import { useNavigate } from 'react-router';
 
-const options = ['List users', 'List reports'];
+const options = ['Admin dashboard', 'Desk status'];
 
 export default function ButtonAdmin() {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-  const navigate = useNavigate();
+	const [open, setOpen] = React.useState(false);
+	const anchorRef = React.useRef(null);
+	const [selectedIndex, setSelectedIndex] = React.useState(1);
+	const navigate = useNavigate();
 
+	const handleClick = () => {
+		console.info(`You clicked ${options[selectedIndex]}`);
+		if (selectedIndex === 0) {
+			navigate('/admin-dashboard');
+		} else {
+			navigate('/desk-status');
+		}
+	};
 
-  const handleClick = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
-    if (selectedIndex === 0) {
-        navigate("/users-list"); 
-      }
-  };
+	const handleMenuItemClick = (event, index) => {
+		setSelectedIndex(index);
+		setOpen(false);
+	};
 
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
-    setOpen(false);
-  };
+	const handleToggle = () => {
+		setOpen(prevOpen => !prevOpen);
+	};
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+	const handleClose = event => {
+		if (anchorRef.current && anchorRef.current.contains(event.target)) {
+			return;
+		}
 
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
+		setOpen(false);
+	};
 
-    setOpen(false);
-  };
-
-  return (
-    <React.Fragment>
-       <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" color="inherit" sx={{display: { xs: 'none', md: 'flex' }, marginRight: "10px"}}>
-        <Button
-          onClick={handleClick}
-          color="inherit"
-          sx={{
-            background: "white", 
-            color: "#C5DA2D", 
-          }}
-        >
-          {options[selectedIndex]}
-        </Button>
-        <Button
-          size="small"
-          aria-controls={open ? "split-button-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-label="select merge strategy"
-          aria-haspopup="menu"
-          onClick={handleToggle}
-          sx={{ background: "white", color: "#C5DA2D" }} 
-        >
-          <ArrowDropDownIcon />
-        </Button>
-      </ButtonGroup>
-      <Popper
-        sx={{
-          zIndex: 1,
-        }}
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper sx={{marginLeft: "60px", marginTop: "3px"}}>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu" autoFocusItem  color="inherit"> 
-                  {options.map((option, index) => (
-                    <MenuItem
-                    sx={{
-                        color: "#C5DA2D", 
-                      }}
-                      key={option}
-                      disabled={index === 2}
-                      selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<ButtonGroup
+				variant='contained'
+				ref={anchorRef}
+				aria-label='split button'
+				color='inherit'
+				sx={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px' }}
+			>
+				<Button
+					onClick={handleClick}
+					color='inherit'
+					sx={{
+						background: 'white',
+						color: '#C5DA2D',
+					}}
+				>
+					{options[selectedIndex]}
+				</Button>
+				<Button
+					size='small'
+					aria-controls={open ? 'split-button-menu' : undefined}
+					aria-expanded={open ? 'true' : undefined}
+					aria-label='select merge strategy'
+					aria-haspopup='menu'
+					onClick={handleToggle}
+					sx={{ background: 'white', color: '#C5DA2D' }}
+				>
+					<ArrowDropDownIcon />
+				</Button>
+			</ButtonGroup>
+			<Popper
+				sx={{
+					zIndex: 1,
+				}}
+				open={open}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				transition
+				disablePortal
+			>
+				{({ TransitionProps, placement }) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+								placement === 'bottom' ? 'center top' : 'center bottom',
+						}}
+					>
+						<Paper sx={{ marginLeft: '60px', marginTop: '3px' }}>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList id='split-button-menu' autoFocusItem color='inherit'>
+									{options.map((option, index) => (
+										<MenuItem
+											sx={{
+												color: '#C5DA2D',
+											}}
+											key={option}
+											disabled={index === 2}
+											selected={index === selectedIndex}
+											onClick={event => handleMenuItemClick(event, index)}
+										>
+											{option}
+										</MenuItem>
+									))}
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
+		</React.Fragment>
+	);
 }

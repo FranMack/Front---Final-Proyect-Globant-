@@ -96,13 +96,8 @@ const ReportCamOn = ({
 		getOffices();
 	}, []);
 
-	console.log('item', item);
-	console.log('description', descripcion);
-	console.log('todoListo', isFormValid);
-	console.log('descriptionError', descripcionError);
-
 	return (
-		<>
+		<Box sx={{ height: '100vh' }}>
 			<Box
 				style={{
 					display: 'flex',
@@ -134,15 +129,12 @@ const ReportCamOn = ({
 						textAlign: 'center',
 						fontSize: '26px',
 						color: 'rgb(77, 75, 75)',
+						paddingTop: '40px',
 					}}
 				>
-					Enter the Damaged item manually
+					Enter the Damaged item
 				</h3>
-				<img
-					src={technicalServiceImage}
-					alt='Technical Service'
-					style={{ width: '200px', margin: '20px' }}
-				/>
+
 				<Box
 					sx={{
 						display: 'flex',
@@ -171,6 +163,7 @@ const ReportCamOn = ({
 						label='item'
 						onChange={handleConfirmObject}
 						required
+						disabled='false'
 					>
 						<MenuItem value='notebook-charger'>Notebook Charger</MenuItem>
 						<MenuItem value='cell-phone-charger'>Cellphone Charger</MenuItem>
@@ -219,6 +212,13 @@ const ReportCamOn = ({
 					onClick={() => {
 						if (isFormValid) {
 							dispatch(setOfficeHomeModalOpen(true));
+							const reportData = {
+								device: item,
+								description: descripcion,
+								url_img: selectedFile,
+							};
+							const reportDataJson = JSON.stringify(reportData);
+							localStorage.setItem('reportData', reportDataJson);
 						} else {
 							toast.error('Please complete the form before proceeding.');
 						}
@@ -227,7 +227,7 @@ const ReportCamOn = ({
 					Next
 				</Button>
 			</Box>
-		</>
+		</Box>
 	);
 };
 

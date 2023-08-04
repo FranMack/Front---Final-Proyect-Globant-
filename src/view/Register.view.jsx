@@ -20,6 +20,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
 	Button,
+	Card,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -178,12 +179,8 @@ const Register = () => {
 				component='form'
 				onSubmit={signupForm.handleSubmit}
 				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
 					margin: { xs: 'inherit', md: '0px auto' },
-					padding: '0 0 20px 0',
-					boxSizing: 'border-box',
+					paddingBottom: '70px',
 				}}
 			>
 				<Grid
@@ -203,116 +200,128 @@ const Register = () => {
 						<h5 style={{ marginLeft: '8px', color: 'grey' }}>NEW REGISTER</h5>
 					</Grid>
 				</Grid>
-				<Grid
-					container
-					style={{
+
+				<Box
+					sx={{
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
 						margin: '0 auto',
-						width: '400px',
+						width: '90%',
+						marginTop: '70px',
 					}}
 				>
-					<Box
-						sx={{
-							borderBottom: '1px solid grey',
-							padding: '10px 16px',
+					<Card
+						style={{
+							padding: '20px 5px',
+							border: '2px solid grey',
 						}}
 					>
 						<Box
 							sx={{
+								padding: '10px 16px',
 								display: 'flex',
 								alignItems: 'center',
 								marginLeft: '10px',
+								marginBottom: '20px',
+								borderBottom: '1px solid grey',
 							}}
 						>
-							<Grid>
-								<input
-									type='file'
-									accept='image/jpeg, image/png'
-									onChange={handleImageUpload}
-									style={{ display: 'none' }}
-									id='avatar-upload'
-								/>
-								<label htmlFor='avatar-upload'>
-									<Avatar
-										component='span'
-										sx={{ width: 90, height: 90, cursor: 'pointer' }}
-										src={image}
-									>
-										{!image &&
-										signupForm.values.first_name &&
-										signupForm.values.last_name
-											? signupForm.values.first_name.charAt(0).toUpperCase() +
-											  signupForm.values.last_name.charAt(0).toUpperCase()
-											: null}
-									</Avatar>
-								</label>
-								<Dialog open={showModal} onClose={handleCloseModal}>
-									<DialogTitle>Imagen demasiado grande</DialogTitle>
-									<DialogContent>
-										<p>
-											El tamaño de la imagen excede el límite permitido de 60KB.
-											Por favor, selecciona una imagen más pequeña.
-										</p>
-									</DialogContent>
-									<DialogActions>
-										<Button
-											onClick={handleCloseModal}
-											color='primary'
-											autoFocus
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									marginLeft: '10px',
+								}}
+							>
+								<Grid>
+									<input
+										type='file'
+										accept='image/jpeg, image/png'
+										onChange={handleImageUpload}
+										style={{ display: 'none' }}
+										id='avatar-upload'
+									/>
+									<label htmlFor='avatar-upload'>
+										<Avatar
+											component='span'
+											sx={{ width: 90, height: 90, cursor: 'pointer' }}
+											src={image}
 										>
-											Cerrar
-										</Button>
-									</DialogActions>
-								</Dialog>
-							</Grid>
-							<Grid item style={{ marginBottom: '20px', padding: '16px' }}>
-								<Grid container direction='column'>
-									<Grid item>
-										<TextField
-											color='success'
-											sx={{ width: '180px' }}
-											name='first_name'
-											label='Name'
-											variant='standard'
-											value={signupForm.values.first_name}
-											onChange={signupForm.handleChange}
-											onBlur={signupForm.handleBlur}
-											error={
-												signupForm.touched.first_name &&
-												signupForm.errors.first_name !== undefined
-											}
-											helperText={
-												signupForm.touched.first_name &&
-												signupForm.errors.first_name
-											}
-											required
-										/>
-									</Grid>
-									<Grid item>
-										<TextField
-											color='success'
-											sx={{ width: '180px' }}
-											name='last_name'
-											label='Last name'
-											variant='standard'
-											value={signupForm.values.last_name}
-											onChange={signupForm.handleChange}
-											onBlur={signupForm.handleBlur}
-											error={
-												signupForm.touched.last_name &&
-												signupForm.errors.last_name !== undefined
-											}
-											helperText={
-												signupForm.touched.last_name &&
-												signupForm.errors.last_name
-											}
-											required
-										/>
+											{!image &&
+											signupForm.values.first_name &&
+											signupForm.values.last_name
+												? signupForm.values.first_name.charAt(0).toUpperCase() +
+												  signupForm.values.last_name.charAt(0).toUpperCase()
+												: null}
+										</Avatar>
+									</label>
+									<Dialog open={showModal} onClose={handleCloseModal}>
+										<DialogTitle>Imagen demasiado grande</DialogTitle>
+										<DialogContent>
+											<p>
+												El tamaño de la imagen excede el límite permitido de
+												60KB. Por favor, selecciona una imagen más pequeña.
+											</p>
+										</DialogContent>
+										<DialogActions>
+											<Button
+												onClick={handleCloseModal}
+												color='primary'
+												autoFocus
+											>
+												Cerrar
+											</Button>
+										</DialogActions>
+									</Dialog>
+								</Grid>
+								<Grid item style={{ marginBottom: '20px', padding: '16px' }}>
+									<Grid container direction='column'>
+										<Grid item>
+											<TextField
+												color='success'
+												sx={{ width: '180px' }}
+												name='first_name'
+												label='Name'
+												variant='standard'
+												value={signupForm.values.first_name}
+												onChange={signupForm.handleChange}
+												onBlur={signupForm.handleBlur}
+												error={
+													signupForm.touched.first_name &&
+													signupForm.errors.first_name !== undefined
+												}
+												helperText={
+													signupForm.touched.first_name &&
+													signupForm.errors.first_name
+												}
+												required
+											/>
+										</Grid>
+										<Grid item>
+											<TextField
+												color='success'
+												sx={{ width: '180px' }}
+												name='last_name'
+												label='Last name'
+												variant='standard'
+												value={signupForm.values.last_name}
+												onChange={signupForm.handleChange}
+												onBlur={signupForm.handleBlur}
+												error={
+													signupForm.touched.last_name &&
+													signupForm.errors.last_name !== undefined
+												}
+												helperText={
+													signupForm.touched.last_name &&
+													signupForm.errors.last_name
+												}
+												required
+											/>
+										</Grid>
 									</Grid>
 								</Grid>
-							</Grid>
+							</Box>
 
 							<Grid
 								style={{
@@ -322,164 +331,171 @@ const Register = () => {
 								}}
 							></Grid>
 						</Box>
-					</Box>
-					<Box
-						sx={{
-							padding: '16px',
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							rowGap: '10px',
-						}}
-					>
-						<Grid item>
-							<TextField
-								color='success'
-								sx={{ width: '300px' }}
-								name='email'
-								label='Email'
-								variant='standard'
-								value={signupForm.values.email}
-								onChange={signupForm.handleChange}
-								onBlur={signupForm.handleBlur}
-								error={
-									signupForm.touched.email &&
-									signupForm.errors.email !== undefined
-								}
-								helperText={signupForm.touched.email && signupForm.errors.email}
-								required
-							/>
-						</Grid>
-						<Grid item>
-							<TextField
-								color='success'
-								sx={{ width: '300px' }}
-								name='username'
-								label='Username'
-								variant='standard'
-								value={signupForm.values.username}
-								onChange={signupForm.handleChange}
-								onBlur={signupForm.handleBlur}
-								error={
-									signupForm.touched.username &&
-									signupForm.errors.username !== undefined
-								}
-								helperText={
-									signupForm.touched.username && signupForm.errors.username
-								}
-								required
-							/>
-						</Grid>
-						<Grid item>
-							<TextField
-								color='success'
-								sx={{ width: '300px' }}
-								name='password'
-								label='Password'
-								variant='standard'
-								type='password'
-								value={signupForm.values.password}
-								onChange={signupForm.handleChange}
-								onBlur={signupForm.handleBlur}
-								error={
-									signupForm.touched.password &&
-									signupForm.errors.password !== undefined
-								}
-								helperText={
-									signupForm.touched.password && signupForm.errors.password
-								}
-								required
-							/>
-						</Grid>
-						<Grid item>
-							<TextField
-								color='success'
-								sx={{ width: '300px' }}
-								name='location'
-								label='Location'
-								variant='standard'
-								value={signupForm.values.location}
-								onChange={signupForm.handleChange}
-								onBlur={signupForm.handleBlur}
-								error={
-									signupForm.touched.location &&
-									signupForm.errors.location !== undefined
-								}
-								helperText={
-									signupForm.touched.location && signupForm.errors.location
-								}
-								required
-							/>
-						</Grid>
-						<Grid item sx={{ width: '300px' }}>
-							<Grid
-								container
-								sx={{
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									columnGap: '5px',
-								}}
-							>
-								<Grid item>
-									<FormControl
-										variant='outlined'
-										size='small'
-										sx={{ width: '98px', marginTop: '16px' }}
-									>
-										<InputLabel id='country-select-label'>Country</InputLabel>
-										<Select
-											labelId='country-select-label'
-											label='Country'
-											value={selectedCountry}
-											onChange={handleCountryChange}
-											renderValue={value => `+${value}`}
+						<Box
+							sx={{
+								padding: '16px',
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								rowGap: '10px',
+							}}
+						>
+							<Grid item>
+								<TextField
+									color='success'
+									sx={{ width: '300px' }}
+									name='email'
+									label='Email'
+									variant='standard'
+									value={signupForm.values.email}
+									onChange={signupForm.handleChange}
+									onBlur={signupForm.handleBlur}
+									error={
+										signupForm.touched.email &&
+										signupForm.errors.email !== undefined
+									}
+									helperText={
+										signupForm.touched.email && signupForm.errors.email
+									}
+									required
+								/>
+							</Grid>
+							<Grid item>
+								<TextField
+									color='success'
+									sx={{ width: '300px' }}
+									name='username'
+									label='Username'
+									variant='standard'
+									value={signupForm.values.username}
+									onChange={signupForm.handleChange}
+									onBlur={signupForm.handleBlur}
+									error={
+										signupForm.touched.username &&
+										signupForm.errors.username !== undefined
+									}
+									helperText={
+										signupForm.touched.username && signupForm.errors.username
+									}
+									required
+								/>
+							</Grid>
+							<Grid item>
+								<TextField
+									color='success'
+									sx={{ width: '300px' }}
+									name='password'
+									label='Password'
+									variant='standard'
+									type='password'
+									value={signupForm.values.password}
+									onChange={signupForm.handleChange}
+									onBlur={signupForm.handleBlur}
+									error={
+										signupForm.touched.password &&
+										signupForm.errors.password !== undefined
+									}
+									helperText={
+										signupForm.touched.password && signupForm.errors.password
+									}
+									required
+								/>
+							</Grid>
+							<Grid item>
+								<TextField
+									color='success'
+									sx={{ width: '300px' }}
+									name='location'
+									label='Location'
+									variant='standard'
+									value={signupForm.values.location}
+									onChange={signupForm.handleChange}
+									onBlur={signupForm.handleBlur}
+									error={
+										signupForm.touched.location &&
+										signupForm.errors.location !== undefined
+									}
+									helperText={
+										signupForm.touched.location && signupForm.errors.location
+									}
+									required
+								/>
+							</Grid>
+							<Grid item sx={{ width: '300px' }}>
+								<Grid
+									container
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										columnGap: '5px',
+									}}
+								>
+									<Grid item>
+										<FormControl
+											variant='outlined'
+											size='small'
+											sx={{ width: '98px', marginTop: '16px' }}
 										>
-											{countries.map(country => (
-												<MenuItem
-													key={country.alpha2Code}
-													value={country.callingCodes[0]}
-												>
-													{`${country.name} (+${country.callingCodes[0]})`}
-												</MenuItem>
-											))}
-										</Select>
-									</FormControl>
-								</Grid>
-								<Grid item>
-									<TextField
-										color='success'
-										name='phone_number'
-										label='Phone number'
-										variant='standard'
-										sx={{ width: '197px' }}
-										value={number}
-										onChange={handlePhoneNumberChange}
-									/>
+											<InputLabel id='country-select-label'>Country</InputLabel>
+											<Select
+												labelId='country-select-label'
+												label='Country'
+												value={selectedCountry}
+												onChange={handleCountryChange}
+												renderValue={value => `+${value}`}
+											>
+												{countries.map(country => (
+													<MenuItem
+														key={country.alpha2Code}
+														value={country.callingCodes[0]}
+													>
+														{`${country.name} (+${country.callingCodes[0]})`}
+													</MenuItem>
+												))}
+											</Select>
+										</FormControl>
+									</Grid>
+									<Grid item>
+										<TextField
+											color='success'
+											name='phone_number'
+											label='Phone number'
+											variant='standard'
+											sx={{ width: '197px' }}
+											value={number}
+											onChange={handlePhoneNumberChange}
+										/>
+									</Grid>
 								</Grid>
 							</Grid>
-						</Grid>
-					</Box>
-				</Grid>
-				{errorMessage && (
-					<Box sx={{ marginTop: 2 }}>
-						<Alert severity='error' variant='outlined'>
-							{errorMessage}
-						</Alert>
-					</Box>
-				)}
-
-				<LoadingButton
-					type='submit'
-					variant='outlined'
-					style={buttonStyles}
-					loading={isLoginRequest}
-					disabled={
-						!formInitialized || !signupForm.isValid || !signupForm.dirty
-					}
-				>
-					NEW ACCOUNT
-				</LoadingButton>
+						</Box>
+						{errorMessage && (
+							<Box sx={{ marginTop: 2 }}>
+								<Alert severity='error' variant='outlined'>
+									{errorMessage}
+								</Alert>
+							</Box>
+						)}
+						<Box
+							sx={{
+								textAlign: 'center',
+							}}
+						>
+							<LoadingButton
+								type='submit'
+								variant='outlined'
+								style={buttonStyles}
+								loading={isLoginRequest}
+								disabled={
+									!formInitialized || !signupForm.isValid || !signupForm.dirty
+								}
+							>
+								NEW ACCOUNT
+							</LoadingButton>
+						</Box>
+					</Card>
+				</Box>
 			</Box>
 		</>
 	);
