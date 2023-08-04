@@ -21,7 +21,6 @@ import axios from 'axios';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
-import Navbar from '../components/Navbar';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -153,10 +152,10 @@ const Profile = () => {
 
 	return (
 		<>
-			<Navbar />
 			<Box
 				sx={{
 					margin: { xs: 'inherit', md: '0px auto' },
+					paddingBottom: '70px',
 				}}
 				onSubmit={profileForm.handleSubmit}
 			>
@@ -184,13 +183,13 @@ const Profile = () => {
 						alignItems: 'center',
 						margin: '0 auto',
 						width: '90%',
-						marginTop: '70px'
+						marginTop: '70px',
 					}}
 				>
 					<Card
 						style={{
-							padding: "20px 5px",
-							border: "2px solid #2e7d32"
+							padding: '20px 5px',
+							border: '2px solid grey',
 						}}
 					>
 						<Box

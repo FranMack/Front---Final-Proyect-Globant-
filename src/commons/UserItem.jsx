@@ -19,11 +19,11 @@ const UserItem = ({ user }) => {
 		>
 			<Box
 				sx={{
-					height: '60%', // Cambiamos la altura a 100%
+					height: '60%',
 					width: '10%',
 					border: '1px solid grey',
 					display: 'flex',
-					justifyContent: 'start',
+					justifyContent: 'center',
 					alignItems: 'center',
 					borderTopLeftRadius: '30px',
 					borderBottomLeftRadius: '30px',
@@ -33,7 +33,7 @@ const UserItem = ({ user }) => {
 			>
 				<Avatar
 					component='span'
-					sx={{height: `85%`, cursor: 'pointer',marginLeft:"10%" }}
+					sx={{height: `85%`, cursor: 'pointer' }}
 					src={user.url_img}
 				>
 					{!user.url_img && user.first_name && user.last_name
@@ -63,7 +63,6 @@ const UserItem = ({ user }) => {
 				}}
 			>
 				<p>{`${user.last_name} ${user.first_name} `}</p>
-              
 			</Box>
 
 			<Box

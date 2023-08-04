@@ -1,11 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as tmImage from '@teachablemachine/image';
 import '@tensorflow/tfjs';
 import Pako from 'pako';
-import ResponsiveAppBar from './Navbar';
 import ReportCamOn from './ReportCamOn';
 import Loading from '../view/Loading';
 import { Box, Button } from '@mui/material';
@@ -29,6 +26,8 @@ const ObjectDetection = () => {
 	const labelContainerRef = useRef(null);
 	const [item, setItem] = useState('');
 	const [selectedFile, setselectedFile] = useState(null);
+
+	console.log(labelContainer, item, selectedFile, setMaxPredictions);
 
 	const URL = 'https://teachablemachine.withgoogle.com/models/Fnqyc2KVZ/';
 	useEffect(() => {
@@ -184,11 +183,11 @@ const ObjectDetection = () => {
 
 	if (capturedImage) {
 		const urlCompressed = Pako.gzip(capturedImage, { to: 'string' });
+		console.log(urlCompressed);
 	}
 
 	return (
 		<>
-			<ResponsiveAppBar />
 			{!modelStart ? (
 				<Loading />
 			) : (

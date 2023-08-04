@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ResponsiveAppBar from '../components/Navbar';
 import {
 	FormControl,
 	InputLabel,
@@ -26,15 +25,11 @@ const OfficeSelection = () => {
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
 
-	const dateReport = new Date()
-		.toLocaleDateString('es-AR')
-		.split('/')
-		.reverse()
-		.join('-');
+	const dateReport = new Date().toISOString();
 
 	const user = useSelector(state => state.user);
-	const reportJson = localStorage.getItem("reportData")
-	const report=JSON.parse(reportJson)
+	const reportJson = localStorage.getItem('reportData');
+	const report = JSON.parse(reportJson);
 	const userLocation = useUserLocation();
 
 	const filterNearbyOffices = radius => {
@@ -94,107 +89,109 @@ const OfficeSelection = () => {
 			toast.success('Report create successfully');
 			navigate('/home');
 
-			localStorage.removeItem("reportData")
+			localStorage.removeItem('reportData');
 
 			await axios.put('http://localhost:5000/api/v1/office/selectDesk', {
 				officeId: selectedOffice._id,
 				deskNumber: selectedDeskNumber,
 			});
-
-			
 		} catch (error) {
 			console.error('Error submitting report:', error);
 		}
 	};
 
-	console.log("reportJson",reportJson)
 	return (
 		<>
-		{reportJson ? (<Box component='form' onSubmit={handleSubmitNewReport}>
-			<ResponsiveAppBar />
-			<Box
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					borderBottom: '1px solid grey',
-				}}
-			>
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						marginLeft: '15px',
-					}}
+			{reportJson ? (
+				<Box
+					component='form'
+					onSubmit={handleSubmitNewReport}
+					sx={{ height: '110vh' }}
 				>
-					<h3 style={{ marginLeft: '16px', color: 'grey' }}>
-						Select your nearby office
-					</h3>
-				</div>
-			</Box>
-			<Box
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					marginTop: '10px',
-				}}
-			>
-				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='nearby-office-label'>Nearby Offices</InputLabel>
-					<Select
-						labelId='nearby-office-label'
-						id='nearby-office-select'
-						value={selectedOffice ? selectedOffice._id : ''}
-						onChange={handleOfficeChange}
-						label='Nearby Offices'
-						MenuProps={{
-							PaperProps: {
-								style: {
-									maxHeight: '200px',
-									width: 'auto',
-									overflowX: 'auto',
-								},
-							},
+					<Box
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							borderBottom: '1px solid grey',
 						}}
 					>
-						<MenuItem value=''>
-							<em>None</em>
-						</MenuItem>
-						{filterNearbyOffices(10).map(office => (
-							<MenuItem key={office._id} value={office._id}>
-								{office.location}, {office.location}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-				{selectedOffice ? (
-					<>
-						<OfficeMap
-							officeId={selectedOffice}
-							setSelectedDeskNumber={setSelectedDeskNumber}
-						/>
-						<Button
-							type='submit'
-							variant='contained'
+						<div
 							style={{
-								backgroundColor: '#3AB54A',
-								color: '#FFFFFF',
-								borderRadius: '20px',
-								margin: '20px',
+								display: 'flex',
+								alignItems: 'center',
+								marginLeft: '15px',
 							}}
 						>
-							New Report
-						</Button>
-					</>
-				) : (
-					<Typography variant='body1'>
-						Please select your nearby office to see the map.
-					</Typography>
-				)}
-			</Box>
-		</Box>):(<NotFound/>)}
-		
-
+							<h3 style={{ marginLeft: '16px', color: 'grey' }}>
+								Select your nearby office
+							</h3>
+						</div>
+					</Box>
+					<Box
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							marginTop: '10px',
+						}}
+					>
+						<FormControl style={{ width: '90%' }}>
+							<InputLabel id='nearby-office-label'>Nearby Offices</InputLabel>
+							<Select
+								labelId='nearby-office-label'
+								id='nearby-office-select'
+								value={selectedOffice ? selectedOffice._id : ''}
+								onChange={handleOfficeChange}
+								label='Nearby Offices'
+								MenuProps={{
+									PaperProps: {
+										style: {
+											maxHeight: '200px',
+											width: 'auto',
+											overflowX: 'auto',
+										},
+									},
+								}}
+							>
+								<MenuItem value=''>
+									<em>None</em>
+								</MenuItem>
+								{filterNearbyOffices(10).map(office => (
+									<MenuItem key={office._id} value={office._id}>
+										{office.location}, {office.location}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+						{selectedOffice ? (
+							<>
+								<OfficeMap
+									officeId={selectedOffice}
+									setSelectedDeskNumber={setSelectedDeskNumber}
+								/>
+								<Button
+									type='submit'
+									variant='contained'
+									style={{
+										backgroundColor: '#3AB54A',
+										color: '#FFFFFF',
+										borderRadius: '20px',
+										margin: '20px',
+									}}
+								>
+									New Report
+								</Button>
+							</>
+						) : (
+							<Typography variant='body1'>
+								Please select your nearby office to see the map.
+							</Typography>
+						)}
+					</Box>
+				</Box>
+			) : (
+				<NotFound />
+			)}
 		</>
 	);
 };

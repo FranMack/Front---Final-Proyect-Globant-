@@ -1,5 +1,7 @@
+
 import React from 'react';
 import Navbar from '../components/Navbar';
+
 import AdminReportsView from '../view/Admin.reports.state';
 
 import { Box, Grid } from '@mui/material';
@@ -8,6 +10,7 @@ const AdminDashboard = () => {
 
 	return (
 		<>
+
 			<Navbar />
 			<Grid
 					container
@@ -24,6 +27,7 @@ const AdminDashboard = () => {
 						<h5 style={{ marginLeft: '8px', color: 'grey' }}>ADMIN DASHBOARD</h5>
 					</Grid>
 				</Grid>
+
 			<Box
 				style={{
 					display: 'flex',

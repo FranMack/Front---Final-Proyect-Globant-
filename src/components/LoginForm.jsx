@@ -38,9 +38,6 @@ const LoginForm = () => {
 				dispatch(setLoginModalOpen(false));
 				navigate('/home');
 				toast.success('Login successful');
-				setTimeout(() => {
-					window.location.reload();
-				}, 1000);
 			} else {
 				setErrorMessage(err.message);
 				toast.error(err.message);

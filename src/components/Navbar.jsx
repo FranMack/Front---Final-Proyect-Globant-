@@ -10,11 +10,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../state/features/userSlice';
 import { setLoginModalOpen } from '../state/features/loginModalSlice';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import { setReportModalOpen } from '../state/features/reportModalSlice';
 import ButtonHome from '../commons/ButtonHome';
-import { Tooltip } from '@mui/material';
 import ButtonAdmin from '../commons/ButtonAdmin';
+import ButtonReportOpenModal from '../commons/ButtonReportOpenModal';
 
 function ResponsiveAppBar() {
 	const dispatch = useDispatch();
@@ -35,32 +33,11 @@ function ResponsiveAppBar() {
 					<ButtonHome />
 					{currentPath != 'report-cam-off' &&
 						currentPath != 'reports/64c033117a8c2257ae1d716a' && (
-							<Tooltip title='¡New report!' placement='left'>
-								<Button
-									variant='contained'
-									color='success'
-									className='button-rotate'
-									sx={{
-										marginRight: '10px',
-										backgroundColor: '#3AB54A',
-										minWidth: '60px',
-										width: '60px',
-										height: '60px',
-										borderRadius: '50%',
-										position: 'fixed',
-										right: 0,
-										bottom: '100px',
-										zIndex: 99,
-									}}
-									onClick={() => dispatch(setReportModalOpen(true))}
-								>
-									<PostAddIcon className='icon-rotate' fontSize='large' />
-								</Button>
-							</Tooltip>
+							<ButtonReportOpenModal />
 						)}
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
-					{user.is_admin === true && <ButtonAdmin />}
+					{user?.is_admin === true && <ButtonAdmin />}
 					<Button
 						component={Link}
 						to='/reports'
