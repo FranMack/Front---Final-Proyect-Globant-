@@ -114,7 +114,16 @@ const AdminReportView = () => {
 			}}
 		>
 
-			<Grid container spacing={3} sx={{ marginBottom: '30px' }}>
+{loading ? (
+				<Box
+					sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+				>
+					<CircularProgress />
+				</Box>
+			) : (
+
+			<Grid>
+		<Grid container spacing={3} sx={{ marginBottom: '30px' }}>
 				<Grid item xs={12} sm={4} md={3}>
 					<Typography
 						component='label'
@@ -231,126 +240,113 @@ const AdminReportView = () => {
 				</Grid>
 			</Grid>
 
-			<Box>
-				{loading ? (
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							marginTop: '20px',
-						}}
-					>
-						<CircularProgress />
-					</Box>
-				) : (
-					<Grid container spacing={2}>
-						{filteredReports.map(report => (
-							<Grid item key={report._id} xs={12} sm={6} md={4} lg={3} xl={2}>
-								<CardActionArea>
-									<Card>
-										<CardContent>
-											<Typography variant='h5' component='h2'>
-												{report.user} Report
-											</Typography>
-											<Typography variant='h5' component='h2'>
-												{report.title}
-											</Typography>
-											<Typography variant='subtitle1' component='h2'>
-												Date: {formatDate(report.date_report)}
-											</Typography>
-											<Typography className='info-text' noWrap>
-												<strong>Device: {report.device}</strong>
-											</Typography>
+	
+				<Grid container spacing={2}>
+					{filteredReports.map(report => (
+						<Grid item key={report._id} xs={12} sm={6} md={4} lg={3} xl={2}>
+							<CardActionArea>
+								<Card>
+									<CardContent>
+										<Typography variant='h5' component='h2'>
+											{report.user} Report
+										</Typography>
+										<Typography variant='h5' component='h2'>
+											{report.title}
+										</Typography>
+										<Typography variant='subtitle1' component='h2'>
+											Date: {formatDate(report.date_report)}
+										</Typography>
+										<Typography className='info-text' noWrap>
+											<strong>Device: {report.device}</strong>
+										</Typography>
 
-											<Typography className='info-text' noWrap>
-												Description: {report.description}
-											</Typography>
-											<Typography className='info-text' noWrap>
-												Box Number: {report.box_number}
-											</Typography>
-											<Typography className='info-text' noWrap>
-												Home Office: {report.homeoffice ? 'Yes' : 'No'}
-											</Typography>
-											<Typography
-												className='info-text'
-												noWrap
-												title={report.location}
-											>
-												Location:
-												{report.location.length > 20
-													? `${report.location.substring(0, 20)}...`
-													: report.location}
-											</Typography>
-											<Typography className='info-text' noWrap>
-												Status Report: {JSON.stringify(report.status_report)}
-											</Typography>
-											<Box
-												className='image-container'
-												style={{ height: '100px', overflow: 'hidden' }}
-											>
-												<img
-													src={report.url_img}
-													alt='Report'
-													style={{
-														width: '100%',
-														height: '100%',
-														objectFit: 'cover',
-													}}
-												/>
-											</Box>
-											<Box display='flex' justifyContent='space-between' mt={2}>
-												{report.status_report === 'Open' && (
-													<Button
-														variant='contained'
-														size='small'
-														onClick={() =>
-															handleStatusChange(report._id, 'In progress')
-														}
-													>
-														In progress
-													</Button>
-												)}
+										<Typography className='info-text' noWrap>
+											Description: {report.description}
+										</Typography>
+										<Typography className='info-text' noWrap>
+											Box Number: {report.box_number}
+										</Typography>
+										<Typography className='info-text' noWrap>
+											Home Office: {report.homeoffice ? 'Yes' : 'No'}
+										</Typography>
+										<Typography
+											className='info-text'
+											noWrap
+											title={report.location}
+										>
+											Location:{' '}
+											{report.location.length > 20
+												? `${report.location.substring(0, 20)}...`
+												: report.location}
+										</Typography>
+										<Typography className='info-text' noWrap>
+											Status Report: {JSON.stringify(report.status_report)}
+										</Typography>
 
-												{report.status_report === 'In progress' && (
-													<Button
-														variant='contained'
-														size='small'
-														onClick={() =>
-															handleStatusChange(report._id, 'Close')
-														}
-													>
-														Close
-													</Button>
-												)}
-												{report.status_report === 'Close' && (
-													<Button
-														variant='contained'
-														size='small'
-														onClick={() =>
-															handleStatusChange(report._id, 'Open')
-														}
-													>
-														Reopen
-													</Button>
-												)}
-
+										<Box
+											className='image-container'
+											style={{ height: '100px', overflow: 'hidden' }}
+										>
+											<img
+												src={report.url_img}
+												alt='Report'
+												style={{
+													width: '100%',
+													height: '100%',
+													objectFit: 'cover',
+												}}
+											/>
+										</Box>
+										<Box display='flex' justifyContent='space-between' mt={2}>
+											{report.status_report === 'Open' && (
 												<Button
 													variant='contained'
-													onClick={() => handleDeleteReport(report._id)}
-													color='error'
 													size='small'
+													onClick={() =>
+														handleStatusChange(report._id, 'In progress')
+													}
 												>
-													DELETE
+													In progress
 												</Button>
-											</Box>
-										</CardContent>
-									</Card>
-								</CardActionArea>
-							</Grid>
-						))}
-					</Grid>
-				)}
-			</Box>
+											)}
+
+											{report.status_report === 'In progress' && (
+												<Button
+													variant='contained'
+													size='small'
+													onClick={() =>
+														handleStatusChange(report._id, 'Close')
+													}
+												>
+													Close
+												</Button>
+											)}
+											{report.status_report === 'Close' && (
+												<Button
+													variant='contained'
+													size='small'
+													onClick={() => handleStatusChange(report._id, 'Open')}
+												>
+													Reopen
+												</Button>
+											)}
+
+											<Button
+												variant='contained'
+												onClick={() => handleDeleteReport(report._id)}
+												color='error'
+												size='small'
+											>
+												DELETE
+											</Button>
+										</Box>
+									</CardContent>
+								</Card>
+							</CardActionArea>
+						</Grid>
+					))} 
+				</Grid></Grid>
+			)}
 		</Box>
 	);
 };
