@@ -31,7 +31,9 @@ const AdminReportView = () => {
 	const [userFilter, setUserFilter] = useState('');
 	const [locationFilter, setLocationFilter] = useState('');
 	const [deviceFilter, setDeviceFilter] = useState('');
+	const [deletingReportId, setDeletingReportId] = useState(null);
 	const allDevices = [...new Set(reports.map(report => report.device))];
+	const [statusChanging, setStatusChanging] = useState(null);
 	const MAX_LOCATION_LENGTH = 20;
 
 	const fetchReports = useCallback(async () => {
@@ -67,43 +69,40 @@ const AdminReportView = () => {
 		return new Date(date).toLocaleDateString(undefined, options);
 	};
 
-	const handleStatusChange = (reportId, newStatus) => {
-		axios
-			.put(`http://localhost:5000/api/v1/userAdmin/status-edit/${reportId}`, {
-				status_report: newStatus,
-			})
-			.then(() => {
-				setReports(prevReports =>
-					prevReports.map(report =>
-						report._id === reportId ? { ...report, status: newStatus } : report,
-					),
-				);
-				console.log('Status updated successfully');
-			})
-			.catch(error => {
-				console.log(error);
-			});
+	const handleStatusChange = async (reportId, newStatus) => {
+		try {
+			setStatusChanging(reportId);
+			await axios.put(
+				`http://localhost:5000/api/v1/userAdmin/status-edit/${reportId}`,
+				{
+					status_report: newStatus,
+				},
+			);
+			console.log('Status updated successfully');
+		} catch (error) {
+			console.error('Error updating status:', error);
+		} finally {
+			setStatusChanging(null);
+		}
 	};
 
 	const handleDeleteReport = async reportId => {
 		try {
+			setDeletingReportId(reportId);
 			await axios.delete(
 				`http://localhost:5000/api/v1/userAdmin/report/delete/${reportId}`,
 			);
-
-			setReports(prevReports =>
-				prevReports.filter(report => report._id !== reportId),
-			);
+			console.log('Report deleted successfully');
 		} catch (error) {
 			console.error('Error deleting report:', error);
+		} finally {
+			setDeletingReportId(null);
 		}
 	};
 
 	const handleLocationFilterChange = event => {
 		setLocationFilter(event.target.value);
 	};
-
-	console.log('reo', reports);
 
 	return (
 		<Box
@@ -238,7 +237,6 @@ const AdminReportView = () => {
 					No reports found matching the applied filters.
 				</Typography>
 			)}
-
 			{!loading && filteredReports.length > 0 && (
 				<Grid container spacing={2}>
 					{filteredReports.map(report => (
@@ -297,47 +295,60 @@ const AdminReportView = () => {
 											/>
 										</Box>
 										<Box display='flex' justifyContent='space-between' mt={2}>
-											{report.status_report === 'Open' && (
-												<Button
-													variant='contained'
-													size='small'
-													onClick={() =>
-														handleStatusChange(report._id, 'In progress')
-													}
-												>
-													In progress
-												</Button>
-											)}
+											{statusChanging === report._id ? (
+												<CircularProgress size={24} />
+											) : (
+												<>
+													{report.status_report === 'Open' && (
+														<Button
+															variant='contained'
+															size='small'
+															onClick={() =>
+																handleStatusChange(report._id, 'In progress')
+															}
+														>
+															In progress
+														</Button>
+													)}
 
-											{report.status_report === 'In progress' && (
-												<Button
-													variant='contained'
-													size='small'
-													onClick={() =>
-														handleStatusChange(report._id, 'Close')
-													}
-												>
-													Close
-												</Button>
-											)}
-											{report.status_report === 'Close' && (
-												<Button
-													variant='contained'
-													size='small'
-													onClick={() => handleStatusChange(report._id, 'Open')}
-												>
-													Reopen
-												</Button>
-											)}
+													{report.status_report === 'In progress' && (
+														<Button
+															variant='contained'
+															size='small'
+															onClick={() =>
+																handleStatusChange(report._id, 'Close')
+															}
+														>
+															Close
+														</Button>
+													)}
 
-											<Button
-												variant='contained'
-												onClick={() => handleDeleteReport(report._id)}
-												color='error'
-												size='small'
-											>
-												DELETE
-											</Button>
+													{report.status_report === 'Close' && (
+														<Button
+															variant='contained'
+															size='small'
+															onClick={() =>
+																handleStatusChange(report._id, 'Open')
+															}
+														>
+															Reopen
+														</Button>
+													)}
+
+													<Button
+														variant='contained'
+														onClick={() => handleDeleteReport(report._id)}
+														color='error'
+														size='small'
+													>
+														{deletingReportId === report._id ? (
+															<CircularProgress size={20} color='inherit' />
+														) : (
+															'DELETE'
+														)}
+													</Button>
+												</>
+											)}
 										</Box>
 									</CardContent>
 								</Card>
