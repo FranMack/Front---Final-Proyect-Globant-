@@ -3,6 +3,7 @@ import loginModalSlice from './features/loginModalSlice';
 import reportModalSlice from './features/reportModalSlice';
 import officeHomeModalSlice from './features/officeHomeModalSlice';
 import userSlice from './features/userSlice';
+import appStateSlice from './features/appStateSlice';
 import reducerReport from './report';
 
 const store = configureStore({
@@ -12,6 +13,7 @@ const store = configureStore({
 		officeHomeModal: officeHomeModalSlice,
 		user: userSlice,
 		report: reducerReport,
+		appState: appStateSlice,
 	},
 });
 

@@ -17,7 +17,6 @@ import { Tooltip } from '@mui/material';
 import ButtonAdmin from '../commons/ButtonAdmin';
 
 function ResponsiveAppBar() {
-	
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -28,7 +27,7 @@ function ResponsiveAppBar() {
 		navigate('/');
 		dispatch(setLoginModalOpen(true));
 	};
-    const user = useSelector((state=> state.user))
+	const user = useSelector(state => state.user);
 	return (
 		<AppBar position='static' sx={{ background: 'white' }}>
 			<Container maxWidth='xl'>
@@ -61,7 +60,7 @@ function ResponsiveAppBar() {
 						)}
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
-					{user.is_admin === true && <ButtonAdmin />}
+					{user?.is_admin === true && <ButtonAdmin />}
 					<Button
 						component={Link}
 						to='/reports'

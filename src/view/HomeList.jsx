@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import GeocodeUser from '../utils/hookGeocodeUser';
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import ResponsiveAppBar from '../components/Navbar';
 import { FormControl, Input, Box, Button } from '@mui/material';
 import useUserLocation from '../utils/hookUserLocation';
 import { useSelector } from 'react-redux';
@@ -18,12 +17,9 @@ const HomeList = () => {
 	const [selectedOffice, setSelectedOffice] = useState('');
 	const [selectedDeskNumber, setSelectedDeskNumber] = useState(null);
 
-
 	const [adress, setAdress] = useState(null);
 	const [edit, setEdit] = useState(false);
 	const [editButton, setEditButton] = useState('EDIT');
-
-
 
 	const handleAdress = event => {
 		setAdress(event.target.value);
@@ -40,8 +36,6 @@ const HomeList = () => {
 		}
 	};
 
-
-
 	const dateReport = new Date()
 		.toLocaleDateString('es-AR')
 		.split('/')
@@ -51,8 +45,6 @@ const HomeList = () => {
 	const user = useSelector(state => state.user);
 	const report = useSelector(state => state.report);
 	const userLocation = useUserLocation();
-
-
 
 	const handleSubmitNewReport = async e => {
 		e.preventDefault();
@@ -99,7 +91,6 @@ const HomeList = () => {
 				justifyContent: 'center',
 			}}
 		>
-			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',

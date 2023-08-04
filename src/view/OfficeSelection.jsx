@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ResponsiveAppBar from '../components/Navbar';
 import {
 	FormControl,
 	InputLabel,
@@ -102,7 +101,6 @@ const OfficeSelection = () => {
 	};
 	return (
 		<Box component='form' onSubmit={handleSubmitNewReport}>
-			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',

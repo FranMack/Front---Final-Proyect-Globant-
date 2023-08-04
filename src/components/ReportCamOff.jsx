@@ -17,7 +17,6 @@ import {
 	InputAdornment,
 } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import ResponsiveAppBar from './Navbar';
 import { setOfficeHomeModalOpen } from '../state/features/officeHomeModalSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -98,7 +97,6 @@ const ReportCamOff = () => {
 
 	return (
 		<>
-			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',
@@ -180,7 +178,7 @@ const ReportCamOff = () => {
 				</Box>
 
 				<FormControl style={{ width: '90%' }}>
-					<InputLabel id='demo-simple-select-label'>Item</InputLabel>
+					<InputLabel id='demo-simple-select-label'>Element</InputLabel>
 					<Select
 						id='demo-simple-select'
 						value={item}

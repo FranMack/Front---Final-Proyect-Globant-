@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 
 import { Box, Button, Pagination, Stack } from '@mui/material';
 import SearchUsers from '../commons/SearchUsers';
@@ -15,7 +14,6 @@ const AdminUsersList = () => {
 	const [users, setUsers] = useState([]);
 	const [search, setSearch] = useState('');
 	const [searchLocation, setSearchLocation] = useState(null);
-	
 
 	const user = useSelector(state => state.user);
 
@@ -24,21 +22,20 @@ const AdminUsersList = () => {
 	const itemsPerPage = 8;
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
-	const paginatedReports = orderAlphabetically(users).slice(startIndex, endIndex);
+	const paginatedReports = orderAlphabetically(users).slice(
+		startIndex,
+		endIndex,
+	);
 
 	const handlePageChange = (event, newPage) => {
 		setCurrentPage(newPage);
 	};
 
-	const handleSearchLocation = (e) => {
-
-       
-            setSearchLocation(e.target.value);
-      
-		
+	const handleSearchLocation = e => {
+		setSearchLocation(e.target.value);
 	};
 
-	const handleSearch = (e) => {
+	const handleSearch = e => {
 		setSearch(e.target.value);
 	};
 
@@ -54,7 +51,7 @@ const AdminUsersList = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:5000/api/v1/userAdmin/users-list")
+			.get('http://localhost:5000/api/v1/userAdmin/users-list')
 			.then(res => setUsers(res.data))
 			.catch(error => {
 				console.log(error);
@@ -79,13 +76,12 @@ const AdminUsersList = () => {
 				.then(res => setUsers(res.data))
 				.catch(err => console.log(err));
 		}
-	}, [searchLocation])
+	}, [searchLocation]);
 
-  console.log("searchlocation",searchLocation)
+	console.log('searchlocation', searchLocation);
 
 	return (
 		<>
-			<Navbar />
 			<Box
 				sx={{
 					display: 'flex',
@@ -119,11 +115,11 @@ const AdminUsersList = () => {
 				>
 					<SearchUsers
 						search={search}
-                        handleSearch={handleSearch}
+						handleSearch={handleSearch}
 						handleSearchLocation={handleSearchLocation}
 						searchLocation={searchLocation}
-                        showAllTheUsers={showAllTheUsers}
-				
+						showAllTheUsers={showAllTheUsers}
+
 						//showAllTheReports={showAllTheReports}
 					/>
 				</Box>

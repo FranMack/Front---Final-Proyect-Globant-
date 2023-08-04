@@ -11,6 +11,7 @@ import {
 	MenuItem,
 	Select,
 } from '@mui/material';
+import Loading from './Loading';
 
 const AdminReports = () => {
 	const [reports, setReports] = useState([]);
@@ -144,7 +145,9 @@ const AdminReports = () => {
 				</Select>
 			</Box>
 			{loading ? (
-				<Typography>Loading...</Typography>
+				<Typography>
+					<Loading />
+				</Typography>
 			) : (
 				<Grid container spacing={2}>
 					{filteredReports.map(report => (

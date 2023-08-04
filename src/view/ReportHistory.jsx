@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 
 import { Box, Button, Pagination, Stack } from '@mui/material';
 import SearchInput from '../commons/SearchInput';
@@ -16,8 +15,8 @@ const ReportHistory = () => {
 	const [date, setDate] = useState(null);
 	const [isoDate, setIsoDate] = useState(null);
 
-	const user = useParams().username || useSelector(state => state.user).username;
-	
+	const user =
+		useParams().username || useSelector(state => state.user).username;
 
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -79,11 +78,9 @@ const ReportHistory = () => {
 		}
 	}, [date]);
 
-
-console.log(useParams().username)
+	console.log(useParams().username);
 	return (
 		<>
-			<Navbar />
 			<Box
 				sx={{
 					display: 'flex',
