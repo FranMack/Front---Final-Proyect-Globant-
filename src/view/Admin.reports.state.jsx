@@ -91,7 +91,7 @@ const AdminReportView = () => {
 			<Box
 				style={{
 					display: 'flex',
-					justifyContent: 'center', // Align the filters to the right
+					justifyContent: 'center',
 					alignItems: 'center',
 				}}
 			>

@@ -7,8 +7,6 @@ const FooterWrapper = styled('footer')({
 	backgroundColor: 'rgba(0, 0, 0, 0.8)',
 	color: '#fff',
 	padding: '16px',
-	position: 'absolute',
-	width: '100%',
 });
 
 const Footer = () => {
