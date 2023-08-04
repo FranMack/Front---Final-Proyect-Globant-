@@ -1,13 +1,5 @@
 import './styles/App.css';
-import React, { useEffect, useState } from 'react';
-import Start from './view/Start.view';
-import Profile from './components/Profile.jsx';
-import Register from './view/Register.view';
-import Loading from './view/Loading';
-import NotFound from './view/NotFound.view';
-import ReportHistory from './view/ReportHistory';
-import ReportCamOff from './components/ReportCamOff';
-import ObjectDetection from './components/ObjectDetection';
+import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import routes from './routes/routes';
@@ -22,8 +14,14 @@ import NotFound from './view/NotFound.view';
 import AdminDeskState from './view/AdminDeskState';
 
 import AdminDashboard from './components/AdminDashboard';
+import AdminUsersList from './view/Admin.users.list';
+import AdminReportView from './view/Admin.reports.state';
+import { useSelector } from 'react-redux';
 
 function App() {
+	const user = useSelector(state => state.user);
+
+	const isAdmin = user && user.is_admin;
 	return (
 		<>
 			<ToastContainer />
@@ -64,14 +62,11 @@ function App() {
 					)}
 				</Route>
 				<Route path='*' element={<NotFound />} />
-				<Route path='/office-list' element={<OfficeSelection />} />
-				<Route path='/home-list' element={<HomeList />} />
-				<Route path='/users-list/:username' element={<ReportHistory />} />
 
 				{isAdmin && (
 					<>
 						<Route path='/users-list' element={<AdminUsersList />} />
-						<Route path='/admin-reports' element={<AdminReports />} />
+						<Route path='/admin-reports' element={<AdminReportView />} />
 						<Route path='/admin-dashboard' element={<AdminDashboard />} />
 						<Route path='/desk-status' element={<AdminDeskState />} />
 					</>

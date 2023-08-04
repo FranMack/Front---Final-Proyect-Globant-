@@ -11,7 +11,9 @@ import ReportCamOff from '../components/ReportCamOff';
 import OfficeSelection from '../view/OfficeSelection';
 import HomeList from '../view/HomeList';
 import AdminUsersList from '../view/Admin.users.list';
-import AdminReports from '../view/Admin.reports.state';
+import AdminReportView from '../view/Admin.reports.state';
+import AdminDashboard from '../components/AdminDashboard';
+import AdminDeskState from '../view/AdminDeskState';
 
 const routes = [
 	{
@@ -74,7 +76,15 @@ const routes = [
 	},
 	{
 		path: '/admin-reports',
-		element: <AdminReports />,
+		element: <AdminReportView />,
+	},
+	{
+		path: '/admin-dashboard',
+		element: <AdminDashboard />,
+	},
+	{
+		path: '/desk-status',
+		element: <AdminDeskState />,
 	},
 ];
 

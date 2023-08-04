@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
 import AdminReportsView from '../view/Admin.reports.state';
 import AdminUsersList from '../view/Admin.users.list';
 
@@ -21,8 +20,6 @@ const AdminDashboard = () => {
 
 	return (
 		<>
-			<Navbar />
-
 			<Box style={{ padding: '10px' }}>
 				<h2>Admin Dashboard:</h2>
 			</Box>
