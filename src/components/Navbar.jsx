@@ -28,7 +28,7 @@ function ResponsiveAppBar() {
 	const user = useSelector(state => state.user);
 	return (
 		<AppBar position='static' sx={{ background: 'white' }}>
-			<Container maxWidth='xl'>
+			<Container sx={{ maxWidth: 'inherit !important' }}>
 				<Toolbar disableGutters>
 					<ButtonHome />
 					{currentPath != 'report-cam-off' &&
@@ -67,7 +67,7 @@ function ResponsiveAppBar() {
 						sx={{
 							color: '#C5DA2D',
 							display: { xs: 'none', md: 'flex' },
-							mr: 2,
+							mr: 0,
 						}}
 						onClick={handleLogout}
 					>

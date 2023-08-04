@@ -10,8 +10,6 @@ import ObjectDetection from '../components/ObjectDetection';
 import ReportCamOff from '../components/ReportCamOff';
 import OfficeSelection from '../view/OfficeSelection';
 import HomeList from '../view/HomeList';
-import AdminUsersList from '../view/Admin.users.list';
-import AdminReportView from '../view/Admin.reports.state';
 import AdminDashboard from '../components/AdminDashboard';
 import AdminDeskState from '../view/AdminDeskState';
 
@@ -25,66 +23,71 @@ const routes = [
 		path: '/register',
 		element: <Register />,
 		state: 'register',
+		admin: false,
 	},
 	{
 		path: '/home',
 		element: <Home />,
 		state: 'home',
+		admin: false,
 	},
 	{
 		path: 'profile',
 		element: <Profile />,
 		state: 'profile',
+		admin: false,
 	},
 	{
 		path: 'reports',
 		element: <ReportHistory />,
 		state: 'reports',
+		admin: false,
 	},
 	{
 		path: '/reports/:id',
 		element: <ReportDetail />,
 		state: 'reports.detail',
+		admin: false,
 	},
 	{
 		path: '/map',
 		element: <OfficeMap />,
+		admin: false,
 	},
 	{
 		path: '/report-cam-on',
 		element: <ObjectDetection />,
+		admin: false,
 	},
 	{
 		path: '/report-cam-off',
 		element: <ReportCamOff />,
+		admin: false,
 	},
 	{
 		path: '/office-list',
 		element: <OfficeSelection />,
+		admin: false,
 	},
 	{
 		path: '/home-list',
 		element: <HomeList />,
-	},
-	{
-		path: '/users-list',
-		element: <AdminUsersList />,
+		admin: false,
 	},
 	{
 		path: '/users-list/:username',
 		element: <ReportHistory />,
-	},
-	{
-		path: '/admin-reports',
-		element: <AdminReportView />,
+		admin: false,
 	},
 	{
 		path: '/admin-dashboard',
 		element: <AdminDashboard />,
+		admin: true,
 	},
 	{
 		path: '/desk-status',
 		element: <AdminDeskState />,
+		admin: true,
 	},
 ];
 

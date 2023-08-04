@@ -46,9 +46,9 @@ const Profile = () => {
 			.matches(/^[A-Za-z]+$/, 'Last name should contain only letters')
 			.required('Last name is required'),
 		email: Yup.string().email('Invalid email').required('Email is required'),
-		ubication: Yup.string()
-			.min(3, 'Ubication minimum 3 characters')
-			.required('Ubication is required'),
+		location: Yup.string()
+			.min(3, 'location minimum 3 characters')
+			.required('location is required'),
 		phoneNumber: Yup.number()
 			.required('Phone number is required')
 			.typeError('phone number must be a number')
@@ -95,7 +95,7 @@ const Profile = () => {
 			firstName: user.first_name,
 			lastName: user.last_name,
 			email: user.email,
-			ubication: user.ubication,
+			location: user.location,
 			phoneNumber: user.phone_number,
 			office: user.office ? user.office : null,
 		},
@@ -107,7 +107,7 @@ const Profile = () => {
 					last_name: values.lastName,
 					username: user.username,
 					email: values.email,
-					ubication: values.ubication,
+					location: values.location,
 					phone_number: values.phoneNumber,
 					url_img: image,
 					office: selectedOffice,
@@ -342,19 +342,19 @@ const Profile = () => {
 							</FormControl>
 							<FormControl sx={{ width: '100%', marginTop: '10px' }}>
 								<Input
-									value={profileForm.values.ubication}
-									id='ubication'
+									value={profileForm.values.location}
+									id='location'
 									type='text'
 									onChange={profileForm.handleChange}
 									disabled={!editing}
-									aria-describedby='ubication-helper'
+									aria-describedby='location-helper'
 									sx={{ borderBottom: '1.5px solid #808080' }}
 								/>
 
-								{!profileForm.errors.ubication ? (
+								{!profileForm.errors.location ? (
 									<FormHelperText
 										sx={{ fontSize: '11px', textAlign: 'center' }}
-										id='ubication-helper'
+										id='location-helper'
 									>
 										Location
 									</FormHelperText>
@@ -366,7 +366,7 @@ const Profile = () => {
 											color: 'red',
 										}}
 									>
-										{profileForm.errors.ubication}
+										{profileForm.errors.location}
 									</FormHelperText>
 								)}
 							</FormControl>

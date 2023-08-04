@@ -13,6 +13,7 @@ import {
 	MenuItem,
 	CircularProgress,
 } from '@mui/material';
+import Loading from './Loading';
 
 const styles = {
 	label: {
@@ -120,7 +121,7 @@ const AdminReportView = () => {
 						marginTop: '20px',
 					}}
 				>
-					<CircularProgress />
+					<Loading />
 				</Box>
 			) : (
 				<Grid container spacing={3} sx={{ marginBottom: '10px' }}>
