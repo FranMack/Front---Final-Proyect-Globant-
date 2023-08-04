@@ -1,9 +1,5 @@
-
 import React from 'react';
-import Navbar from '../components/Navbar';
-
 import AdminReportsView from '../view/Admin.reports.state';
-
 import { Box, Grid } from '@mui/material';
 
 const AdminDashboard = () => {
@@ -11,7 +7,6 @@ const AdminDashboard = () => {
 	return (
 		<>
 
-			<Navbar />
 			<Grid
 					container
 					spacing={2}
@@ -29,10 +24,10 @@ const AdminDashboard = () => {
 				</Grid>
 
 			<Box
-				style={{
+				sx={{
 					display: 'flex',
 					justifyContent: 'center',
-					marginTop: '20px',
+					margin: '20px'
 				}}
 			>
 				 <AdminReportsView />

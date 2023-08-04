@@ -114,20 +114,23 @@ const AdminReportView = () => {
 			}}
 		>
 
-			<Grid container spacing={3} sx={{ marginBottom: '10px' }}>
+			<Grid container spacing={3} sx={{ marginBottom: '30px' }}>
 				<Grid item xs={12} sm={4} md={3}>
 					<Typography
 						component='label'
 						htmlFor='status-filter'
 						style={styles.label}
 					>
-						Filter by Report Status:
+						Status:
 					</Typography>
 					<Select
 						id='status-filter'
 						value={statusFilter}
 						onChange={event => setStatusFilter(event.target.value)}
 						style={styles.select}
+						sx={{
+							marginLeft: "33px"
+						}}
 					>
 						<MenuItem value=''>
 							<em>All</em>
@@ -144,13 +147,16 @@ const AdminReportView = () => {
 						htmlFor='status-filter'
 						style={styles.label}
 					>
-						Filter by Users Report:
+						Users:
 					</Typography>
 					<Select
 						id='user-filter'
 						value={userFilter}
 						onChange={event => setUserFilter(event.target.value)}
 						style={styles.select}
+						sx={{
+							marginLeft: "37px"
+						}}
 					>
 						<MenuItem value=''>All</MenuItem>
 						{allUsers.map(user => (
@@ -167,13 +173,16 @@ const AdminReportView = () => {
 						htmlFor='location-filter'
 						style={styles.label}
 					>
-						Filter by Users Location:
+						Location:
 					</Typography>
 					<Select
 						id='location-filter'
 						value={locationFilter}
 						onChange={handleLocationFilterChange}
 						style={styles.select}
+						sx={{
+							marginLeft: "15px"
+						}}
 					>
 						<MenuItem value=''>All Locations</MenuItem>
 						{reports.map(report => {
@@ -201,13 +210,16 @@ const AdminReportView = () => {
 						htmlFor='status-filter'
 						style={styles.label}
 					>
-						Filter by Device:
+						Device: 
 					</Typography>
 					<Select
 						id='device-filter'
 						value={deviceFilter}
 						onChange={event => setDeviceFilter(event.target.value)}
 						style={styles.select}
+						sx={{
+							marginLeft: "30px"
+						}}
 					>
 						<MenuItem value=''>All</MenuItem>
 						{allDevices.map(device => (
@@ -272,7 +284,6 @@ const AdminReportView = () => {
 											<Typography className='info-text' noWrap>
 												Status Report: {JSON.stringify(report.status_report)}
 											</Typography>
-
 											<Box
 												className='image-container'
 												style={{ height: '100px', overflow: 'hidden' }}
