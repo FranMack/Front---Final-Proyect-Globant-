@@ -14,11 +14,25 @@ import {
 	CircularProgress,
 } from '@mui/material';
 
+const styles = {
+	label: {
+		fontWeight: 'bold',
+		marginBottom: '8px',
+	},
+	select: {
+		minWidth: '180px',
+	},
+};
+
 const AdminReportView = () => {
 	const [reports, setReports] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [statusFilter, setStatusFilter] = useState('');
 	const [userFilter, setUserFilter] = useState('');
+	const [locationFilter, setLocationFilter] = useState('');
+	const [deviceFilter, setDeviceFilter] = useState('');
+	const allDevices = [...new Set(reports.map(report => report.device))];
+	const MAX_LOCATION_LENGTH = 20;
 
 	const fetchReports = useCallback(async () => {
 		try {
@@ -35,11 +49,16 @@ const AdminReportView = () => {
 		fetchReports();
 	}, [reports]);
 
-	const filteredReports = reports.filter(
-		report =>
-			(!statusFilter || report.status_report === statusFilter) &&
-			(!userFilter || report.user === userFilter),
-	);
+	const filteredReports = reports.filter(report => {
+		const filterByStatus =
+			!statusFilter || report.status_report === statusFilter;
+		const filterByUser = !userFilter || report.user === userFilter;
+		const filterByLocation =
+			!locationFilter || report.location === locationFilter;
+		const filterDevice = !deviceFilter || report.device === deviceFilter;
+
+		return filterByStatus && filterByUser && filterByLocation && filterDevice;
+	});
 
 	const allUsers = [...new Set(reports.map(report => report.user))];
 
@@ -80,6 +99,12 @@ const AdminReportView = () => {
 		}
 	};
 
+	const handleLocationFilterChange = event => {
+		setLocationFilter(event.target.value);
+	};
+
+	console.log('reo', reports);
+
 	return (
 		<Box
 			sx={{
@@ -88,56 +113,126 @@ const AdminReportView = () => {
 				justifyContent: 'center',
 			}}
 		>
-			<Box
-				style={{
-					display: 'flex',
-					justifyContent: 'center', // Align the filters to the right
-					alignItems: 'center',
-				}}
-			>
-				<Typography component='label' htmlFor='status-filter'>
-					Filter by Report Status:
-				</Typography>
-				<Select
-					id='status-filter'
-					value={statusFilter}
-					onChange={event => setStatusFilter(event.target.value)}
-					style={{ margin: '10px' }}
-				>
-					<MenuItem value=''>All</MenuItem>
-					<MenuItem value='Open'>Open</MenuItem>
-					<MenuItem value='In progress'>In progress</MenuItem>
-					<MenuItem value='Close'>Close</MenuItem>
-				</Select>
-
-				<Typography component='label' htmlFor='user-filter'>
-					Filter by Users Report:
-				</Typography>
-				<Select
-					id='user-filter'
-					value={userFilter}
-					onChange={event => setUserFilter(event.target.value)}
-					style={{ marginLeft: '10px' }}
-				>
-					<MenuItem value=''>All</MenuItem>
-					{allUsers.map(user => (
-						<MenuItem key={user} value={user}>
-							{user}
+			<Grid container spacing={3} sx={{ marginBottom: '10px' }}>
+				<Grid item xs={12} sm={4} md={3}>
+					<Typography
+						component='label'
+						htmlFor='status-filter'
+						style={styles.label}
+					>
+						Filter by Report Status:
+					</Typography>
+					<Select
+						id='status-filter'
+						value={statusFilter}
+						onChange={event => setStatusFilter(event.target.value)}
+						style={styles.select}
+					>
+						<MenuItem value=''>
+							<em>All</em>
 						</MenuItem>
-					))}
-				</Select>
-			</Box>
-			{loading ? (
-				<Box
-					sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-				>
-					<CircularProgress />
-				</Box>
-			) : (
-				<Grid container spacing={2}>
-					{filteredReports.map(report => (
-						<Grid item key={report._id} xs={12} sm={6} md={4} lg={3} xl={2}>
-							<Box display='flex' justifyContent='center'>
+						<MenuItem value='Open'>Open</MenuItem>
+						<MenuItem value='In progress'>In progress</MenuItem>
+						<MenuItem value='Close'>Close</MenuItem>
+					</Select>
+				</Grid>
+
+				<Grid item xs={12} sm={4} md={3}>
+					<Typography
+						component='label'
+						htmlFor='status-filter'
+						style={styles.label}
+					>
+						Filter by Users Report:
+					</Typography>
+					<Select
+						id='user-filter'
+						value={userFilter}
+						onChange={event => setUserFilter(event.target.value)}
+						style={styles.select}
+					>
+						<MenuItem value=''>All</MenuItem>
+						{allUsers.map(user => (
+							<MenuItem key={user} value={user}>
+								{user}
+							</MenuItem>
+						))}
+					</Select>
+				</Grid>
+
+				<Grid item xs={12} sm={4} md={3}>
+					<Typography
+						component='label'
+						htmlFor='location-filter'
+						style={styles.label}
+					>
+						Filter by Users Location:
+					</Typography>
+					<Select
+						id='location-filter'
+						value={locationFilter}
+						onChange={handleLocationFilterChange}
+						style={styles.select}
+					>
+						<MenuItem value=''>All Locations</MenuItem>
+						{reports.map(report => {
+							const truncatedLocation =
+								report.location.length > MAX_LOCATION_LENGTH
+									? `${report.location.substring(0, MAX_LOCATION_LENGTH)}...`
+									: report.location;
+
+							return (
+								<MenuItem
+									key={report.location}
+									value={report.location}
+									title={report.location}
+								>
+									{truncatedLocation}
+								</MenuItem>
+							);
+						})}
+					</Select>
+				</Grid>
+
+				<Grid item xs={12} sm={4} md={3}>
+					<Typography
+						component='label'
+						htmlFor='status-filter'
+						style={styles.label}
+					>
+						Filter by Device:
+					</Typography>
+					<Select
+						id='device-filter'
+						value={deviceFilter}
+						onChange={event => setDeviceFilter(event.target.value)}
+						style={styles.select}
+					>
+						<MenuItem value=''>All</MenuItem>
+						{allDevices.map(device => (
+							<MenuItem key={device} value={device}>
+								{device}
+							</MenuItem>
+						))}
+					</Select>
+				</Grid>
+			</Grid>
+
+			<Box>
+				{loading ? (
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							marginTop: '20px',
+						}}
+					>
+						<CircularProgress />
+					</Box>
+				) : (
+					<Grid container spacing={2}>
+						{filteredReports.map(report => (
+							<Grid item key={report._id} xs={12} sm={6} md={4} lg={3} xl={2}>
 								<CardActionArea>
 									<Card>
 										<CardContent>
@@ -153,24 +248,30 @@ const AdminReportView = () => {
 											<Typography className='info-text' noWrap>
 												<strong>Device: {report.device}</strong>
 											</Typography>
-											<div className='info-container'>
-												<Typography className='info-text' noWrap>
-													Description: {report.description}
-												</Typography>
 
-												<Typography className='info-text' noWrap>
-													Box Number: {report.box_number}
-												</Typography>
-												<Typography className='info-text' noWrap>
-													Home Office: {report.homeoffice ? 'Yes' : 'No'}
-												</Typography>
-												<Typography className='info-text' noWrap>
-													Location: {report.location}
-												</Typography>
-												<Typography className='info-text' noWrap>
-													Status Report: {JSON.stringify(report.status_report)}
-												</Typography>
-											</div>
+											<Typography className='info-text' noWrap>
+												Description: {report.description}
+											</Typography>
+											<Typography className='info-text' noWrap>
+												Box Number: {report.box_number}
+											</Typography>
+											<Typography className='info-text' noWrap>
+												Home Office: {report.homeoffice ? 'Yes' : 'No'}
+											</Typography>
+											<Typography
+												className='info-text'
+												noWrap
+												title={report.location}
+											>
+												Location:
+												{report.location.length > 20
+													? `${report.location.substring(0, 20)}...`
+													: report.location}
+											</Typography>
+											<Typography className='info-text' noWrap>
+												Status Report: {JSON.stringify(report.status_report)}
+											</Typography>
+
 											<Box
 												className='image-container'
 												style={{ height: '100px', overflow: 'hidden' }}
@@ -217,7 +318,7 @@ const AdminReportView = () => {
 															handleStatusChange(report._id, 'Open')
 														}
 													>
-														Re open
+														Reopen
 													</Button>
 												)}
 
@@ -233,11 +334,11 @@ const AdminReportView = () => {
 										</CardContent>
 									</Card>
 								</CardActionArea>
-							</Box>
-						</Grid>
-					))}
-				</Grid>
-			)}
+							</Grid>
+						))}
+					</Grid>
+				)}
+			</Box>
 		</Box>
 	);
 };
