@@ -94,7 +94,6 @@ const HomeList = () => {
 						justifyContent: 'center',
 					}}
 				>
-					<ResponsiveAppBar />
 					<Box
 						style={{
 							display: 'flex',

@@ -126,7 +126,6 @@ const ReportCamOff = () => {
 					</Button>
 				</DialogActions>
 			</Dialog>
-			<ResponsiveAppBar />
 			<Box
 				style={{
 					display: 'flex',

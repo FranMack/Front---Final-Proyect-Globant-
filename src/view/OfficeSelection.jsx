@@ -108,7 +108,6 @@ const OfficeSelection = () => {
 					onSubmit={handleSubmitNewReport}
 					sx={{ height: '110vh' }}
 				>
-					<ResponsiveAppBar />
 					<Box
 						style={{
 							display: 'flex',

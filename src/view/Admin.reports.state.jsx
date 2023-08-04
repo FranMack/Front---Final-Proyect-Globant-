@@ -13,7 +13,6 @@ import {
 	MenuItem,
 	CircularProgress,
 } from '@mui/material';
-import Loading from './Loading';
 
 const AdminReportView = () => {
 	const [reports, setReports] = useState([]);
